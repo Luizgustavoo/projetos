@@ -19,55 +19,60 @@ class AvailableCompanyView extends GetView<CompanyController> {
         child: Column(
           children: [
             const SizedBox(height: 15),
-            Expanded(
-                child: ListView.builder(
-                    padding: const EdgeInsets.only(right: 15, left: 15),
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Dismissible(
-                        key: UniqueKey(),
-                        direction: DismissDirection.endToStart,
-                        confirmDismiss: (DismissDirection direction) async {
-                          if (direction == DismissDirection.endToStart) {
-                            showDialog(context);
-                          }
-                          return false;
-                        },
-                        background: Container(
-                          margin: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.green,
-                          ),
-                          child: const Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
+            Obx(() {
+              return Expanded(
+                  child: ListView.builder(
+                      padding: const EdgeInsets.only(right: 15, left: 15),
+                      itemCount: controller.listAvailableCompany.length,
+                      itemBuilder: (context, index) {
+                        return Dismissible(
+                          key: UniqueKey(),
+                          direction: DismissDirection.endToStart,
+                          confirmDismiss: (DismissDirection direction) async {
+                            if (direction == DismissDirection.endToStart) {
+                              showDialog(context);
+                            }
+                            return false;
+                          },
+                          background: Container(
+                            margin: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.green,
+                            ),
+                            child: const Align(
+                              alignment: Alignment.centerRight,
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      Icons.check_rounded,
-                                      size: 25,
-                                      color: Colors.white,
-                                    ),
-                                  ],
+                                padding: EdgeInsets.all(10),
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Icon(
+                                        Icons.check_rounded,
+                                        size: 25,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        child: CustomCompanyCard(
-                          name: 'NOME: NOME DA INDUSTRIA',
-                          phone: 'TELEFONE: (43)9 9999-9999',
-                          contact: 'CONTATO: NOME PESSOA CONTATO',
-                          pickup: 'CAPTADOR: NOME DO CAP DA EMPRESA',
-                          color: Colors.green.shade100,
-                        ),
-                      );
-                    })),
+                          child: CustomCompanyCard(
+                            name:
+                                'NOME: ${controller.listAvailableCompany[index].nome}',
+                            phone:
+                                'TELEFONE: ${controller.listAvailableCompany[index].telefone}',
+                            contact:
+                                'CONTATO: ${controller.listAvailableCompany[index].nomePessoa}',
+                            pickup: '',
+                            color: Colors.green.shade100,
+                          ),
+                        );
+                      }));
+            }),
             const SizedBox(height: 15)
           ],
         ),

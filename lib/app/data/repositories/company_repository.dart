@@ -18,12 +18,25 @@ class CompanyRepository {
     return list;
   }
 
+  gettAllAvailable(String token) async {
+    List<Company> list = <Company>[];
+
+    var response = await apiClient.gettAll(token);
+
+    if (response != null) {
+      response['data'].forEach((e) {
+        list.add(Company.fromJson(e));
+      });
+    }
+
+    return list;
+  }
+
   insertCompany(String token, String nome, String cnpj, String responsavel,
       String telefone, String nomePessoa) async {
     try {
       var response = await apiClient.insertCompany(
           token, nome, cnpj, responsavel, telefone, nomePessoa);
-
       return response;
     } catch (e) {
       Exception(e);
