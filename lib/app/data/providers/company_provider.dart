@@ -43,7 +43,7 @@ class CompanyApiClient {
     return null;
   }
 
-  gettAllAvailable(String token) async {
+  getAllAvailable(String token) async {
     try {
       Uri companyUrl;
       String url = '$baseUrl/v1/company/available';

@@ -21,7 +21,7 @@ class CompanyRepository {
   gettAllAvailable(String token) async {
     List<Company> list = <Company>[];
 
-    var response = await apiClient.gettAll(token);
+    var response = await apiClient.getAllAvailable(token);
 
     if (response != null) {
       response['data'].forEach((e) {

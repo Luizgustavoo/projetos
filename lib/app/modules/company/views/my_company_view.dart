@@ -86,12 +86,12 @@ class MyCompanyView extends GetView<CompanyController> {
                           Get.toNamed(Routes.contactcompany);
                         },
                         child: CustomCompanyCard(
-                          name: 'NOME: ${company.nome}'.toUpperCase(),
+                          name: 'EMPRESA: ${company.nome}'.toUpperCase(),
+                          responsible: 'RESPONSÁVEL: ${company.responsavel}'
+                              .toUpperCase(),
                           phone: 'TELEFONE: ${company.telefone}',
-                          contact:
-                              'CONTATO: ${company.responsavel}'.toUpperCase(),
-                          pickup:
-                              'CAPTADOR: ${company.nomePessoa}'.toUpperCase(),
+                          contactName: 'NOME DO CONTATO: ${company.nomePessoa}'
+                              .toUpperCase(),
                           color: const Color(0xFFFFF3DB),
                           company: company,
                         ),

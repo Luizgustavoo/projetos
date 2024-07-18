@@ -12,8 +12,8 @@ import 'package:projetos/app/routes/app_routes.dart';
 class CustomCompanyCard extends StatelessWidget {
   final String? name;
   final String? phone;
-  final String? contact;
-  final String? pickup;
+  final String? responsible;
+  final String? contactName;
   final Color? color;
   final Company? company;
 
@@ -21,8 +21,8 @@ class CustomCompanyCard extends StatelessWidget {
       {super.key,
       this.name,
       this.phone,
-      this.contact,
-      this.pickup,
+      this.responsible,
+      this.contactName,
       this.color,
       this.company});
 
@@ -35,23 +35,26 @@ class CustomCompanyCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.all(5),
       child: ListTile(
-        trailing: IconButton(
-          onPressed: () {
-            final controller = Get.put(CompanyController());
-            controller.selectedCompany = company;
-            controller.fillInFields();
-            showModalBottomSheet(
-              isScrollControlled: true,
-              context: context,
-              builder: (context) => CreateCompanyModal(
-                company: company,
+        trailing: Get.currentRoute == Routes.availablecompany
+            ? const SizedBox()
+            : IconButton(
+                onPressed: () {
+                  final controller = Get.put(CompanyController());
+                  controller.selectedCompany = company;
+                  controller.fillInFields();
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) => CreateCompanyModal(
+                      company: company,
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.edit_rounded),
               ),
-            );
-          },
-          icon: const Icon(Icons.edit_rounded),
-        ),
         leading: Get.currentRoute == Routes.allcompany ||
-                Get.currentRoute == Routes.expiringcompany
+                Get.currentRoute == Routes.expiringcompany ||
+                Get.currentRoute == Routes.availablecompany
             ? const Icon(
                 Icons.business_rounded,
                 size: 35,
@@ -84,9 +87,9 @@ class CustomCompanyCard extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(responsible!),
             Text(phone!),
-            Text(contact!),
-            Text(pickup!),
+            Text(contactName!),
           ],
         ),
       ),

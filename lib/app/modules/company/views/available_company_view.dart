@@ -65,9 +65,10 @@ class AvailableCompanyView extends GetView<CompanyController> {
                                 'NOME: ${controller.listAvailableCompany[index].nome}',
                             phone:
                                 'TELEFONE: ${controller.listAvailableCompany[index].telefone}',
-                            contact:
-                                'CONTATO: ${controller.listAvailableCompany[index].nomePessoa}',
-                            pickup: '',
+                            contactName:
+                                'NOME DO CONTATO: ${controller.listAvailableCompany[index].nomePessoa}',
+                            responsible:
+                                'RESPONSÁVEL PELA EMPRESA: ${controller.listAvailableCompany[index].responsavel}',
                             color: Colors.green.shade100,
                           ),
                         );
