@@ -12,8 +12,8 @@ import 'package:projetos/app/routes/app_routes.dart';
 class CustomCompanyCard extends StatelessWidget {
   final String? name;
   final String? phone;
-  final String? contact;
-  final String? pickup;
+  final String? responsible;
+  final String? contactName;
   final Color? color;
   final Company? company;
 
@@ -21,8 +21,8 @@ class CustomCompanyCard extends StatelessWidget {
       {super.key,
       this.name,
       this.phone,
-      this.contact,
-      this.pickup,
+      this.responsible,
+      this.contactName,
       this.color,
       this.company});
 
@@ -84,9 +84,9 @@ class CustomCompanyCard extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(responsible!),
             Text(phone!),
-            Text(contact!),
-            Text(pickup!),
+            Text(contactName!),
           ],
         ),
       ),

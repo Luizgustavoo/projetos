@@ -62,8 +62,8 @@ class AvailableCompanyView extends GetView<CompanyController> {
                         child: CustomCompanyCard(
                           name: 'NOME: NOME DA INDUSTRIA',
                           phone: 'TELEFONE: (43)9 9999-9999',
-                          contact: 'CONTATO: NOME PESSOA CONTATO',
-                          pickup: 'CAPTADOR: NOME DO CAP DA EMPRESA',
+                          responsible: 'CONTATO: NOME PESSOA CONTATO',
+                          contactName: 'CAPTADOR: NOME DO CAP DA EMPRESA',
                           color: Colors.green.shade100,
                         ),
                       );
