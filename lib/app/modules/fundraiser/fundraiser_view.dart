@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
-import 'package:projetos/app/modules/fundraiser/widgets/create_pickup_modal.dart';
+import 'package:projetos/app/modules/fundraiser/widgets/create_fundraiser_modal.dart';
 
 class FundRaiserView extends GetView<FundRaiserController> {
   const FundRaiserView({super.key});
@@ -52,7 +52,7 @@ class FundRaiserView extends GetView<FundRaiserController> {
               showModalBottomSheet(
                 isScrollControlled: true,
                 context: context,
-                builder: (context) => const CreatePickupModal(),
+                builder: (context) => const CreateFundRaiserModal(),
               );
             },
             child: const Icon(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 
-class CreatePickupModal extends GetView<FundRaiserController> {
-  const CreatePickupModal({super.key});
+class CreateFundRaiserModal extends GetView<FundRaiserController> {
+  const CreateFundRaiserModal({super.key});
 
   @override
   Widget build(BuildContext context) {
