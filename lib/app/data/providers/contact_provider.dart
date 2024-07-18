@@ -81,7 +81,6 @@ class ContactApiClient {
         "user_id": ServiceStorage.getUserId().toString(),
         "company_id": contactCompany.companyId.toString()
       });
-      print(json.decode(response.body));
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

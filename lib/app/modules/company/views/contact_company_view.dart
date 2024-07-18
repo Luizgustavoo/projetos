@@ -29,22 +29,43 @@ class ContactCompanyView extends GetView<ContactController> {
               ),
             ),
             Obx(
-              () => Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(right: 15, left: 15),
-                  itemCount: controller.listContactCompany.length,
-                  itemBuilder: (context, index) {
-                    ContactCompany contactCompany =
-                        controller.listContactCompany[index];
-                    String dateContact = contactCompany.dateContact != null
-                        ? controller.formatApiDate(contactCompany.dateContact!)
-                        : '';
-                    return CustomContactCompanyCard(
-                        dateContact: dateContact,
-                        contactCompany: contactCompany);
-                  },
-                ),
-              ),
+              () => controller.isLoading.value
+                  ? const Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  : controller.listContactCompany.isEmpty
+                      ? const Expanded(
+                          child: Center(
+                            child: Text(
+                              'NÃO HÁ NENHUM CONTATO NESSA EMPRESA',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                            padding: const EdgeInsets.only(right: 15, left: 15),
+                            itemCount: controller.listContactCompany.length,
+                            itemBuilder: (context, index) {
+                              ContactCompany contactCompany =
+                                  controller.listContactCompany[index];
+                              String dateContact =
+                                  contactCompany.dateContact != null
+                                      ? controller.formatApiDate(
+                                          contactCompany.dateContact!)
+                                      : '';
+                              return CustomContactCompanyCard(
+                                  dateContact: dateContact,
+                                  contactCompany: contactCompany);
+                            },
+                          ),
+                        ),
             ),
           ],
         )));
