@@ -28,21 +28,24 @@ class ContactCompanyView extends GetView<ContactController> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
-            Obx(() => Expanded(
+            Obx(
+              () => Expanded(
                 child: ListView.builder(
-                    padding: const EdgeInsets.only(right: 15, left: 15),
-                    itemCount: controller.listContactCompany.length,
-                    itemBuilder: (context, index) {
-                      ContactCompany contactCompany =
-                          controller.listContactCompany[index];
-                      String dateContact = contactCompany.dateContact != null
-                          ? controller
-                              .formatApiDate(contactCompany.dateContact!)
-                          : '';
-                      return CustomContactCompanyCard(
-                          dateContact: dateContact,
-                          contactCompany: contactCompany);
-                    })))
+                  padding: const EdgeInsets.only(right: 15, left: 15),
+                  itemCount: controller.listContactCompany.length,
+                  itemBuilder: (context, index) {
+                    ContactCompany contactCompany =
+                        controller.listContactCompany[index];
+                    String dateContact = contactCompany.dateContact != null
+                        ? controller.formatApiDate(contactCompany.dateContact!)
+                        : '';
+                    return CustomContactCompanyCard(
+                        dateContact: dateContact,
+                        contactCompany: contactCompany);
+                  },
+                ),
+              ),
+            ),
           ],
         )));
   }

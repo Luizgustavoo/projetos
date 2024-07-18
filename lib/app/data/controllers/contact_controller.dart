@@ -31,12 +31,13 @@ class ContactController extends GetxController {
   };
   dynamic mensagem;
 
-  Future<void> getContactCompanies({Company? company}) async {
+  Future<void> getContactCompanies(Company company) async {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
       listContactCompany.value =
-          await repository.gettAll("Bearer $token", company!);
+          await repository.gettAll("Bearer $token", company);
+      update();
     } catch (e) {
       Exception(e);
     }
@@ -65,8 +66,10 @@ class ContactController extends GetxController {
     return retorno;
   }
 
-  Future<Map<String, dynamic>> updateContactCompany(int? companyId) async {
+  Future<Map<String, dynamic>> updateContactCompany(
+      int? companyId, int? contactId) async {
     ContactCompany contactCompany = ContactCompany(
+      id: contactId,
       companyId: companyId,
       nomePessoa: nameContactController.text,
       dateContact: dateContactController.text,
@@ -81,7 +84,7 @@ class ContactController extends GetxController {
         'success': mensagem['success'],
         'message': mensagem['message']
       };
-      getContactCompanies();
+      getContactCompanies(Company(id: companyId));
     }
     return retorno;
   }

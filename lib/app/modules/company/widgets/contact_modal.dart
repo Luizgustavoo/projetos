@@ -123,8 +123,8 @@ class ContactModal extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () async {
                       Map<String, dynamic> retorno = isUpdate
-                          ? await contactController
-                              .updateContactCompany(contactCompany!.id)
+                          ? await contactController.updateContactCompany(
+                              contactCompany!.companyId, contactCompany!.id)
                           : await contactController
                               .insertContactCompany(company!.id!);
 

@@ -37,7 +37,7 @@ class CustomCompanyCard extends StatelessWidget {
       child: ListTile(
         onTap: () {
           final contactController = Get.put(ContactController());
-          contactController.getContactCompanies(company: company);
+          contactController.getContactCompanies(company!);
           Get.toNamed(Routes.contactcompany);
         },
         trailing: IconButton(
