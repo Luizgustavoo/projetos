@@ -89,6 +89,18 @@ class ContactController extends GetxController {
     return retorno;
   }
 
+  Future<Map<String, dynamic>> unlinkContactCompany(int? contactId) async {
+    ContactCompany contactCompany = ContactCompany(
+      id: contactId,
+    );
+    final token = ServiceStorage.getToken();
+    mensagem =
+        await repository.unlinkContactCompany("Bearer $token", contactCompany);
+    retorno = {'success': mensagem['success'], 'message': mensagem['message']};
+    getContactCompanies(Company(id: contactCompany.companyId));
+    return retorno;
+  }
+
   void clearAllFields() {
     final textControllers = [nameContactController, obsContactController];
 

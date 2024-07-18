@@ -35,11 +35,6 @@ class CustomCompanyCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.all(5),
       child: ListTile(
-        onTap: () {
-          final contactController = Get.put(ContactController());
-          contactController.getContactCompanies(company!);
-          Get.toNamed(Routes.contactcompany);
-        },
         trailing: IconButton(
           onPressed: () {
             final controller = Get.put(CompanyController());

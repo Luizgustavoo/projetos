@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
+import 'package:projetos/app/data/controllers/contact_controller.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
 import 'package:projetos/app/modules/company/widgets/create_my_company_modal.dart';
+import 'package:projetos/app/routes/app_routes.dart';
 
 class MyCompanyView extends GetView<CompanyController> {
   const MyCompanyView({super.key});
@@ -76,14 +78,23 @@ class MyCompanyView extends GetView<CompanyController> {
                           ),
                         ),
                       ),
-                      child: CustomCompanyCard(
-                        name: 'NOME: ${company.nome}'.toUpperCase(),
-                        phone: 'TELEFONE: ${company.telefone}',
-                        contact:
-                            'CONTATO: ${company.responsavel}'.toUpperCase(),
-                        pickup: 'CAPTADOR: ${company.nomePessoa}'.toUpperCase(),
-                        color: const Color(0xFFFFF3DB),
-                        company: company,
+                      child: GestureDetector(
+                        onTap: () {
+                          final contactController =
+                              Get.put(ContactController());
+                          contactController.getContactCompanies(company);
+                          Get.toNamed(Routes.contactcompany);
+                        },
+                        child: CustomCompanyCard(
+                          name: 'NOME: ${company.nome}'.toUpperCase(),
+                          phone: 'TELEFONE: ${company.telefone}',
+                          contact:
+                              'CONTATO: ${company.responsavel}'.toUpperCase(),
+                          pickup:
+                              'CAPTADOR: ${company.nomePessoa}'.toUpperCase(),
+                          color: const Color(0xFFFFF3DB),
+                          company: company,
+                        ),
                       ),
                     );
                   },

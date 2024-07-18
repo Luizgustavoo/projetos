@@ -16,56 +16,139 @@ class CustomContactCompanyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      color: Colors.grey.shade200,
-      shadowColor: Colors.black,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      margin: const EdgeInsets.all(5),
-      child: ExpansionTile(
-        leading: IconButton(
-            onPressed: () {
-              final contactController = Get.put(ContactController());
-              contactController.selectedContactCompany = contactCompany;
-              print(contactController.selectedContactCompany!.companyId);
-              contactController.fillInFields();
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: false,
-                shape: const RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(25.0)),
-                ),
-                builder: (BuildContext context) {
-                  return ContactModal(
-                    name: contactCompany.empresa,
-                    contactCompany: contactCompany,
-                  );
-                },
-              );
-            },
-            icon: const Icon(Icons.edit_rounded)),
-        childrenPadding: const EdgeInsets.only(right: 15, left: 15, bottom: 5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        title: Text(
-          dateContact,
-          style: const TextStyle(fontSize: 14),
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      confirmDismiss: (DismissDirection direction) async {
+        if (direction == DismissDirection.endToStart) {
+          showDialog(context, contactCompany);
+        }
+        return false;
+      },
+      background: Container(
+        margin: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.red,
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              contactCompany.nomePessoa!,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        child: const Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Icon(
+              Icons.delete_forever,
+              size: 25,
+              color: Colors.white,
             ),
-            const Divider(
-              height: 5,
-              thickness: 2,
-            )
-          ],
+          ),
         ),
-        children: [Text(contactCompany.observacoes!)],
       ),
+      child: Card(
+        elevation: 2,
+        color: Colors.grey.shade200,
+        shadowColor: Colors.black,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        margin: const EdgeInsets.all(5),
+        child: ExpansionTile(
+          leading: IconButton(
+              onPressed: () {
+                final contactController = Get.put(ContactController());
+                contactController.selectedContactCompany = contactCompany;
+                contactController.fillInFields();
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: false,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(25.0)),
+                  ),
+                  builder: (BuildContext context) {
+                    return ContactModal(
+                      name: contactCompany.empresa,
+                      contactCompany: contactCompany,
+                    );
+                  },
+                );
+              },
+              icon: const Icon(Icons.edit_rounded)),
+          childrenPadding:
+              const EdgeInsets.only(right: 15, left: 15, bottom: 5),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          title: Text(
+            dateContact,
+            style: const TextStyle(fontSize: 14),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                contactCompany.nomePessoa!,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const Divider(
+                height: 5,
+                thickness: 2,
+              )
+            ],
+          ),
+          children: [Text(contactCompany.observacoes!)],
+        ),
+      ),
+    );
+  }
+
+  void showDialog(context, ContactCompany contactCompany) {
+    Get.defaultDialog(
+      titlePadding: const EdgeInsets.all(16),
+      contentPadding: const EdgeInsets.all(16),
+      title: "Confirmação",
+      content: Text(
+        textAlign: TextAlign.center,
+        "Tem certeza que deseja desativar o contato ${contactCompany.nomePessoa}?",
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 18,
+        ),
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: () async {
+            final contactController = Get.put(ContactController());
+            Map<String, dynamic> retorno =
+                await contactController.unlinkContactCompany(contactCompany.id);
+
+            if (retorno['success'] == true) {
+              Get.back();
+              Get.snackbar('Sucesso!', retorno['message'].join('\n'),
+                  backgroundColor: Colors.green,
+                  colorText: Colors.white,
+                  duration: const Duration(seconds: 2),
+                  snackPosition: SnackPosition.BOTTOM);
+            } else {
+              Get.snackbar('Falha!', retorno['message'].join('\n'),
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                  duration: const Duration(seconds: 2),
+                  snackPosition: SnackPosition.BOTTOM);
+            }
+          },
+          child: const Text(
+            "CONFIRMAR",
+            style: TextStyle(fontFamily: 'Poppinss', color: Colors.white),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: const Text(
+            "CANCELAR",
+            style: TextStyle(fontFamily: 'Poppinss'),
+          ),
+        ),
+      ],
     );
   }
 }

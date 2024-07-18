@@ -68,10 +68,10 @@ class ContactApiClient {
 
   updateContactCompany(String token, ContactCompany contactCompany) async {
     try {
-      Uri companyUrl;
+      Uri contactCompanyUrl;
       String url = '$baseUrl/v1/contactcompany/${contactCompany.id.toString()}';
-      companyUrl = Uri.parse(url);
-      var response = await httpClient.put(companyUrl, headers: {
+      contactCompanyUrl = Uri.parse(url);
+      var response = await httpClient.put(contactCompanyUrl, headers: {
         "Accept": "application/json",
         "Authorization": token,
       }, body: {
@@ -81,6 +81,25 @@ class ContactApiClient {
         "user_id": ServiceStorage.getUserId().toString(),
         "company_id": contactCompany.companyId.toString()
       });
+      return json.decode(response.body);
+    } catch (err) {
+      Exception(err);
+    }
+    return null;
+  }
+
+  unlinkContactCompany(String token, ContactCompany contactCompany) async {
+    try {
+      Uri contactCompanyUrl;
+      String url = '$baseUrl/v1/contactcompany/${contactCompany.id.toString()}';
+      contactCompanyUrl = Uri.parse(url);
+      var response = await httpClient.delete(
+        contactCompanyUrl,
+        headers: {
+          "Accept": "application/json",
+          "Authorization": token,
+        },
+      );
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

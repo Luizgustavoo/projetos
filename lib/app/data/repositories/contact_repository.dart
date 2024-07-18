@@ -40,4 +40,15 @@ class ContactRepository {
       Exception(e);
     }
   }
+
+  unlinkContactCompany(String token, ContactCompany contactCompany) async {
+    try {
+      var response =
+          await apiClient.unlinkContactCompany(token, contactCompany);
+
+      return response;
+    } catch (e) {
+      Exception(e);
+    }
+  }
 }
