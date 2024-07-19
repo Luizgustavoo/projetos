@@ -19,19 +19,29 @@ class ExpiringCompanyView extends GetView<CompanyController> {
         child: Column(
           children: [
             const SizedBox(height: 15),
-            Expanded(
-                child: ListView.builder(
+            Obx(
+              () {
+                return Expanded(
+                  child: ListView.builder(
                     padding: const EdgeInsets.only(right: 15, left: 15),
-                    itemCount: 10,
+                    itemCount: controller.listExpirianCompany.length,
                     itemBuilder: (context, index) {
                       return CustomCompanyCard(
-                        name: 'NOME: NOME DA INDUSTRIA',
-                        phone: 'TELEFONE: (43)9 9999-9999',
-                        responsible: 'CONTATO: NOME PESSOA CONTATO',
-                        contactName: 'CAPTADOR: NOME DO CAP DA EMPRESA',
+                        name:
+                            'EMPRESA: ${controller.listExpirianCompany[index].nome}',
+                        phone:
+                            'TELEFONE: ${controller.listExpirianCompany[index].telefone}',
+                        responsible:
+                            'RESPONSÁVEL DA EMPRESA: ${controller.listExpirianCompany[index].responsavel}',
+                        contactName:
+                            'NOME DO CONTATO: ${controller.listExpirianCompany[index].nomePessoa}',
                         color: Colors.red.shade100,
                       );
-                    })),
+                    },
+                  ),
+                );
+              },
+            ),
             const SizedBox(height: 15)
           ],
         ),

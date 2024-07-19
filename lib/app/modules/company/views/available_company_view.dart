@@ -41,7 +41,7 @@ class AvailableCompanyView extends GetView<CompanyController> {
                             margin: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.green,
+                              color: Colors.orange,
                             ),
                             child: const Align(
                               alignment: Alignment.centerRight,
@@ -52,10 +52,20 @@ class AvailableCompanyView extends GetView<CompanyController> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Icon(
-                                        Icons.check_rounded,
-                                        size: 25,
-                                        color: Colors.white,
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'VINCULAR',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Icon(
+                                            Icons.check_rounded,
+                                            size: 25,
+                                            color: Colors.white,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),

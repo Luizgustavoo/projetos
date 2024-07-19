@@ -8,6 +8,7 @@ import 'package:projetos/app/utils/service_storage.dart';
 class CompanyController extends GetxController {
   RxList<Company> listCompany = RxList<Company>([]);
   RxList<Company> listAvailableCompany = RxList<Company>([]);
+  RxList<Company> listExpirianCompany = RxList<Company>([]);
   RxBool isLoading = true.obs;
 
   Company? selectedCompany;
@@ -33,6 +34,7 @@ class CompanyController extends GetxController {
   void onInit() {
     getCompanies();
     getAvailableCompanies();
+    getExpirianCompanies();
     super.onInit();
   }
 
@@ -53,6 +55,18 @@ class CompanyController extends GetxController {
       final token = ServiceStorage.getToken();
       listAvailableCompany.value =
           await repository.gettAllAvailable("Bearer $token");
+    } catch (e) {
+      Exception(e);
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> getExpirianCompanies() async {
+    isLoading.value = true;
+    try {
+      final token = ServiceStorage.getToken();
+      listExpirianCompany.value =
+          await repository.getAllExpirian("Bearer $token");
     } catch (e) {
       Exception(e);
     }

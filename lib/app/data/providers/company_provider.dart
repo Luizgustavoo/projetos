@@ -74,6 +74,37 @@ class CompanyApiClient {
     return null;
   }
 
+  getAllExpirian(String token) async {
+    try {
+      Uri companyUrl;
+      String url = '$baseUrl/v1/company/expirian';
+      companyUrl = Uri.parse(url);
+      var response = await httpClient.get(
+        companyUrl,
+        headers: {
+          "Accept": "application/json",
+          "Authorization": token,
+        },
+      );
+      if (response.statusCode == 201) {
+        return json.decode(response.body);
+      } else if (response.statusCode == 401 &&
+          json.decode(response.body)['message'] == "Token has expired") {
+        Get.defaultDialog(
+          title: "Expirou",
+          content: const Text(
+              'O token de autenticação expirou, faça login novamente.'),
+        );
+        var box = GetStorage('projeto');
+        box.erase();
+        Get.offAllNamed('/login');
+      }
+    } catch (e) {
+      Exception(e);
+    }
+    return null;
+  }
+
   insertCompany(String token, String nome, String cnpj, String responsavel,
       String telefone, String nomePessoa) async {
     try {
