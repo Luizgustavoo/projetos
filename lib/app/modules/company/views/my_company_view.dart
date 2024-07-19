@@ -51,13 +51,23 @@ class MyCompanyView extends GetView<CompanyController> {
                         child: const Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Icon(
-                              Icons.check_rounded,
-                              size: 25,
-                              color: Colors.white,
-                            ),
-                          ),
+                              padding: EdgeInsets.all(10),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.check_rounded,
+                                    size: 25,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'CAPTAÇÃO',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              )),
                         ),
                       ),
                       secondaryBackground: Container(
@@ -69,13 +79,24 @@ class MyCompanyView extends GetView<CompanyController> {
                         child: const Align(
                           alignment: Alignment.centerRight,
                           child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Icon(
-                              Icons.delete_rounded,
-                              size: 25,
-                              color: Colors.white,
-                            ),
-                          ),
+                              padding: EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'EXCLUIR',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Icon(
+                                    Icons.delete_forever,
+                                    size: 25,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              )),
                         ),
                       ),
                       child: GestureDetector(
@@ -156,9 +177,9 @@ class MyCompanyView extends GetView<CompanyController> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'NOME EMPRESA',
-                    style: TextStyle(
+                  Text(
+                    company.nome!.toUpperCase(),
+                    style: const TextStyle(
                       fontSize: 16,
                     ),
                     textAlign: TextAlign.center,
@@ -170,9 +191,9 @@ class MyCompanyView extends GetView<CompanyController> {
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: fundRaiserController.dateFundController,
+                    maxLength: 10,
                     decoration: const InputDecoration(
-                      labelText: 'DATA PREVISTA',
-                    ),
+                        labelText: 'DATA PREVISTA', counterText: ''),
                     onChanged: (value) {
                       fundRaiserController.onDateChanged(value);
                     },

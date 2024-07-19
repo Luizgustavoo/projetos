@@ -146,7 +146,26 @@ class CompanyApiClient {
           "Authorization": token,
         },
       );
-      print(json.decode(response.body));
+      return json.decode(response.body);
+    } catch (err) {
+      Exception(err);
+    }
+    return null;
+  }
+
+  linkCompany(String token, Company company) async {
+    try {
+      Uri companyUrl;
+      String url =
+          '$baseUrl/v1/company/vincular/${ServiceStorage.getUserId().toString()}/${company.id.toString()}';
+      companyUrl = Uri.parse(url);
+      var response = await httpClient.post(
+        companyUrl,
+        headers: {
+          "Accept": "application/json",
+          "Authorization": token,
+        },
+      );
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

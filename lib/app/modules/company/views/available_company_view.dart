@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
+import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
 
 class AvailableCompanyView extends GetView<CompanyController> {
@@ -25,12 +26,14 @@ class AvailableCompanyView extends GetView<CompanyController> {
                       padding: const EdgeInsets.only(right: 15, left: 15),
                       itemCount: controller.listAvailableCompany.length,
                       itemBuilder: (context, index) {
+                        Company company =
+                            controller.listAvailableCompany[index];
                         return Dismissible(
                           key: UniqueKey(),
                           direction: DismissDirection.endToStart,
                           confirmDismiss: (DismissDirection direction) async {
                             if (direction == DismissDirection.endToStart) {
-                              showDialog(context);
+                              showDialog(context, company, controller);
                             }
                             return false;
                           },
@@ -61,14 +64,12 @@ class AvailableCompanyView extends GetView<CompanyController> {
                             ),
                           ),
                           child: CustomCompanyCard(
-                            name:
-                                'NOME: ${controller.listAvailableCompany[index].nome}',
-                            phone:
-                                'TELEFONE: ${controller.listAvailableCompany[index].telefone}',
+                            name: 'NOME: ${company.nome}',
+                            phone: 'TELEFONE: ${company.telefone}',
                             contactName:
-                                'NOME DO CONTATO: ${controller.listAvailableCompany[index].nomePessoa}',
+                                'NOME DO CONTATO: ${company.nomePessoa}',
                             responsible:
-                                'RESPONSÁVEL PELA EMPRESA: ${controller.listAvailableCompany[index].responsavel}',
+                                'RESPONSÁVEL PELA EMPRESA: ${company.responsavel}',
                             color: Colors.green.shade100,
                           ),
                         );
@@ -81,42 +82,50 @@ class AvailableCompanyView extends GetView<CompanyController> {
     );
   }
 
-  void showDialog(context) {
+  void showDialog(context, Company company, CompanyController controller) {
     Get.defaultDialog(
       titlePadding: const EdgeInsets.all(16),
       contentPadding: const EdgeInsets.all(16),
       title: "Confirmação",
-      content: const Text(
+      content: Text(
         textAlign: TextAlign.center,
-        "Tem certeza que deseja ........... ?",
-        style: TextStyle(
+        "Deseja vincular a empresa ${company.nome} à você?",
+        style: const TextStyle(
           fontFamily: 'Poppinss',
           fontSize: 18,
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () {
-            Get.back();
-          },
-          child: const Text("CANCELAR"),
-        ),
         ElevatedButton(
           onPressed: () async {
-            // Get.snackbar(
-            //   snackPosition: SnackPosition.BOTTOM,
-            //   duration: const Duration(milliseconds: 1500),
-            //   retorno['return'] == 0 ? 'Sucesso' : "Falha",
-            //   retorno['message'],
-            //   backgroundColor:
-            //       retorno['return'] == 0 ? Colors.green : Colors.red,
-            //   colorText: Colors.white,
-            // );
+            Map<String, dynamic> retorno =
+                await controller.linkCompany(company.id!);
+
+            if (retorno['success'] == true) {
+              Get.back();
+              Get.snackbar('Sucesso!', retorno['message'].join('\n'),
+                  backgroundColor: Colors.green,
+                  colorText: Colors.white,
+                  duration: const Duration(seconds: 2),
+                  snackPosition: SnackPosition.BOTTOM);
+            } else {
+              Get.snackbar('Falha!', retorno['message'].join('\n'),
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                  duration: const Duration(seconds: 2),
+                  snackPosition: SnackPosition.BOTTOM);
+            }
           },
           child: const Text(
             "CONFIRMAR",
             style: TextStyle(color: Colors.white),
           ),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: const Text("CANCELAR"),
         ),
       ],
     );

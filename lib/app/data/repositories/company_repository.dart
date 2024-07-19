@@ -62,4 +62,14 @@ class CompanyRepository {
       Exception(e);
     }
   }
+
+  linkCompany(String token, Company company) async {
+    try {
+      var response = await apiClient.linkCompany(token, company);
+
+      return response;
+    } catch (e) {
+      Exception(e);
+    }
+  }
 }

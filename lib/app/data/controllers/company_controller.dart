@@ -110,6 +110,17 @@ class CompanyController extends GetxController {
     return retorno;
   }
 
+  Future<Map<String, dynamic>> linkCompany(int? id) async {
+    Company company = Company(
+      id: id,
+    );
+    final token = ServiceStorage.getToken();
+    mensagem = await repository.linkCompany("Bearer $token", company);
+    retorno = {'success': mensagem['success'], 'message': mensagem['message']};
+    getAvailableCompanies();
+    return retorno;
+  }
+
   void fillInFields() {
     nameCompanyController.text = selectedCompany!.nome.toString();
     cnpjController.text = selectedCompany!.cnpj.toString();
