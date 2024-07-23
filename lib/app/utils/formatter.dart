@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 abstract class FormattedInputers {
   static String formatCpfCnpj(String value) {
     value = value.replaceAll(RegExp(r'\D'), '');
@@ -60,5 +62,14 @@ abstract class FormattedInputers {
     }
 
     return buffer.toString();
+  }
+
+  static String formatApiDate(String dateString) {
+    try {
+      DateTime dateTime = DateTime.parse(dateString);
+      return DateFormat('dd/MM/yyyy').format(dateTime);
+    } catch (e) {
+      return 'Data inválida';
+    }
   }
 }

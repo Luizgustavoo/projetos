@@ -19,29 +19,44 @@ class AllCompanyView extends GetView<CompanyController> {
       ),
       body: SafeArea(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 10),
             Obx(
               () => Expanded(
-                  child: ListView.builder(
-                      padding: const EdgeInsets.only(right: 15, left: 15),
-                      itemCount: controller.listAllCompany.length,
-                      itemBuilder: (context, index) {
-                        Company company = controller.listAllCompany[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.contacttimeline,
-                                arguments: company);
-                          },
-                          child: CustomCompanyCard(
-                            name: company.nome,
-                            responsible: company.responsavel,
-                            phone: company.telefone,
-                            contactName: company.nomePessoa,
-                            company: company,
-                          ),
-                        );
-                      })),
+                  child: controller.isLoading.value
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                            Text(
+                              'Carregando...',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            )
+                          ],
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.only(right: 15, left: 15),
+                          itemCount: controller.listAllCompany.length,
+                          itemBuilder: (context, index) {
+                            Company company = controller.listAllCompany[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.contacttimeline,
+                                    arguments: company);
+                              },
+                              child: CustomCompanyCard(
+                                name: company.nome,
+                                responsible: company.responsavel,
+                                phone: company.telefone,
+                                contactName: company.nomePessoa,
+                                company: company,
+                              ),
+                            );
+                          })),
             ),
             const SizedBox(height: 10)
           ],
