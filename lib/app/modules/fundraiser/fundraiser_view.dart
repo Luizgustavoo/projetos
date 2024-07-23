@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
+import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/modules/fundraiser/widgets/create_fundraiser_modal.dart';
+import 'package:projetos/app/modules/fundraiser/widgets/custom_fundraiser_card.dart';
 
 class FundRaiserView extends GetView<FundRaiserController> {
   const FundRaiserView({super.key});
@@ -19,27 +21,20 @@ class FundRaiserView extends GetView<FundRaiserController> {
           child: Column(
             children: [
               const SizedBox(height: 15),
-              Expanded(
-                  child: ListView.builder(
-                      padding: const EdgeInsets.only(right: 15, left: 15),
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          color: const Color(0xFFFFF3DB),
-                          margin: const EdgeInsets.all(5),
-                          elevation: 2,
-                          child: ListTile(
-                            dense: true,
-                            onTap: () {},
-                            trailing: Icon(
-                              Icons.search,
-                              color: Colors.grey.shade500,
-                            ),
-                            title: const Text('NOME: NOME DO CAPTADOR'),
-                            subtitle: const Text('TELEFONE: (43) 9 9999-9999'),
-                          ),
-                        );
-                      })),
+              Obx(
+                () => Expanded(
+                    child: ListView.builder(
+                        padding: const EdgeInsets.only(right: 15, left: 15),
+                        itemCount: controller.listFundRaiser.length,
+                        itemBuilder: (context, index) {
+                          User user = controller.listFundRaiser[index];
+                          return CustomFundRaiserCard(
+                            user: user,
+                            fundRaiserName: user.name,
+                            fundRaiserPhone: user.contact,
+                          );
+                        })),
+              ),
               const SizedBox(height: 15)
             ],
           ),
@@ -47,8 +42,11 @@ class FundRaiserView extends GetView<FundRaiserController> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(right: 8, bottom: 5),
           child: FloatingActionButton(
+            mini: true,
+            elevation: 2,
             backgroundColor: Colors.orange,
             onPressed: () {
+              controller.clearAllFields();
               showModalBottomSheet(
                 isScrollControlled: true,
                 context: context,

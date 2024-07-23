@@ -74,12 +74,10 @@ class AvailableCompanyView extends GetView<CompanyController> {
                             ),
                           ),
                           child: CustomCompanyCard(
-                            name: 'NOME: ${company.nome}',
-                            phone: 'TELEFONE: ${company.telefone}',
-                            contactName:
-                                'NOME DO CONTATO: ${company.nomePessoa}',
-                            responsible:
-                                'RESPONSÁVEL PELA EMPRESA: ${company.responsavel}',
+                            name: company.nome,
+                            phone: company.telefone,
+                            contactName: company.nomePessoa,
+                            responsible: company.responsavel,
                             color: Colors.green.shade100,
                           ),
                         );

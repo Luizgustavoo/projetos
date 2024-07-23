@@ -25,102 +25,117 @@ class MyCompanyView extends GetView<CompanyController> {
           children: [
             const SizedBox(height: 15),
             Obx(
-              () => Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(right: 15, left: 15),
-                  itemCount: controller.listCompany.length,
-                  itemBuilder: (context, index) {
-                    Company company = controller.listCompany[index];
-                    return Dismissible(
-                      key: UniqueKey(),
-                      direction: DismissDirection.horizontal,
-                      confirmDismiss: (DismissDirection direction) async {
-                        if (direction == DismissDirection.endToStart) {
-                          showDialog(context, company);
-                        } else if (direction == DismissDirection.startToEnd) {
-                          showModal(context, company);
-                        }
-                        return false;
+              () {
+                if (controller.isLoading.value) {
+                  return const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else if (controller.listCompany.isEmpty) {
+                  return const Expanded(
+                    child: Center(
+                      child: Text('NÃO HÁ EMPRESAS PARA MOSTRAR'),
+                    ),
+                  );
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.only(right: 15, left: 15),
+                      itemCount: controller.listCompany.length,
+                      itemBuilder: (context, index) {
+                        Company company = controller.listCompany[index];
+                        return Dismissible(
+                          key: UniqueKey(),
+                          direction: DismissDirection.horizontal,
+                          confirmDismiss: (DismissDirection direction) async {
+                            if (direction == DismissDirection.endToStart) {
+                              showDialog(context, company);
+                            } else if (direction ==
+                                DismissDirection.startToEnd) {
+                              showModal(context, company);
+                            }
+                            return false;
+                          },
+                          background: Container(
+                            margin: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.green,
+                            ),
+                            child: const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.check_rounded,
+                                        size: 25,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text(
+                                        'CAPTAÇÃO',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                          ),
+                          secondaryBackground: Container(
+                            margin: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.red,
+                            ),
+                            child: const Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'EXCLUIR',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Icon(
+                                        Icons.delete_forever,
+                                        size: 25,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              final contactController =
+                                  Get.put(ContactController());
+                              contactController.getContactCompanies(company);
+                              Get.toNamed(Routes.contactcompany);
+                            },
+                            child: CustomCompanyCard(
+                              name: company.nome,
+                              phone: company.telefone,
+                              contactName: company.nomePessoa,
+                              responsible: company.responsavel,
+                              color: const Color(0xFFFFF3DB),
+                              company: company,
+                            ),
+                          ),
+                        );
                       },
-                      background: Container(
-                        margin: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.green,
-                        ),
-                        child: const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.check_rounded,
-                                    size: 25,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    'CAPTAÇÃO',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )),
-                        ),
-                      ),
-                      secondaryBackground: Container(
-                        margin: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.red,
-                        ),
-                        child: const Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    'EXCLUIR',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.delete_forever,
-                                    size: 25,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              )),
-                        ),
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          final contactController =
-                              Get.put(ContactController());
-                          contactController.getContactCompanies(company);
-                          Get.toNamed(Routes.contactcompany);
-                        },
-                        child: CustomCompanyCard(
-                          name: 'EMPRESA: ${company.nome}'.toUpperCase(),
-                          responsible: 'RESPONSÁVEL: ${company.responsavel}'
-                              .toUpperCase(),
-                          phone: 'TELEFONE: ${company.telefone}',
-                          contactName: 'NOME DO CONTATO: ${company.nomePessoa}'
-                              .toUpperCase(),
-                          color: const Color(0xFFFFF3DB),
-                          company: company,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+                    ),
+                  );
+                }
+              },
             ),
             const SizedBox(height: 15)
           ],
@@ -128,6 +143,7 @@ class MyCompanyView extends GetView<CompanyController> {
       ),
       floatingActionButton: FloatingActionButton(
         mini: true,
+        elevation: 2,
         backgroundColor: Colors.orange,
         onPressed: () {
           controller.clearAllFields();
@@ -164,7 +180,7 @@ class MyCompanyView extends GetView<CompanyController> {
           ),
           child: SingleChildScrollView(
             child: Form(
-              key: fundRaiserController.fundRaiserKey,
+              key: fundRaiserController.fundRaisingKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -195,7 +211,7 @@ class MyCompanyView extends GetView<CompanyController> {
                     decoration: const InputDecoration(
                         labelText: 'DATA PREVISTA', counterText: ''),
                     onChanged: (value) {
-                      fundRaiserController.onDateChanged(value);
+                      fundRaiserController.onFundRaiserDateChanged(value);
                     },
                   ),
                   const SizedBox(height: 16),
@@ -216,7 +232,7 @@ class MyCompanyView extends GetView<CompanyController> {
                         onPressed: () async {
                           Map<String, dynamic> retorno =
                               await fundRaiserController
-                                  .insertFundRaiser(company.id!);
+                                  .insertFundRaising(company.id!);
 
                           if (retorno['success'] == true) {
                             Get.back();

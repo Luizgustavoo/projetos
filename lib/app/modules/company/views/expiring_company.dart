@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
+import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
 
 class ExpiringCompanyView extends GetView<CompanyController> {
@@ -26,15 +27,12 @@ class ExpiringCompanyView extends GetView<CompanyController> {
                     padding: const EdgeInsets.only(right: 15, left: 15),
                     itemCount: controller.listExpirianCompany.length,
                     itemBuilder: (context, index) {
+                      Company company = controller.listAvailableCompany[index];
                       return CustomCompanyCard(
-                        name:
-                            'EMPRESA: ${controller.listExpirianCompany[index].nome}',
-                        phone:
-                            'TELEFONE: ${controller.listExpirianCompany[index].telefone}',
-                        responsible:
-                            'RESPONSÁVEL DA EMPRESA: ${controller.listExpirianCompany[index].responsavel}',
-                        contactName:
-                            'NOME DO CONTATO: ${controller.listExpirianCompany[index].nomePessoa}',
+                        name: company.nome,
+                        phone: company.telefone,
+                        contactName: company.nomePessoa,
+                        responsible: company.responsavel,
                         color: Colors.red.shade100,
                       );
                     },

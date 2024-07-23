@@ -15,7 +15,15 @@ class HomeView extends GetView<HomeController> {
       children: [
         Scaffold(
           appBar: AppBar(
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 90, left: 15),
+              child: Text(ServiceStorage.getUserName().toUpperCase()),
+            ),
             toolbarHeight: 130.0,
+            leading: Padding(
+              padding: const EdgeInsets.only(bottom: 90, left: 15),
+              child: Image.asset('assets/images/logo_drawer.png'),
+            ),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 90),
@@ -46,6 +54,13 @@ class HomeView extends GetView<HomeController> {
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
                     children: [
+                      HomeCard(
+                        icon: Icons.price_check_rounded,
+                        title: 'CAPTAÇÕES\nPENDENTES',
+                        onTap: () {
+                          Get.toNamed(Routes.pendingfundrising);
+                        },
+                      ),
                       HomeCard(
                         icon: Icons.factory_rounded,
                         title: 'MINHAS\nEMPRESAS',
@@ -78,13 +93,15 @@ class HomeView extends GetView<HomeController> {
                         icon: CupertinoIcons.group_solid,
                         title: 'LISTAGEM\nCAPTADORES',
                         onTap: () {
-                          Get.toNamed(Routes.pickup);
+                          Get.toNamed(Routes.fundraiser);
                         },
                       ),
                       HomeCard(
                         icon: CupertinoIcons.chart_bar_alt_fill,
                         title: 'LISTAGEM\nRELATÓRIOS',
-                        onTap: () {},
+                        onTap: () {
+                          Get.toNamed(Routes.report);
+                        },
                       ),
                     ],
                   ),

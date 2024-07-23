@@ -11,7 +11,7 @@ class ContactCompanyView extends GetView<ContactController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('COLIBRI IND. MÓVEIS LTDA'),
+          title: const Text('NOME EMPRESA'),
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
@@ -23,10 +23,16 @@ class ContactCompanyView extends GetView<ContactController> {
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                'Contatos',
+                'CONTATOS',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
+            ),
+            const Divider(
+              height: 0,
+              thickness: 2,
+              endIndent: 20,
+              indent: 20,
             ),
             Obx(
               () => controller.isLoading.value

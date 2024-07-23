@@ -34,7 +34,7 @@ class ServiceStorage {
 
   static String getUserName() {
     if (existUser()) {
-      return _box.read('auth')['user']['nome'];
+      return _box.read('auth')['user']['name'];
     }
     return "";
   }

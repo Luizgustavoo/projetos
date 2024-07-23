@@ -7,5 +7,8 @@ abstract class Routes {
   static const allcompany = '/allcompany';
   static const expiringcompany = '/expiringcompany';
   static const contactcompany = '/contactcompany';
-  static const pickup = '/pickup';
+  static const fundraiser = '/fundraiser';
+  static const pendingfundrising = '/pendingfundrising';
+  static const report = '/report';
+  static const contacttimeline = '/contacttimeline';
 }

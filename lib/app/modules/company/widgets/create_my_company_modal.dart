@@ -55,9 +55,9 @@ class CreateCompanyModal extends GetView<CompanyController> {
                 TextFormField(
                   controller: controller.cnpjController,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'CNPJ',
-                  ),
+                  maxLength: 18,
+                  decoration:
+                      const InputDecoration(labelText: 'CNPJ', counterText: ''),
                   onChanged: (value) {
                     controller.onCnpjChanged(value);
                   },
@@ -85,9 +85,9 @@ class CreateCompanyModal extends GetView<CompanyController> {
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: controller.contactController,
+                  maxLength: 15,
                   decoration: const InputDecoration(
-                    labelText: 'CONTATO',
-                  ),
+                      labelText: 'TELEFONE', counterText: ''),
                   onChanged: (value) {
                     controller.onContactChanged(value);
                   },

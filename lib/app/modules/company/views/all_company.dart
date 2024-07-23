@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
+import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
+import 'package:projetos/app/routes/app_routes.dart';
 
 class AllCompanyView extends GetView<CompanyController> {
   const AllCompanyView({super.key});
@@ -18,21 +20,30 @@ class AllCompanyView extends GetView<CompanyController> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 15),
-            Expanded(
-                child: ListView.builder(
-                    padding: const EdgeInsets.only(right: 15, left: 15),
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return CustomCompanyCard(
-                        name: 'NOME: NOME DA INDUSTRIA',
-                        phone: 'TELEFONE: (43)9 9999-9999',
-                        responsible: 'CONTATO: NOME PESSOA CONTATO',
-                        contactName: 'CAPTADOR: NOME DO CAP DA EMPRESA',
-                        color: Colors.blue.shade100,
-                      );
-                    })),
-            const SizedBox(height: 15)
+            const SizedBox(height: 10),
+            Obx(
+              () => Expanded(
+                  child: ListView.builder(
+                      padding: const EdgeInsets.only(right: 15, left: 15),
+                      itemCount: controller.listAllCompany.length,
+                      itemBuilder: (context, index) {
+                        Company company = controller.listAllCompany[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.contacttimeline,
+                                arguments: company);
+                          },
+                          child: CustomCompanyCard(
+                            name: company.nome,
+                            responsible: company.responsavel,
+                            phone: company.telefone,
+                            contactName: company.nomePessoa,
+                            company: company,
+                          ),
+                        );
+                      })),
+            ),
+            const SizedBox(height: 10)
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:projetos/app/data/models/fundraisings_model.dart';
+
 class Company {
   int? id;
   String? nome;
@@ -8,6 +10,7 @@ class Company {
   int? status;
   String? createdAt;
   String? updatedAt;
+  List<FundRaising>? fundraisings;
 
   Company(
       {this.id,
@@ -18,7 +21,8 @@ class Company {
       this.nomePessoa,
       this.status,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.fundraisings});
 
   Company.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -30,6 +34,12 @@ class Company {
     status = json['status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    if (json['fundraisings'] != null) {
+      fundraisings = <FundRaising>[];
+      json['fundraisings'].forEach((v) {
+        fundraisings!.add(FundRaising.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -43,6 +53,9 @@ class Company {
     data['status'] = status;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+    if (fundraisings != null) {
+      data['fundraisings'] = fundraisings!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }

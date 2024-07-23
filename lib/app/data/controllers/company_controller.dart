@@ -9,6 +9,7 @@ class CompanyController extends GetxController {
   RxList<Company> listCompany = RxList<Company>([]);
   RxList<Company> listAvailableCompany = RxList<Company>([]);
   RxList<Company> listExpirianCompany = RxList<Company>([]);
+  RxList<Company> listAllCompany = RxList<Company>([]);
   RxBool isLoading = true.obs;
 
   Company? selectedCompany;
@@ -35,6 +36,7 @@ class CompanyController extends GetxController {
     getCompanies();
     getAvailableCompanies();
     getExpirianCompanies();
+    getAllCompanies();
     super.onInit();
   }
 
@@ -67,6 +69,17 @@ class CompanyController extends GetxController {
       final token = ServiceStorage.getToken();
       listExpirianCompany.value =
           await repository.getAllExpirian("Bearer $token");
+    } catch (e) {
+      Exception(e);
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> getAllCompanies() async {
+    isLoading.value = true;
+    try {
+      final token = ServiceStorage.getToken();
+      listAllCompany.value = await repository.gettAllCompany("Bearer $token");
     } catch (e) {
       Exception(e);
     }

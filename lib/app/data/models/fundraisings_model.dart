@@ -1,6 +1,6 @@
 import 'package:projetos/app/data/models/user_model.dart';
 
-class FundRaiser {
+class FundRaising {
   int? id;
   int? userId;
   int? companyId;
@@ -11,9 +11,10 @@ class FundRaiser {
   String? status;
   String? createdAt;
   String? updatedAt;
+  String? empresa;
   User? user;
 
-  FundRaiser(
+  FundRaising(
       {this.id,
       this.userId,
       this.companyId,
@@ -24,9 +25,10 @@ class FundRaiser {
       this.status,
       this.createdAt,
       this.updatedAt,
+      this.empresa,
       this.user});
 
-  FundRaiser.fromJson(Map<String, dynamic> json) {
+  FundRaising.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
     companyId = json['company_id'];
@@ -37,6 +39,7 @@ class FundRaiser {
     status = json['status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    empresa = json['empresa'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
 
@@ -52,6 +55,7 @@ class FundRaiser {
     data['status'] = status;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+    data['empresa'] = empresa;
     if (user != null) {
       data['user'] = user!.toJson();
     }
