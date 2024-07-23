@@ -159,7 +159,6 @@ class FundRaiserApiClient {
         "date_of_capture": fundRaising.dateOfCapture.toString(),
         "captured_value": fundRaising.capturedValue.toString(),
       });
-      print(json.decode(response.body));
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

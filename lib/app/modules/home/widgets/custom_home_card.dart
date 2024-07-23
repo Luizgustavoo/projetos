@@ -24,14 +24,15 @@ class HomeCard extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 80,
-              color: Colors.orange,
+              size: 40,
+              color: const Color(0xFFEBAE1F),
             ),
             const SizedBox(
               height: 5,
             ),
             Text(
               title!,
+              style: const TextStyle(fontSize: 10, fontFamily: 'Poppins'),
               textAlign: TextAlign.center,
             )
           ],

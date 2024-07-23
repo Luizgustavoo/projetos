@@ -21,7 +21,7 @@ class ContactTimeLineView extends GetView<CompanyController> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: company.fundraisings!.length <= 0
+        child: company.fundraisings!.isEmpty
             ? const Center(
                 child: Text(
                   'NENHUMA CAPTAÇÃO PARA A EMPRESA SELECIONADA!',
@@ -39,8 +39,10 @@ class ContactTimeLineView extends GetView<CompanyController> {
                       : "DATA CAPTAÇÃO: ${FormattedInputers.formatApiDate(fundRaising.dateOfCapture.toString())}";
 
                   String valor = fundRaising.status == 'aguardando'
-                      ? "${FormattedInputers.formatValue(fundRaising.predictedValue.toString())}"
-                      : "${FormattedInputers.formatValue(fundRaising.capturedValue.toString())}";
+                      ? FormattedInputers.formatValue(
+                          fundRaising.predictedValue.toString())
+                      : FormattedInputers.formatValue(
+                          fundRaising.capturedValue.toString());
 
                   return TimelineTile(
                     alignment: TimelineAlign.manual,
@@ -76,11 +78,11 @@ class ContactTimeLineView extends GetView<CompanyController> {
                         children: [
                           Text(
                             dataCap,
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
-                            'VALOR: ${valor}',
+                            'VALOR: $valor',
                             style: const TextStyle(fontSize: 16),
                           ),
                           const SizedBox(height: 8),

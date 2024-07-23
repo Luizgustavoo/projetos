@@ -27,7 +27,7 @@ class ExpiringCompanyView extends GetView<CompanyController> {
                     padding: const EdgeInsets.only(right: 15, left: 15),
                     itemCount: controller.listExpirianCompany.length,
                     itemBuilder: (context, index) {
-                      Company company = controller.listAvailableCompany[index];
+                      Company company = controller.listExpirianCompany[index];
                       return CustomCompanyCard(
                         name: company.nome,
                         phone: company.telefone,

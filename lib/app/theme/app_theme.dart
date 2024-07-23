@@ -11,7 +11,7 @@ final ThemeData appThemeData = ThemeData(
                 borderRadius: BorderRadiusDirectional.circular(10)))),
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.orange,
+            backgroundColor: const Color(0xFFEBAE1F),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadiusDirectional.circular(10)))),
     appBarTheme: const AppBarTheme(
@@ -34,4 +34,4 @@ final ThemeData appThemeData = ThemeData(
           borderSide: BorderSide.none, borderRadius: BorderRadius.circular(10)),
     ),
     useMaterial3: true,
-    colorSchemeSeed: Colors.orange);
+    colorSchemeSeed: const Color(0xFFEBAE1F));

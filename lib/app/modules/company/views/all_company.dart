@@ -26,7 +26,7 @@ class AllCompanyView extends GetView<CompanyController> {
             Obx(
               () => Expanded(
                   child: controller.isLoading.value
-                      ? Row(
+                      ? const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [

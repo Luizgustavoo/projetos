@@ -117,8 +117,6 @@ class CompanyApiClient {
           "Authorization": token,
         },
       );
-      // print(json.decode(response.body));
-      print(response.body);
       if (response.statusCode == 201) {
         return json.decode(response.body);
       } else if (response.statusCode == 401 &&
@@ -133,8 +131,7 @@ class CompanyApiClient {
         Get.offAllNamed('/login');
       }
     } catch (e) {
-      // Exception(e);
-      print(e);
+      Exception(e);
     }
     return null;
   }
