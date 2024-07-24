@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projetos/app/data/controllers/company_controller.dart';
 import 'package:projetos/app/data/controllers/home_controller.dart';
 import 'package:projetos/app/data/controllers/statistic_controller.dart';
 import 'package:projetos/app/modules/home/widgets/custom_drawer.dart';
@@ -11,16 +12,16 @@ import 'package:projetos/app/utils/service_storage.dart';
 class HomeView extends GetView<HomeController> {
   HomeView({super.key});
 
-
+  final companyController = Get.put(CompanyController());
 
   @override
   Widget build(BuildContext context) {
     final statisticController = Get.put(StatisticController());
-    final RxBool _isDrawerOpen = false.obs;
+    final RxBool isDrawerOpen = false.obs;
     return Stack(
       children: [
         GestureDetector(
-          onTap: () => _isDrawerOpen.value = false,
+          onTap: () => isDrawerOpen.value = false,
           child: Scaffold(
             appBar: AppBar(
               title: Padding(
@@ -32,7 +33,7 @@ class HomeView extends GetView<HomeController> {
                 child: IconButton(
                   icon: const Icon(Icons.menu),
                   onPressed: () {
-                    _isDrawerOpen.value = !_isDrawerOpen.value;
+                    isDrawerOpen.value = !isDrawerOpen.value;
                   },
                 ),
               ),
@@ -74,6 +75,7 @@ class HomeView extends GetView<HomeController> {
                           icon: Icons.factory_rounded,
                           title: 'MINHAS\nEMPRESAS',
                           onTap: () {
+                            companyController.getAllCompanies();
                             Get.toNamed(Routes.mycompany);
                           },
                         ),
@@ -81,6 +83,7 @@ class HomeView extends GetView<HomeController> {
                           icon: Icons.domain_add_rounded,
                           title: 'TODAS AS\nEMPRESAS',
                           onTap: () {
+                            companyController.getAllCompanies();
                             Get.toNamed(Routes.allcompany);
                           },
                         ),
@@ -88,6 +91,7 @@ class HomeView extends GetView<HomeController> {
                           icon: Icons.pin_drop_rounded,
                           title: 'EMPRESAS\nDISPONÍVEIS',
                           onTap: () {
+                            companyController.getAvailableCompanies();
                             Get.toNamed(Routes.availablecompany);
                           },
                         ),
@@ -95,6 +99,7 @@ class HomeView extends GetView<HomeController> {
                           icon: Icons.history_rounded,
                           title: 'EMPRESAS\nEXPIRANDO',
                           onTap: () {
+                            companyController.getExpirianCompanies();
                             Get.toNamed(Routes.expiringcompany);
                           },
                         ),
@@ -103,6 +108,13 @@ class HomeView extends GetView<HomeController> {
                           title: 'LISTAGEM\nCAPTADORES',
                           onTap: () {
                             Get.toNamed(Routes.fundraiser);
+                          },
+                        ),
+                        HomeCard(
+                          icon: Icons.post_add_rounded,
+                          title: 'LISTAGEM\nPROJETOS',
+                          onTap: () {
+                            Get.toNamed(Routes.bill);
                           },
                         ),
                       ],
@@ -218,18 +230,18 @@ class HomeView extends GetView<HomeController> {
         ),
         Obx(() => AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
-              left: _isDrawerOpen.value ? 0 : -250,
+              left: isDrawerOpen.value ? 0 : -250,
               top: 0,
               bottom: 0,
               child: GestureDetector(
                 onHorizontalDragEnd: (details) {
                   if (details.primaryVelocity! < 0) {
-                    _isDrawerOpen.value = false;
+                    isDrawerOpen.value = false;
                   }
                 },
                 child: CustomDrawer(
                   onClose: () {
-                    _isDrawerOpen.value = false;
+                    isDrawerOpen.value = false;
                   },
                 ),
               ),

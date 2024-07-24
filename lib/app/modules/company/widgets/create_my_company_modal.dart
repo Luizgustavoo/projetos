@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
+import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
+import 'package:projetos/app/data/models/user_model.dart';
 
 class CreateCompanyModal extends GetView<CompanyController> {
   const CreateCompanyModal({super.key, this.company});
@@ -63,7 +65,7 @@ class CreateCompanyModal extends GetView<CompanyController> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira a idade';
+                      return 'Por favor, insira o cnpj';
                     }
                     return null;
                   },
@@ -77,7 +79,7 @@ class CreateCompanyModal extends GetView<CompanyController> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira a idade';
+                      return 'Por favor, insira a empresa';
                     }
                     return null;
                   },
@@ -93,7 +95,7 @@ class CreateCompanyModal extends GetView<CompanyController> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira o parentesco';
+                      return 'Por favor, insira o telefone';
                     }
                     return null;
                   },
@@ -106,11 +108,39 @@ class CreateCompanyModal extends GetView<CompanyController> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira a escolaridade';
+                      return 'Por favor, insira o contato da pessoa';
                     }
                     return null;
                   },
                 ),
+                const SizedBox(height: 15),
+                Obx(() {
+                  final userController = Get.put(FundRaiserController());
+                  if (userController.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    return DropdownButtonFormField<int>(
+                      decoration: const InputDecoration(
+                        labelText: 'CAPTADOR',
+                      ),
+                      items: userController.listFundRaiser.map((User user) {
+                        return DropdownMenuItem<int>(
+                          value: user.id,
+                          child: Text(user.name!),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        controller.selectedUserId.value = value!;
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Por favor, selecione um usuário';
+                        }
+                        return null;
+                      },
+                    );
+                  }
+                }),
                 const SizedBox(height: 16),
                 Row(
                   children: [

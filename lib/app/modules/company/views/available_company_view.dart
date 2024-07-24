@@ -21,67 +21,92 @@ class AvailableCompanyView extends GetView<CompanyController> {
           children: [
             const SizedBox(height: 15),
             Obx(() {
-              return Expanded(
-                  child: ListView.builder(
-                      padding: const EdgeInsets.only(right: 15, left: 15),
-                      itemCount: controller.listAvailableCompany.length,
-                      itemBuilder: (context, index) {
-                        Company company =
-                            controller.listAvailableCompany[index];
-                        return Dismissible(
-                          key: UniqueKey(),
-                          direction: DismissDirection.endToStart,
-                          confirmDismiss: (DismissDirection direction) async {
-                            if (direction == DismissDirection.endToStart) {
-                              showDialog(context, company, controller);
-                            }
-                            return false;
-                          },
-                          background: Container(
-                            margin: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.orange,
-                            ),
-                            child: const Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
+              if (controller.isLoading.value) {
+                return const Expanded(
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Carregando...'),
+                        SizedBox(height: 20.0),
+                        CircularProgressIndicator(
+                          value: 5,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              } else if (!controller.isLoading.value &&
+                  controller.listAvailableCompany.isNotEmpty) {
+                return Expanded(
+                    child: ListView.builder(
+                        padding: const EdgeInsets.only(right: 15, left: 15),
+                        itemCount: controller.listAvailableCompany.length,
+                        itemBuilder: (context, index) {
+                          Company company =
+                              controller.listAvailableCompany[index];
+                          return Dismissible(
+                            key: UniqueKey(),
+                            direction: DismissDirection.endToStart,
+                            confirmDismiss: (DismissDirection direction) async {
+                              if (direction == DismissDirection.endToStart) {
+                                showDialog(context, company, controller);
+                              }
+                              return false;
+                            },
+                            background: Container(
+                              margin: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.orange,
+                              ),
+                              child: const Align(
+                                alignment: Alignment.centerRight,
                                 child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'VINCULAR',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Icon(
-                                            Icons.check_rounded,
-                                            size: 25,
-                                            color: Colors.white,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                  padding: EdgeInsets.all(10),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'VINCULAR',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Icon(
+                                              Icons.check_rounded,
+                                              size: 25,
+                                              color: Colors.white,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          child: CustomCompanyCard(
-                            name: company.nome,
-                            phone: company.telefone,
-                            contactName: company.nomePessoa,
-                            responsible: company.responsavel,
-                            color: Colors.green.shade100,
-                          ),
-                        );
-                      }));
+                            child: CustomCompanyCard(
+                              name: company.nome,
+                              phone: company.telefone,
+                              contactName: company.nomePessoa,
+                              responsible: company.responsavel,
+                              color: Colors.green.shade100,
+                            ),
+                          );
+                        }));
+              } else {
+                return const Expanded(
+                  child: Center(
+                    child: Text('NÃO HÁ EMPRESAS PARA MOSTRAR'),
+                  ),
+                );
+              }
             }),
             const SizedBox(height: 15)
           ],

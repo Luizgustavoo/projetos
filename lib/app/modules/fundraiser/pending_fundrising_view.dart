@@ -24,74 +24,85 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
               if (controller.isLoading.value) {
                 return const Expanded(
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Carregando...'),
+                        SizedBox(height: 20.0),
+                        CircularProgressIndicator(
+                          value: 5,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              } else if (!controller.isLoading.value &&
+                  controller.listAproveFundRising.isNotEmpty) {
+                return Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(right: 15, left: 15),
+                    itemCount: controller.listAproveFundRising.length,
+                    itemBuilder: (context, index) {
+                      FundRaising fundRaising =
+                          controller.listAproveFundRising[index];
+                      return Dismissible(
+                        key: UniqueKey(),
+                        direction: DismissDirection.endToStart,
+                        confirmDismiss: (DismissDirection direction) async {
+                          if (direction == DismissDirection.endToStart) {
+                            showModal(context, fundRaising, controller);
+                          }
+                          return false;
+                        },
+                        background: Container(
+                          margin: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.green,
+                          ),
+                          child: const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'ATUALIZAR',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Icon(
+                                    Icons.check_rounded,
+                                    size: 25,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        child: CustomPendingFundRaiserCard(
+                          companyName: fundRaising.empresa,
+                          predictedValue: controller.formatValue(
+                              int.parse(fundRaising.predictedValue.toString())),
+                          predictedDate: controller
+                              .formatDate(fundRaising.expectedDate.toString()),
+                          status: fundRaising.status,
+                          fundRaiser: fundRaising.user!.name,
+                        ),
+                      );
+                    },
                   ),
                 );
               } else {
-                return Expanded(
-                  child: controller.listAproveFundRising.isEmpty
-                      ? const Center(
-                          child: Text('NÃO HÁ EMPRESAS PARA MOSTRAR'),
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.only(right: 15, left: 15),
-                          itemCount: controller.listAproveFundRising.length,
-                          itemBuilder: (context, index) {
-                            FundRaising fundRaising =
-                                controller.listAproveFundRising[index];
-                            return Dismissible(
-                              key: UniqueKey(),
-                              direction: DismissDirection.endToStart,
-                              confirmDismiss:
-                                  (DismissDirection direction) async {
-                                if (direction == DismissDirection.endToStart) {
-                                  showModal(context, fundRaising, controller);
-                                }
-                                return false;
-                              },
-                              background: Container(
-                                margin: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.green,
-                                ),
-                                child: const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          'ATUALIZAR',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        SizedBox(width: 10),
-                                        Icon(
-                                          Icons.check_rounded,
-                                          size: 25,
-                                          color: Colors.white,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              child: CustomPendingFundRaiserCard(
-                                companyName: fundRaising.empresa,
-                                predictedValue: controller.formatValue(
-                                    int.parse(
-                                        fundRaising.predictedValue.toString())),
-                                predictedDate: controller.formatDate(
-                                    fundRaising.expectedDate.toString()),
-                                status: fundRaising.status,
-                                fundRaiser: fundRaising.user!.name,
-                              ),
-                            );
-                          },
-                        ),
+                return const Expanded(
+                  child: Center(
+                    child: Text('NÃO HÁ EMPRESAS CAPTAÇÕES PENDENTES'),
+                  ),
                 );
               }
             }),

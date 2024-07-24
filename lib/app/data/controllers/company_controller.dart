@@ -15,6 +15,8 @@ class CompanyController extends GetxController {
 
   Company? selectedCompany;
 
+  var selectedUserId = 0.obs;
+
   final companyKey = GlobalKey<FormState>();
 
   final nameCompanyController = TextEditingController();
@@ -23,7 +25,7 @@ class CompanyController extends GetxController {
   final contactController = TextEditingController();
   final peopleContactController = TextEditingController();
 
-  final repository = Get.find<CompanyRepository>();
+  final repository = Get.put(CompanyRepository());
 
   Map<String, dynamic> retorno = {
     "success": false,
@@ -31,15 +33,6 @@ class CompanyController extends GetxController {
     "message": ["Preencha todos os campos!"]
   };
   dynamic mensagem;
-
-  @override
-  void onInit() {
-    getCompanies();
-    getAvailableCompanies();
-    getExpirianCompanies();
-    getAllCompanies();
-    super.onInit();
-  }
 
   Future<void> getCompanies() async {
     isLoading.value = true;

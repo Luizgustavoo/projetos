@@ -4,6 +4,7 @@ import 'package:projetos/app/data/bindings/home_binding.dart';
 import 'package:projetos/app/data/bindings/initial_binding.dart';
 import 'package:projetos/app/data/bindings/login_binding.dart';
 import 'package:projetos/app/data/bindings/fundraiser_binding.dart';
+import 'package:projetos/app/data/bindings/bill_binding.dart';
 import 'package:projetos/app/data/bindings/report_binding.dart';
 import 'package:projetos/app/modules/company/views/all_company.dart';
 import 'package:projetos/app/modules/company/views/available_company_view.dart';
@@ -16,6 +17,7 @@ import 'package:projetos/app/modules/home/home_view.dart';
 import 'package:projetos/app/modules/initial/initial_view.dart';
 import 'package:projetos/app/modules/login/login_view.dart';
 import 'package:projetos/app/modules/fundraiser/fundraiser_view.dart';
+import 'package:projetos/app/modules/bill/bill_view.dart';
 import 'package:projetos/app/modules/report/report_view.dart';
 import 'package:projetos/app/routes/app_routes.dart';
 
@@ -80,6 +82,11 @@ class AppPages {
       name: Routes.report,
       page: () => const ReportView(),
       binding: ReportBinding(),
+    ),
+    GetPage(
+      name: Routes.bill,
+      page: () => const BillView(),
+      binding: BillBinding(),
     ),
   ];
 }
