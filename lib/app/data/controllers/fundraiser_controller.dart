@@ -94,7 +94,8 @@ class FundRaiserController extends GetxController {
     return retorno;
   }
 
-  Future<Map<String, dynamic>> insertFundRaising(int companyId) async {
+  Future<Map<String, dynamic>> insertFundRaising(
+      int companyId, int billId) async {
     final token = ServiceStorage.getToken();
     final companyController = Get.put(CompanyController());
 
@@ -108,8 +109,8 @@ class FundRaiserController extends GetxController {
         companyId: companyId);
 
     if (fundRaisingKey.currentState!.validate()) {
-      mensagem =
-          await repository.insertFundRaising("Bearer $token", fundRaiser);
+      mensagem = await repository.insertFundRaising(
+          "Bearer $token", fundRaiser, billId);
       retorno = {
         'success': mensagem['success'],
         'message': mensagem['message']

@@ -5,7 +5,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:projetos/app/data/base_url.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
-import 'package:projetos/app/utils/service_storage.dart';
 
 class BillApiClient {
   final http.Client httpClient = http.Client();
@@ -14,8 +13,7 @@ class BillApiClient {
     try {
       Uri companyUrl;
 
-      String url =
-          '$baseUrl/v1/bills';
+      String url = '$baseUrl/v1/bills';
 
       companyUrl = Uri.parse(url);
       var response = await httpClient.get(
@@ -31,7 +29,7 @@ class BillApiClient {
           json.decode(response.body)['message'] == "Token has expired") {
         Get.defaultDialog(
           title: "Expirou",
-          content: Text(
+          content: const Text(
               'O token de autenticação expirou, faça login novamente.'),
         );
         var box = GetStorage('projeto');

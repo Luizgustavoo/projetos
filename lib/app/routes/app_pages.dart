@@ -6,7 +6,7 @@ import 'package:projetos/app/data/bindings/login_binding.dart';
 import 'package:projetos/app/data/bindings/fundraiser_binding.dart';
 import 'package:projetos/app/data/bindings/bill_binding.dart';
 import 'package:projetos/app/data/bindings/report_binding.dart';
-import 'package:projetos/app/modules/company/views/all_company.dart';
+import 'package:projetos/app/modules/company/views/all_company_view.dart';
 import 'package:projetos/app/modules/company/views/available_company_view.dart';
 import 'package:projetos/app/modules/company/views/contact_company_view.dart';
 import 'package:projetos/app/modules/company/views/contact_timeline_view.dart';

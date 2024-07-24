@@ -18,16 +18,26 @@ class ServiceStorage {
   }
 
   static void clearBox() {
+    final box = GetStorage('projeto');
     if (existUser()) {
-      _box.remove('auth');
-      _box.remove('projeto');
-      _box.erase();
+      box.remove('auth');
+      box.remove('projeto');
+      box.erase();
+      print(box.read('auth'));
+      print(box.read('projeto'));
     }
   }
 
   static int getUserId() {
     if (existUser()) {
       return _box.read('auth')['user']['id'];
+    }
+    return 0;
+  }
+
+  static int getUserType() {
+    if (existUser()) {
+      return _box.read('auth')['user']['usertype_id'];
     }
     return 0;
   }

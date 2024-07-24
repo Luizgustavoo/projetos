@@ -137,7 +137,7 @@ class CompanyApiClient {
   }
 
   insertCompany(String token, String nome, String cnpj, String responsavel,
-      String telefone, String nomePessoa) async {
+      String telefone, String nomePessoa, int userId) async {
     try {
       var companyUrl = Uri.parse('$baseUrl/v1/company');
 
@@ -149,7 +149,9 @@ class CompanyApiClient {
         "responsavel": responsavel,
         "telefone": telefone,
         "nome_pessoa": nomePessoa,
-        "user_id": ServiceStorage.getUserId().toString(),
+        "user_id": ServiceStorage.getUserType() == 1
+            ? userId.toString()
+            : ServiceStorage.getUserId().toString(),
         "status": "1"
       });
 

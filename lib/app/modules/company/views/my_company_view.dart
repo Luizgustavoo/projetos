@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
 import 'package:projetos/app/data/controllers/contact_controller.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
+import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
 import 'package:projetos/app/modules/company/widgets/create_my_company_modal.dart';
@@ -38,11 +40,12 @@ class MyCompanyView extends GetView<CompanyController> {
                           CircularProgressIndicator(
                             value: 5,
                           ),
-                        ],),
+                        ],
+                      ),
                     ),
                   );
-                }else
-                if (controller.isLoading.value == false && controller.listCompany.isNotEmpty) {
+                } else if (controller.isLoading.value == false &&
+                    controller.listCompany.isNotEmpty) {
                   return Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.only(right: 15, left: 15),
@@ -138,15 +141,13 @@ class MyCompanyView extends GetView<CompanyController> {
                       },
                     ),
                   );
-                }else{
+                } else {
                   return const Expanded(
                     child: Center(
                       child: Text('NÃO HÁ EMPRESAS PARA MOSTRAR'),
                     ),
                   );
                 }
-
-
               },
             ),
             const SizedBox(height: 15)
@@ -236,6 +237,34 @@ class MyCompanyView extends GetView<CompanyController> {
                       fundRaiserController.onValueChanged(value);
                     },
                   ),
+                  const SizedBox(height: 15),
+                  Obx(() {
+                    final billController = Get.put(BillController());
+                    if (billController.isLoading.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
+                      return DropdownButtonFormField<int>(
+                        decoration: const InputDecoration(
+                          labelText: 'PROJETOS',
+                        ),
+                        items: billController.listAllBills.map((Bill bill) {
+                          return DropdownMenuItem<int>(
+                            value: bill.id,
+                            child: Text(bill.nome!),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          controller.selectedBillId.value = value!;
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Por favor, selecione um projeto';
+                          }
+                          return null;
+                        },
+                      );
+                    }
+                  }),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -243,8 +272,8 @@ class MyCompanyView extends GetView<CompanyController> {
                       ElevatedButton(
                         onPressed: () async {
                           Map<String, dynamic> retorno =
-                              await fundRaiserController
-                                  .insertFundRaising(company.id!);
+                              await fundRaiserController.insertFundRaising(
+                                  company.id!, controller.selectedBillId.value);
 
                           if (retorno['success'] == true) {
                             Get.back();

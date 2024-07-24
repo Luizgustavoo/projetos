@@ -87,11 +87,11 @@ class CustomFundRaiserCard extends StatelessWidget {
               icon: const Icon(Icons.edit_rounded)),
           title: Text(
             fundRaiserName!.toUpperCase(),
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 15, fontFamily: 'Poppinss'),
           ),
           subtitle: Text(
             fundRaiserPhone!,
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 14, fontFamily: 'Poppins'),
           ),
         ),
       ),

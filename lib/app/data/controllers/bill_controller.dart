@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/repositories/bill_repository.dart';
 import 'package:projetos/app/utils/formatter.dart';
@@ -25,6 +26,12 @@ class BillController extends GetxController {
   };
   dynamic mensagem;
 
+  @override
+  void onInit() {
+    getAllBills();
+    super.onInit();
+  }
+
   Future<void> getAllBills() async {
     isLoading.value = true;
     try {
@@ -39,17 +46,16 @@ class BillController extends GetxController {
   Future<Map<String, dynamic>> insertBill() async {
     final token = ServiceStorage.getToken();
     if (billKey.currentState!.validate()) {
-
       mensagem = await repository.insertBill(
           "Bearer $token",
-      Bill(
-        nome: nameController.text,
-        ano: int.parse(yearController.text),
-        status: statusController.text,
-        observacoes: commentsController.text,
-        valorAprovado: FormattedInputers.convertToDouble(aprovedValueController.text),
-      )
-      );
+          Bill(
+            nome: nameController.text,
+            ano: int.parse(yearController.text),
+            status: statusController.text,
+            observacoes: commentsController.text,
+            valorAprovado:
+                FormattedInputers.convertToDouble(aprovedValueController.text),
+          ));
       retorno = {
         'success': mensagem['success'],
         'message': mensagem['message']
@@ -65,5 +71,11 @@ class BillController extends GetxController {
       selection: TextSelection.collapsed(
           offset: FormattedInputers.formatValue(value).length),
     );
+  }
+
+  String formatValue(double value) {
+    final NumberFormat formatter =
+        NumberFormat.currency(symbol: '', decimalDigits: 2, locale: 'pt_BR');
+    return formatter.format(value);
   }
 }

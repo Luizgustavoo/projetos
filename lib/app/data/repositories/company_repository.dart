@@ -61,10 +61,10 @@ class CompanyRepository {
   }
 
   insertCompany(String token, String nome, String cnpj, String responsavel,
-      String telefone, String nomePessoa) async {
+      String telefone, String nomePessoa, int userId) async {
     try {
       var response = await apiClient.insertCompany(
-          token, nome, cnpj, responsavel, telefone, nomePessoa);
+          token, nome, cnpj, responsavel, telefone, nomePessoa, userId);
       return response;
     } catch (e) {
       Exception(e);

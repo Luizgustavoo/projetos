@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/repositories/company_repository.dart';
+import 'package:projetos/app/routes/app_routes.dart';
 import 'package:projetos/app/utils/formatter.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
@@ -16,6 +17,7 @@ class CompanyController extends GetxController {
   Company? selectedCompany;
 
   var selectedUserId = 0.obs;
+  var selectedBillId = 0.obs;
 
   final companyKey = GlobalKey<FormState>();
 
@@ -89,12 +91,17 @@ class CompanyController extends GetxController {
           cnpjController.text,
           responsibleCompanyController.text,
           contactController.text,
-          peopleContactController.text);
+          peopleContactController.text,
+          selectedUserId.value);
       retorno = {
         'success': mensagem['success'],
         'message': mensagem['message']
       };
-      getCompanies();
+      if (Get.currentRoute == Routes.mycompany) {
+        getCompanies();
+      } else {
+        getAllCompanies();
+      }
     }
     return retorno;
   }

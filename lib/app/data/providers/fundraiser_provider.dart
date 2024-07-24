@@ -100,7 +100,7 @@ class FundRaiserApiClient {
     return null;
   }
 
-  insertFundRaising(String token, FundRaiser fundRaiser) async {
+  insertFundRaising(String token, FundRaiser fundRaiser, int billId) async {
     try {
       Uri fundRaiserUrl;
       String url = '$baseUrl/v1/fundraising';
@@ -109,6 +109,7 @@ class FundRaiserApiClient {
         "Accept": "application/json",
         "Authorization": token,
       }, body: {
+        "bills_id": billId.toString(),
         "user_id": ServiceStorage.getUserId().toString(),
         "company_id": fundRaiser.companyId.toString(),
         "expected_date": fundRaiser.expectedDate.toString(),

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/bill_controller.dart';
-import 'package:projetos/app/data/controllers/company_controller.dart';
-import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
-import 'package:projetos/app/data/models/user_model.dart';
 
 class CreateBillModal extends GetView<BillController> {
   const CreateBillModal({super.key, this.company});
@@ -60,7 +57,7 @@ class CreateBillModal extends GetView<BillController> {
                   keyboardType: TextInputType.number,
                   maxLength: 18,
                   decoration:
-                  const InputDecoration(labelText: 'ANO', counterText: ''),
+                      const InputDecoration(labelText: 'ANO', counterText: ''),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, insira o ano';
@@ -84,13 +81,12 @@ class CreateBillModal extends GetView<BillController> {
                     return null;
                   },
                 ),
-
                 const SizedBox(height: 10),
                 DropdownButtonFormField<String>(
                   decoration: const InputDecoration(
                     labelText: 'STATUS',
                   ),
-                  items: ['aberto','fechado'].map((String valor) {
+                  items: ['aberto', 'fechado'].map((String valor) {
                     return DropdownMenuItem<String>(
                       value: valor,
                       child: Text(valor.toUpperCase()),
@@ -108,7 +104,6 @@ class CreateBillModal extends GetView<BillController> {
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
-
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
                   textInputAction: TextInputAction.newline,
@@ -124,13 +119,13 @@ class CreateBillModal extends GetView<BillController> {
                     return null;
                   },
                 ),
-
                 const SizedBox(height: 16),
                 Row(
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        Map<String, dynamic> retorno =  await controller.insertBill();
+                        Map<String, dynamic> retorno =
+                            await controller.insertBill();
 
                         if (retorno['success'] == true) {
                           Get.back();
@@ -158,15 +153,15 @@ class CreateBillModal extends GetView<BillController> {
                     SizedBox(
                       width: 120,
                       child: TextButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: const Text(
-                            'CANCELAR',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Color(0xFFEBAE1F)),
-                          ),),
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text(
+                          'CANCELAR',
+                          style: TextStyle(
+                              fontFamily: 'Poppins', color: Color(0xFFEBAE1F)),
+                        ),
+                      ),
                     )
                   ],
                 ),
