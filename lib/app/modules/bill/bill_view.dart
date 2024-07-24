@@ -24,7 +24,6 @@ class BillView extends GetView<BillController> {
             const SizedBox(height: 10),
 
             Obx(() {
-
               if (controller.isLoading.value) {
                 return const Expanded(
                   child: Center(
@@ -43,9 +42,6 @@ class BillView extends GetView<BillController> {
                 );
               }else if(!controller.isLoading.value &&
                   controller.listAllBills.isNotEmpty){
-
-
-
                 return Expanded(
                     child: ListView.builder(
                         padding: const EdgeInsets.only(right: 15, left: 15),
@@ -75,7 +71,7 @@ class BillView extends GetView<BillController> {
                               ),
                             ),
                           );
-                        }));
+                        },),);
               }else{
                 return const Expanded(
                   child: Center(

@@ -6,7 +6,7 @@ class Bill {
   int? ano;
   String? status;
   String? observacoes;
-  String? valorAprovado;
+  dynamic valorAprovado;
   List<FundRaising>? fundraisings;
 
   Bill(
@@ -24,7 +24,7 @@ class Bill {
     ano = json['ano'];
     status = json['status'];
     observacoes = json['observacoes'];
-    valorAprovado = json['valor_aprovado'];
+    valorAprovado = json['valor_aprovado'].toString();
     if (json['fundraisings'] != null) {
       fundraisings = <FundRaising>[];
       json['fundraisings'].forEach((v) {

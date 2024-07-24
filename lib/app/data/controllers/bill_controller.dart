@@ -46,7 +46,7 @@ class BillController extends GetxController {
         ano: int.parse(yearController.text),
         status: statusController.text,
         observacoes: commentsController.text,
-        valorAprovado: aprovedValueController.text,
+        valorAprovado: double.parse(aprovedValueController.text),
       )
       );
       retorno = {
