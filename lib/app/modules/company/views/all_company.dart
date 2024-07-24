@@ -24,41 +24,54 @@ class AllCompanyView extends GetView<CompanyController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 10),
-            Obx(
-              () => Expanded(
-                  child: controller.isLoading.value
-                      ? const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(),
-                            Text(
-                              'Carregando...',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20),
-                            )
-                          ],
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.only(right: 15, left: 15),
-                          itemCount: controller.listAllCompany.length,
-                          itemBuilder: (context, index) {
-                            Company company = controller.listAllCompany[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Get.toNamed(Routes.contacttimeline,
-                                    arguments: company);
-                              },
-                              child: CustomCompanyCard(
-                                name: company.nome,
-                                responsible: company.responsavel,
-                                phone: company.telefone,
-                                contactName: company.nomePessoa,
-                                company: company,
-                              ),
-                            );
-                          })),
-            ),
+
+            Obx(() {
+              if(controller.isLoading.value){
+
+                return const Expanded(
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                      Text('Carregando...'),
+                        SizedBox(height: 20.0),
+                        CircularProgressIndicator(
+                          value: 5,
+                        ),
+                    ],),
+                  ),
+                );
+              }else if(!controller.isLoading.value && controller.listCompany.isNotEmpty){
+                return Expanded(child: ListView.builder(
+                  padding: const EdgeInsets.only(right: 15, left: 15),
+                  itemCount: controller.listAllCompany.length,
+                  itemBuilder: (context, index) {
+                    Company company = controller.listAllCompany[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.contacttimeline,
+                            arguments: company);
+                      },
+                      child: CustomCompanyCard(
+                        name: company.nome,
+                        responsible: company.responsavel,
+                        phone: company.telefone,
+                        contactName: company.nomePessoa,
+                        company: company,
+                      ),
+                    );
+                  },
+                ),);
+              }else{
+                return const Expanded(
+                  child: Center(
+                    child: Text('NÃO HÁ EMPRESAS PARA MOSTRAR'),
+                  ),
+                );
+              }
+            }),
+
             const SizedBox(height: 10)
           ],
         ),

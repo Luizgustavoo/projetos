@@ -29,16 +29,20 @@ class MyCompanyView extends GetView<CompanyController> {
                 if (controller.isLoading.value) {
                   return const Expanded(
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Carregando...'),
+                          SizedBox(height: 20.0),
+                          CircularProgressIndicator(
+                            value: 5,
+                          ),
+                        ],),
                     ),
                   );
-                } else if (controller.listCompany.isEmpty) {
-                  return const Expanded(
-                    child: Center(
-                      child: Text('NÃO HÁ EMPRESAS PARA MOSTRAR'),
-                    ),
-                  );
-                } else {
+                }else
+                if (!controller.isLoading.value && controller.listCompany.isNotEmpty) {
                   return Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.only(right: 15, left: 15),
@@ -134,7 +138,15 @@ class MyCompanyView extends GetView<CompanyController> {
                       },
                     ),
                   );
+                }else{
+                  return const Expanded(
+                    child: Center(
+                      child: Text('NÃO HÁ EMPRESAS PARA MOSTRAR'),
+                    ),
+                  );
                 }
+
+
               },
             ),
             const SizedBox(height: 15)

@@ -11,11 +11,12 @@ import 'package:projetos/app/utils/service_storage.dart';
 class HomeView extends GetView<HomeController> {
   HomeView({super.key});
 
-  final RxBool _isDrawerOpen = false.obs;
+
 
   @override
   Widget build(BuildContext context) {
     final statisticController = Get.put(StatisticController());
+    final RxBool _isDrawerOpen = false.obs;
     return Stack(
       children: [
         GestureDetector(
