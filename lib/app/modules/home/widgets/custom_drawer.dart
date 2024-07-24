@@ -1,4 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:projetos/app/routes/app_routes.dart';
+import 'package:projetos/app/utils/service_storage.dart';
 
 class CustomDrawer extends StatelessWidget {
   final VoidCallback onClose;
@@ -16,6 +21,7 @@ class CustomDrawer extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              height: 150,
               color: Colors.orange,
               padding: const EdgeInsets.all(16),
               child: const Text(
@@ -24,13 +30,30 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
             ListTile(
-              title: const Text('Item 1'),
-              onTap: onClose,
+              leading: const Icon(CupertinoIcons.chart_bar_alt_fill),
+              title: const Text(
+                'LISTAGEM DE RELATÓRIOS',
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 12),
+              ),
+              onTap: () {
+                Get.toNamed(Routes.report);
+              },
             ),
             ListTile(
               title: const Text('Item 2'),
               onTap: onClose,
             ),
+            const Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton.icon(
+                  onPressed: () {
+                    ServiceStorage.clearBox();
+                    Get.offAllNamed(Routes.login);
+                  },
+                  icon: const Icon(Icons.exit_to_app_rounded),
+                  label: const Text('SAIR')),
+            )
           ],
         ),
       ),

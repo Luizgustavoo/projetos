@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/home_controller.dart';
+import 'package:projetos/app/data/controllers/statistic_controller.dart';
 import 'package:projetos/app/modules/home/widgets/custom_drawer.dart';
 import 'package:projetos/app/modules/home/widgets/custom_home_card.dart';
 import 'package:projetos/app/routes/app_routes.dart';
@@ -15,6 +15,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final statisticController = Get.put(StatisticController());
     return Stack(
       children: [
         GestureDetector(
@@ -103,13 +104,6 @@ class HomeView extends GetView<HomeController> {
                             Get.toNamed(Routes.fundraiser);
                           },
                         ),
-                        HomeCard(
-                          icon: CupertinoIcons.chart_bar_alt_fill,
-                          title: 'LISTAGEM\nRELATÓRIOS',
-                          onTap: () {
-                            Get.toNamed(Routes.report);
-                          },
-                        ),
                       ],
                     ),
                   )
@@ -128,82 +122,90 @@ class HomeView extends GetView<HomeController> {
             margin: const EdgeInsets.only(right: 20, left: 20, top: 20),
             child: SizedBox(
               height: MediaQuery.of(context).size.height * .16,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'EMPRESAS',
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,
-                          fontFamily: 'Poppins'),
+                          fontFamily: 'Poppinss'),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 2),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              '05',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontFamily: 'Poppins',
-                                color: Colors.green,
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Obx(
+                                () => Text(
+                                  '${statisticController.availableCompanies}',
+                                  style: const TextStyle(
+                                    fontSize: 38,
+                                    fontFamily: 'Poppinss',
+                                  ),
+                                ),
                               ),
-                            ),
-                            Text(
-                              'DISPONÍVEIS',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.green,
-                                fontFamily: 'Poppins',
+                              const Text(
+                                'DISPONÍVEIS',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'Poppins',
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              '10',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontFamily: 'Poppins',
-                                color: Colors.red,
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Obx(
+                                () => Text(
+                                  '${statisticController.expiredCompanies}',
+                                  style: const TextStyle(
+                                    fontSize: 38,
+                                    fontFamily: 'Poppinss',
+                                  ),
+                                ),
                               ),
-                            ),
-                            Text(
-                              'EXPIRANDO',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.red,
-                                fontFamily: 'Poppins',
+                              const Text(
+                                'EXPIRANDO',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'Poppins',
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              '15',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontFamily: 'Poppins',
-                                color: Colors.black,
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Obx(
+                                () => Text(
+                                  '${statisticController.totalCompanies}',
+                                  style: const TextStyle(
+                                    fontSize: 38,
+                                    fontFamily: 'Poppinss',
+                                  ),
+                                ),
                               ),
-                            ),
-                            Text(
-                              'TOTAL',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontFamily: 'Poppins',
+                              const Text(
+                                'TOTAL',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontFamily: 'Poppins',
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),

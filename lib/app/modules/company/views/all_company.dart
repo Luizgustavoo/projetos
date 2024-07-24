@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
+import 'package:projetos/app/modules/company/widgets/create_my_company_modal.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
 import 'package:projetos/app/routes/app_routes.dart';
 
@@ -60,6 +61,23 @@ class AllCompanyView extends GetView<CompanyController> {
             ),
             const SizedBox(height: 10)
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        mini: true,
+        elevation: 2,
+        backgroundColor: Colors.orange,
+        onPressed: () {
+          controller.clearAllFields();
+          showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: (context) => const CreateCompanyModal(),
+          );
+        },
+        child: const Icon(
+          Icons.add_rounded,
+          color: Colors.white,
         ),
       ),
     );

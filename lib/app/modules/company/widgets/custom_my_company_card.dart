@@ -83,13 +83,23 @@ class CustomCompanyCard extends StatelessWidget {
                   color: Colors.grey.shade500,
                 )),
         dense: true,
-        title: Text('EMPRESA: ${name!}'.toUpperCase()),
+        title: Text(
+          'EMPRESA: ${name!}'.toUpperCase(),
+          style: const TextStyle(fontFamily: 'Poppinss'),
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('RESPONSÁVEL : ${responsible!}'.toUpperCase()),
-            Text('TELEFONE: ${phone!}'.toUpperCase()),
-            Text('NOME DO CONTATO: ${contactName!}'.toUpperCase()),
+            Text('RESPONSÁVEL : ${responsible!}'.toUpperCase(),
+                style: const TextStyle(fontFamily: 'Poppins')),
+            Text(
+              'TELEFONE: ${phone!}'.toUpperCase(),
+              style: const TextStyle(fontFamily: 'Poppins'),
+            ),
+            Text(
+              'NOME DO CONTATO: ${contactName!}'.toUpperCase(),
+              style: const TextStyle(fontFamily: 'Poppins'),
+            ),
           ],
         ),
       ),

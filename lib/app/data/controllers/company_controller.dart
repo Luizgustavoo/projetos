@@ -6,11 +6,12 @@ import 'package:projetos/app/utils/formatter.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
 class CompanyController extends GetxController {
-  RxList<Company> listCompany = RxList<Company>([]);
+  // RxList<Company> listCompany = RxList<Company>([]);
   RxList<Company> listAvailableCompany = RxList<Company>([]);
-  RxList<Company> listExpirianCompany = RxList<Company>([]);
-  RxList<Company> listAllCompany = RxList<Company>([]);
-  RxBool isLoading = true.obs;
+  var listExpirianCompany = <Company>[].obs;
+  var listAllCompany = <Company>[].obs;
+  var isLoading = true.obs;
+  var listCompany = <Company>[].obs;
 
   Company? selectedCompany;
 
