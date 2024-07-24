@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
 import 'package:projetos/app/data/controllers/home_controller.dart';
 import 'package:projetos/app/data/controllers/statistic_controller.dart';
@@ -13,6 +14,7 @@ class HomeView extends GetView<HomeController> {
   HomeView({super.key});
 
   final companyController = Get.put(CompanyController());
+  final billsController = Get.put(BillController());
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +116,7 @@ class HomeView extends GetView<HomeController> {
                           icon: Icons.post_add_rounded,
                           title: 'LISTAGEM\nPROJETOS',
                           onTap: () {
+                            billsController.getAllBills();
                             Get.toNamed(Routes.bill);
                           },
                         ),

@@ -5,8 +5,8 @@ class Bill {
   String? nome;
   int? ano;
   String? status;
-  Null observacoes;
-  int? valorAprovado;
+  String? observacoes;
+  String? valorAprovado;
   List<FundRaising>? fundraisings;
 
   Bill(
