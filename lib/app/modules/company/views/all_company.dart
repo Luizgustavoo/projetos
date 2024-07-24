@@ -42,7 +42,7 @@ class AllCompanyView extends GetView<CompanyController> {
                   ),
                 );
               } else if (!controller.isLoading.value &&
-                  controller.listCompany.isNotEmpty) {
+                  controller.listAllCompany.isNotEmpty) {
                 return Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.only(right: 15, left: 15),

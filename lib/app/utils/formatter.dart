@@ -72,4 +72,19 @@ abstract class FormattedInputers {
       return 'Data inválida';
     }
   }
+
+  static double convertToDouble(String valorString) {
+    try {
+      String valorSemMoeda = valorString.replaceAll("R\$ ", "");
+      valorSemMoeda = valorSemMoeda.replaceAll(".", "");
+      valorSemMoeda = valorSemMoeda.replaceAll(",", ".");
+      double valorDouble = double.parse(valorSemMoeda);
+
+      return valorDouble; // Output: 2356.5
+    } catch (e) {
+      print("Erro ao converter o valor: $e");
+    }
+
+    return 0;
+  }
 }

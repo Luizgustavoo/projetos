@@ -39,6 +39,7 @@ class BillController extends GetxController {
   Future<Map<String, dynamic>> insertBill() async {
     final token = ServiceStorage.getToken();
     if (billKey.currentState!.validate()) {
+
       mensagem = await repository.insertBill(
           "Bearer $token",
       Bill(
@@ -46,7 +47,7 @@ class BillController extends GetxController {
         ano: int.parse(yearController.text),
         status: statusController.text,
         observacoes: commentsController.text,
-        valorAprovado: double.parse(aprovedValueController.text),
+        valorAprovado: FormattedInputers.convertToDouble(aprovedValueController.text),
       )
       );
       retorno = {

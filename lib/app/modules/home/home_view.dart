@@ -77,7 +77,7 @@ class HomeView extends GetView<HomeController> {
                           icon: Icons.factory_rounded,
                           title: 'MINHAS\nEMPRESAS',
                           onTap: () {
-                            companyController.getAllCompanies();
+                            companyController.getCompanies();
                             Get.toNamed(Routes.mycompany);
                           },
                         ),
