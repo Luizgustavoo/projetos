@@ -13,6 +13,8 @@ class FundRaiserController extends GetxController {
   RxList<User> listFundRaiser = RxList<User>([]);
   RxList<FundRaising> listPendingFundRising = RxList<FundRaising>([]);
   RxBool isLoading = true.obs;
+  var paidOutCheckboxValue = false.obs;
+  var showPaymentDateField = false.obs;
 
   final dateFundController = TextEditingController();
   final valueFundController = TextEditingController();
@@ -29,6 +31,7 @@ class FundRaiserController extends GetxController {
   final pendingFundRaisingKey = GlobalKey<FormState>();
   final datePendingFundController = TextEditingController();
   final pendingValueFundController = TextEditingController();
+  final paymentDateController = TextEditingController();
 
   final repository = Get.put(FundRaiserRepository());
 
@@ -63,13 +66,11 @@ class FundRaiserController extends GetxController {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
-      var aqui = listPendingFundRising.value =
+      var pendingFundRaisings =
           await repository.getAllPendingFundRising("Bearer $token");
-      print(
-          '-------------------------------------------------------------------------------');
-      print(aqui);
+      listPendingFundRising.value = pendingFundRaisings;
     } catch (e) {
-      Exception(e);
+      Exception('Exception: $e');
     }
     isLoading.value = false;
   }
@@ -100,22 +101,17 @@ class FundRaiserController extends GetxController {
     final token = ServiceStorage.getToken();
     final companyController = Get.put(CompanyController());
 
-    // Remove todos os caracteres não numéricos exceto a vírgula
     String valueString =
         valueFundController.text.replaceAll(RegExp(r'[^0-9,]'), '');
 
-    // Remove os zeros finais depois da vírgula
     if (valueString.contains(',')) {
       valueString = valueString.replaceAll(RegExp(r'(?<=,\d*)0+$'), '');
     }
 
-    // Substitui a vírgula por um ponto para conversão
     valueString = valueString.replaceAll(',', '.');
 
-    // Tenta converter para double
     double? predictedValue = double.tryParse(valueString);
 
-    // Verifica se o valor é válido
     if (predictedValue == null) {
       return {'success': false, 'message': 'Valor previsto inválido'};
     }
@@ -161,13 +157,25 @@ class FundRaiserController extends GetxController {
 
   Future<Map<String, dynamic>> updatePendingFundRaising(int? id) async {
     String valueString =
-        pendingValueFundController.text.replaceAll(RegExp(r'[^0-9]'), '');
+        pendingValueFundController.text.replaceAll(RegExp(r'[^0-9,]'), '');
 
-    int? capturedValue = int.tryParse(valueString);
+    if (valueString.contains(',')) {
+      valueString = valueString.replaceAll(RegExp(r'(?<=,\d*)0+$'), '');
+    }
+
+    valueString = valueString.replaceAll(',', '.');
+
+    double? capturedValue = double.tryParse(valueString);
+
+    if (capturedValue == null) {
+      return {'success': false, 'message': 'Valor previsto inválido'};
+    }
     FundRaising fundRaising = FundRaising(
         id: id,
         dateOfCapture: datePendingFundController.text,
-        capturedValue: capturedValue);
+        capturedValue: capturedValue,
+        pago: paidOutCheckboxValue.value ? 'sim' : 'nao',
+        payDay: paymentDateController.text);
 
     final token = ServiceStorage.getToken();
     if (pendingFundRaisingKey.currentState!.validate()) {
@@ -203,9 +211,11 @@ class FundRaiserController extends GetxController {
       emailRaiserController,
       passwordRaiserController,
       datePendingFundController,
-      pendingValueFundController
+      pendingValueFundController,
+      paymentDateController
     ];
-
+    paidOutCheckboxValue.value = false;
+    showPaymentDateField.value = false;
     for (final controller in textControllers) {
       controller.clear();
     }
@@ -255,6 +265,14 @@ class FundRaiserController extends GetxController {
     );
   }
 
+  void onPaymentDateChanged(String value) {
+    paymentDateController.value = paymentDateController.value.copyWith(
+      text: FormattedInputers.formatDate(value),
+      selection: TextSelection.collapsed(
+          offset: FormattedInputers.formatDate(value).length),
+    );
+  }
+
   void onCnpjChanged(String value) {
     cpfCnpjRaiserController.value = cpfCnpjRaiserController.value.copyWith(
       text: FormattedInputers.formatCpfCnpj(value),
@@ -294,9 +312,12 @@ class FundRaiserController extends GetxController {
     return formatter.format(parsedDate);
   }
 
-  String formatValue(int value) {
+  String formatValue(dynamic value) {
+    if (value is String) {
+      value = double.tryParse(value) ?? 0.0;
+    }
     final NumberFormat formatter =
         NumberFormat.currency(symbol: '', decimalDigits: 2, locale: 'pt_BR');
-    return formatter.format(value / 100);
+    return formatter.format(value);
   }
 }

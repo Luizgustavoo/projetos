@@ -110,7 +110,7 @@ abstract class FormattedInputers {
 
       return valorDouble;
     } catch (e) {
-      print("Erro ao converter o valor: $e");
+      Exception("Erro ao converter o valor: $e");
     }
 
     return 0;
@@ -127,7 +127,7 @@ abstract class FormattedInputers {
 
       return percentageValue;
     } catch (e) {
-      print("Erro ao converter o valor: $e");
+      Exception("Erro ao converter o valor: $e");
     }
 
     return 0;

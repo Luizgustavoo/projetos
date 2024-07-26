@@ -44,7 +44,7 @@ class FundRaiserApiClient {
     return null;
   }
 
-  getAllPendingFundRising(String token) async {
+  Future<Map<String, dynamic>?> getAllPendingFundRising(String token) async {
     try {
       Uri fundRaiserUrl;
       String url = '$baseUrl/v1/company/fundraising';
@@ -56,7 +56,6 @@ class FundRaiserApiClient {
           "Authorization": token,
         },
       );
-      print(json.decode(response.body));
       if (response.statusCode == 201) {
         return json.decode(response.body);
       } else if (response.statusCode == 401 &&
@@ -71,7 +70,7 @@ class FundRaiserApiClient {
         Get.offAllNamed('/login');
       }
     } catch (e) {
-      Exception(e);
+      Exception('Exception: $e');
     }
     return null;
   }
@@ -160,6 +159,8 @@ class FundRaiserApiClient {
       }, body: {
         "date_of_capture": fundRaising.dateOfCapture.toString(),
         "captured_value": fundRaising.capturedValue.toString(),
+        "pago": fundRaising.pago.toString(),
+        "payday": fundRaising.payDay.toString()
       });
       print(json.decode(response.body));
       return json.decode(response.body);

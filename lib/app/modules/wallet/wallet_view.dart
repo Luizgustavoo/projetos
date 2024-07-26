@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/wallet_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
-import 'package:projetos/app/data/models/fundraisings_model.dart';
 import 'package:projetos/app/modules/wallet/widgets/custom_wallet_card.dart';
 
 class WalletView extends GetView<WalletController> {
@@ -50,11 +49,14 @@ class WalletView extends GetView<WalletController> {
                                   color: Colors.green.shade800),
                             ),
                             const SizedBox(height: 5),
-                            Text('R\$ 250.000,00',
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.green.shade800,
-                                    fontSize: 20)),
+                            Obx(
+                              () => Text(
+                                  'R\$${controller.formatValue(controller.sumReceived.toString())}',
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.green.shade800,
+                                      fontSize: 20)),
+                            )
                           ],
                         ),
                       ),
@@ -81,11 +83,14 @@ class WalletView extends GetView<WalletController> {
                                   color: Colors.red.shade800),
                             ),
                             const SizedBox(height: 5),
-                            Text('R\$ 250.000,00',
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.red.shade800,
-                                    fontSize: 20)),
+                            Obx(
+                              () => Text(
+                                  'R\$${controller.formatValue(controller.sumToReceive.toString())}',
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.red.shade800,
+                                      fontSize: 20)),
+                            )
                           ],
                         ),
                       ),
@@ -106,25 +111,12 @@ class WalletView extends GetView<WalletController> {
                   child: ListView.builder(
                     itemCount: controller.listWallet.length,
                     padding:
-                        const EdgeInsets.only(top: 10, left: 16, right: 16),
+                        const EdgeInsets.only(top: 10, left: 12, right: 12),
                     shrinkWrap: true,
                     itemBuilder: ((context, index) {
                       Bill bill = controller.listWallet[index];
-                      FundRaising fundRaising = bill.fundraisings![index];
-                      int capturedValue =
-                          int.parse(fundRaising.capturedValue.toString());
-                      double percentage =
-                          double.parse(bill.porcentagem.toString());
-                      double commission =
-                          calculateCommission(capturedValue, percentage);
-
                       return CustomWalletCard(
-                        name: bill.nome,
-                        capturedValue:
-                            'R\$${controller.formatValue(capturedValue)}',
-                        comission:
-                            'R\$${controller.formatValue(commission.toInt())}',
-                      );
+                          bill: bill, controller: controller);
                     }),
                   ),
                 ))

@@ -20,11 +20,10 @@ class FundRaiserRepository {
     return list;
   }
 
-  getAllPendingFundRising(String token) async {
+  Future<List<FundRaising>> getAllPendingFundRising(String token) async {
     List<FundRaising> list = <FundRaising>[];
 
     var response = await apiClient.getAllPendingFundRising(token);
-    print(response['data']);
     if (response != null) {
       response['data'].forEach((e) {
         list.add(FundRaising.fromJson(e));

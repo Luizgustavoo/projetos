@@ -221,6 +221,7 @@ class MyCompanyView extends GetView<CompanyController> {
                   TextFormField(
                     controller: fundRaiserController.dateFundController,
                     maxLength: 10,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                         labelText: 'DATA PREVISTA', counterText: ''),
                     onChanged: (value) {
@@ -229,6 +230,7 @@ class MyCompanyView extends GetView<CompanyController> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    keyboardType: TextInputType.number,
                     controller: fundRaiserController.valueFundController,
                     decoration: const InputDecoration(
                       labelText: 'VALOR PREVISTO',

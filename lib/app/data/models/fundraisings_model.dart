@@ -6,13 +6,15 @@ class FundRaising {
   int? userId;
   int? companyId;
   String? expectedDate;
-  int? predictedValue;
+  dynamic predictedValue;
   dynamic capturedValue;
   dynamic dateOfCapture;
   String? status;
   String? createdAt;
   String? updatedAt;
   String? empresa;
+  String? pago;
+  dynamic payDay;
   User? user;
   Company? company;
 
@@ -28,6 +30,8 @@ class FundRaising {
       this.createdAt,
       this.updatedAt,
       this.empresa,
+      this.pago,
+      this.payDay,
       this.company,
       this.user});
 
@@ -43,6 +47,8 @@ class FundRaising {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     empresa = json['empresa'];
+    pago = json['pago'];
+    payDay = json['payday'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     company =
         json['company'] != null ? Company.fromJson(json['company']) : null;
@@ -61,6 +67,8 @@ class FundRaising {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['empresa'] = empresa;
+    data['pago'] = pago;
+    data['payday'] = payDay;
     if (user != null) {
       data['user'] = user!.toJson();
     }

@@ -44,8 +44,8 @@ class CustomPendingFundRaiserCard extends StatelessWidget {
           ),
           dense: true,
           title: Text(
-            'EMPRESA: $companyName',
-            style: const TextStyle(fontSize: 16, fontFamily: 'Poppinss'),
+            'EMPRESA: $companyName'.toUpperCase(),
+            style: const TextStyle(fontSize: 14, fontFamily: 'Poppinss'),
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

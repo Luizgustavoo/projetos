@@ -87,8 +87,8 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                         ),
                         child: CustomPendingFundRaiserCard(
                           companyName: fundRaising.empresa,
-                          predictedValue: controller.formatValue(
-                              int.parse(fundRaising.predictedValue.toString())),
+                          predictedValue: controller.formatValue(double.parse(
+                              fundRaising.predictedValue.toString())),
                           predictedDate: controller
                               .formatDate(fundRaising.expectedDate.toString()),
                           status: fundRaising.status,
@@ -159,6 +159,7 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                   TextFormField(
                     controller: controller.datePendingFundController,
                     maxLength: 10,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                         labelText: 'DATA CAPTAÇÃO', counterText: ''),
                     onChanged: (value) {
@@ -167,6 +168,7 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    keyboardType: TextInputType.number,
                     controller: controller.pendingValueFundController,
                     decoration: const InputDecoration(
                       labelText: 'VALOR CAPTADO',
@@ -175,6 +177,43 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                       controller.onPendingValueChanged(value);
                     },
                   ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      const Text(
+                        'PAGO: ',
+                        style: TextStyle(fontFamily: 'Poppins'),
+                      ),
+                      Obx(() => Switch(
+                            activeColor: Colors.orange.shade700,
+                            inactiveThumbColor: Colors.orange.shade500,
+                            inactiveTrackColor: Colors.orange.shade100,
+                            value: controller.paidOutCheckboxValue.value,
+                            onChanged: (value) {
+                              controller.paidOutCheckboxValue.value = value;
+                              controller.showPaymentDateField.value =
+                                  value; // Atualiza a visibilidade do campo de data
+                            },
+                          )),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Obx(() {
+                    if (controller.showPaymentDateField.value) {
+                      return TextFormField(
+                        keyboardType: TextInputType.number,
+                        controller: controller.paymentDateController,
+                        decoration: const InputDecoration(
+                          labelText: 'DATA DO PAGAMENTO',
+                        ),
+                        onChanged: (value) {
+                          controller.onPaymentDateChanged(value);
+                        },
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  }),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,

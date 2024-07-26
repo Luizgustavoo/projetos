@@ -23,8 +23,6 @@ class ServiceStorage {
       box.remove('auth');
       box.remove('projeto');
       box.erase();
-      print(box.read('auth'));
-      print(box.read('projeto'));
     }
   }
 

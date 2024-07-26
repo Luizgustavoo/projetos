@@ -141,6 +141,7 @@ class HomeView extends GetView<HomeController> {
                         title: 'MINHA\nCARTEIRA',
                         onTap: () {
                           walletController.getWallet();
+                          walletController.getWalletBalance();
                           Get.toNamed(Routes.wallet);
                         },
                       ),
