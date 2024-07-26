@@ -75,8 +75,8 @@ class CustomFundRaiserCard extends StatelessWidget {
           leading: IconButton(
               onPressed: () {
                 final financialController = Get.put(FinancialController());
-                financialController.getWallet(user!.id!);
-                financialController.getWalletBalance(user!.id!);
+                financialController.getFinancial(user!.id!);
+                financialController.getFinancialBalance(user!.id!);
                 Get.toNamed(Routes.financial, arguments: user);
               },
               icon: const Icon(

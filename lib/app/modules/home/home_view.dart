@@ -140,8 +140,8 @@ class HomeView extends GetView<HomeController> {
                         icon: Icons.account_balance_wallet_outlined,
                         title: 'MINHA\nCARTEIRA',
                         onTap: () {
-                          walletController.getWallet(0);
-                          walletController.getWalletBalance(0);
+                          walletController.getFinancial(0);
+                          walletController.getFinancialBalance(0);
                           Get.toNamed(Routes.financial);
                         },
                       ),

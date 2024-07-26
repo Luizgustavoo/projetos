@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:projetos/app/data/base_url.dart';
+import 'package:projetos/app/data/models/fund_raiser_comission_model.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
 class FinancialApiClient {
@@ -14,11 +15,11 @@ class FinancialApiClient {
     try {
       String userId =
           id <= 0 ? ServiceStorage.getUserId().toString() : id.toString();
-      Uri statisticUrl;
+      Uri financialUrl;
       String url = '$baseUrl/v1/bills/my/$userId';
-      statisticUrl = Uri.parse(url);
+      financialUrl = Uri.parse(url);
       var response = await httpClient.get(
-        statisticUrl,
+        financialUrl,
         headers: {
           "Accept": "application/json",
           "Authorization": token,
@@ -45,16 +46,15 @@ class FinancialApiClient {
 
   getFinancialBalance(String token, int id) async {
     try {
+      Uri financialUrl;
 
-      Uri statisticUrl;
+      String userId =
+          id <= 0 ? ServiceStorage.getUserId().toString() : id.toString();
 
-      String user_id = id <= 0 ? ServiceStorage.getUserId().toString() : id.toString();
-
-      String url =
-          '$baseUrl/v1/fundraisercomission/${user_id}';
-      statisticUrl = Uri.parse(url);
+      String url = '$baseUrl/v1/fundraisercomission/$userId';
+      financialUrl = Uri.parse(url);
       var response = await httpClient.get(
-        statisticUrl,
+        financialUrl,
         headers: {
           "Accept": "application/json",
           "Authorization": token,
@@ -75,6 +75,24 @@ class FinancialApiClient {
       }
     } catch (e) {
       Exception(e);
+    }
+    return null;
+  }
+
+  updateFinancial(String token, FundRaiserComission fundRaiserComission) async {
+    try {
+      Uri financialUrl;
+      String url =
+          '$baseUrl/v1/fundraisercomission/${fundRaiserComission.id.toString()}';
+      financialUrl = Uri.parse(url);
+      var response = await httpClient.put(financialUrl, headers: {
+        "Accept": "application/json",
+        "Authorization": token,
+      });
+      print(json.decode(response.body));
+      return json.decode(response.body);
+    } catch (err) {
+      Exception(err);
     }
     return null;
   }

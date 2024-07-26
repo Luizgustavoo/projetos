@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
+import 'package:projetos/app/data/models/fund_raiser_comission_model.dart';
 import 'package:projetos/app/data/repositories/financial_repository.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
@@ -12,7 +13,14 @@ class FinancialController extends GetxController {
   var sumToReceive = 0.0.obs;
   var sumReceived = 0.0.obs;
 
-  Future<void> getWallet(int id) async {
+  Map<String, dynamic> retorno = {
+    "success": false,
+    "data": null,
+    "message": ["Preencha todos os campos!"]
+  };
+  dynamic mensagem;
+
+  Future<void> getFinancial(int id) async {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
@@ -24,7 +32,7 @@ class FinancialController extends GetxController {
     isLoading.value = false;
   }
 
-  Future<void> getWalletBalance(int id) async {
+  Future<void> getFinancialBalance(int id) async {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
@@ -47,5 +55,18 @@ class FinancialController extends GetxController {
     final NumberFormat formatter =
         NumberFormat.currency(symbol: '', decimalDigits: 2, locale: 'pt_BR');
     return formatter.format(value);
+  }
+
+  Future<Map<String, dynamic>> updateFinancial(int? id) async {
+    FundRaiserComission company = FundRaiserComission(
+      id: id,
+    );
+    final token = ServiceStorage.getToken();
+
+    mensagem = await repository.updateFinancial("Bearer $token", company);
+    retorno = {'success': mensagem['success'], 'message': mensagem['message']};
+    getFinancial(id!);
+
+    return retorno;
   }
 }

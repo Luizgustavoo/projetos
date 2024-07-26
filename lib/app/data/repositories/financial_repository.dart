@@ -1,4 +1,5 @@
 import 'package:projetos/app/data/models/bill_model.dart';
+import 'package:projetos/app/data/models/fund_raiser_comission_model.dart';
 import 'package:projetos/app/data/providers/financial_provider.dart';
 
 class FinancialRepository {
@@ -26,5 +27,16 @@ class FinancialRepository {
     }
 
     return null;
+  }
+
+  updateFinancial(String token, FundRaiserComission fundRaiserComission) async {
+    try {
+      var response =
+          await apiClient.updateFinancial(token, fundRaiserComission);
+
+      return response;
+    } catch (e) {
+      Exception(e);
+    }
   }
 }

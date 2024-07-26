@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 
@@ -42,7 +43,25 @@ class CustomFinancialCard extends StatelessWidget {
             trailing: e.fundRaiserComission != null &&
                     e.fundRaiserComission!.status! == 'a_receber'
                 ? IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      Map<String, dynamic> retorno = await controller
+                          .updateFinancial(e.fundRaiserComission!.id!);
+
+                      if (retorno['success'] == true) {
+                        Get.back();
+                        Get.snackbar('Sucesso!', retorno['message'].join('\n'),
+                            backgroundColor: Colors.green,
+                            colorText: Colors.white,
+                            duration: const Duration(seconds: 2),
+                            snackPosition: SnackPosition.BOTTOM);
+                      } else {
+                        Get.snackbar('Falha!', retorno['message'].join('\n'),
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                            duration: const Duration(seconds: 2),
+                            snackPosition: SnackPosition.BOTTOM);
+                      }
+                    },
                     icon: const Icon(
                       Icons.payments_rounded,
                       color: Colors.green,
