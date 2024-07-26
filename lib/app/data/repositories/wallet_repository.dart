@@ -4,10 +4,10 @@ import 'package:projetos/app/data/providers/wallet_provider.dart';
 class WalletRepository {
   final WalletApiClient apiClient = WalletApiClient();
 
-  getAll(String token) async {
+  getAll(String token, int id) async {
     List<Bill> list = <Bill>[];
 
-    var response = await apiClient.getAll(token);
+    var response = await apiClient.getAll(token, id);
 
     if (response != null) {
       response['data'].forEach((e) {

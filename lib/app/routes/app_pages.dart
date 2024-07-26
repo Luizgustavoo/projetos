@@ -73,7 +73,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.fundraiser,
-      page: () => const FundRaiserView(),
+      page: () => FundRaiserView(),
       binding: FundRaiserBinding(),
     ),
     GetPage(

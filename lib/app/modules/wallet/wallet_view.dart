@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/wallet_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
+import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/modules/wallet/widgets/custom_wallet_card.dart';
 
 class WalletView extends GetView<WalletController> {
@@ -13,9 +14,16 @@ class WalletView extends GetView<WalletController> {
 
   @override
   Widget build(BuildContext context) {
+
+    String carteira = "MINHA CARTEIRA";
+    if (Get.arguments != null && Get.arguments is User) {
+      final User user = Get.arguments as User;
+      carteira = "CARTEIRA: ${user.name!.toUpperCase()}";
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MINHA CARTEIRA'),
+        title: Text(carteira),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),

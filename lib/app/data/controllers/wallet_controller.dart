@@ -14,11 +14,11 @@ class WalletController extends GetxController {
   var sumToReceive = 0.0.obs;
   var sumReceived = 0.0.obs;
 
-  Future<void> getWallet() async {
+  Future<void> getWallet(int id) async {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
-      listWallet.value = await repository.getAll("Bearer $token");
+      listWallet.value = await repository.getAll("Bearer $token", id);
       update();
     } catch (e) {
       Exception(e);

@@ -10,11 +10,12 @@ import 'package:projetos/app/utils/service_storage.dart';
 class WalletApiClient {
   final http.Client httpClient = http.Client();
 
-  getAll(String token) async {
+  getAll(String token, int id) async {
     try {
+      String user_id = id <= 0? ServiceStorage.getUserId().toString() : id.toString();
       Uri statisticUrl;
       String url =
-          '$baseUrl/v1/bills/my/${ServiceStorage.getUserId().toString()}';
+          '$baseUrl/v1/bills/my/${user_id}';
       statisticUrl = Uri.parse(url);
       var response = await httpClient.get(
         statisticUrl,

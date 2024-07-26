@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
+import 'package:projetos/app/data/controllers/wallet_controller.dart';
 import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/modules/fundraiser/widgets/create_fundraiser_modal.dart';
 import 'package:projetos/app/modules/fundraiser/widgets/custom_fundraiser_card.dart';
+import 'package:projetos/app/routes/app_routes.dart';
 
 class FundRaiserView extends GetView<FundRaiserController> {
-  const FundRaiserView({super.key});
+  FundRaiserView({super.key});
 
+  final walletController = Get.put(WalletController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,10 +49,17 @@ class FundRaiserView extends GetView<FundRaiserController> {
                           itemCount: controller.listFundRaiser.length,
                           itemBuilder: (context, index) {
                             User user = controller.listFundRaiser[index];
-                            return CustomFundRaiserCard(
-                              user: user,
-                              fundRaiserName: user.name,
-                              fundRaiserPhone: user.contact,
+                            return InkWell(
+                              onTap: (){
+                                walletController.getWallet(user.id!);
+                                walletController.getWalletBalance();
+                                Get.toNamed(Routes.wallet, arguments: user);
+                              },
+                              child: CustomFundRaiserCard(
+                                user: user,
+                                fundRaiserName: user.name,
+                                fundRaiserPhone: user.contact,
+                              ),
                             );
                           }));
                 } else {
