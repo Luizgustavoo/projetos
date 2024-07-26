@@ -6,18 +6,27 @@ import 'package:projetos/app/data/controllers/contact_controller.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/company_model.dart';
+import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
 import 'package:projetos/app/modules/company/widgets/create_my_company_modal.dart';
 import 'package:projetos/app/routes/app_routes.dart';
+import 'package:projetos/app/utils/service_storage.dart';
 
 class MyCompanyView extends GetView<CompanyController> {
   const MyCompanyView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    String titulo = "MINHAS EMPRESAS";
+
+    if (Get.arguments != null && Get.arguments is User) {
+      final User user = Get.arguments as User;
+      titulo = "EMPRESAS DE ${user!.name!.toUpperCase()}";
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MINHAS EMPRESAS'),
+        title:  Text(titulo),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
@@ -154,7 +163,7 @@ class MyCompanyView extends GetView<CompanyController> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: ServiceStorage.getUserType() == 1 ? SizedBox() :  FloatingActionButton(
         mini: true,
         elevation: 2,
         backgroundColor: Colors.orange,

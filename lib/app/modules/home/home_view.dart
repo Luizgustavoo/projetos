@@ -80,6 +80,7 @@ class HomeView extends GetView<HomeController> {
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
                     children: [
+<<<<<<< HEAD
                       HomeCard(
                         icon: Icons.price_check_rounded,
                         title: 'CAPTAÇÕES\nPENDENTES',
@@ -145,6 +146,87 @@ class HomeView extends GetView<HomeController> {
                           Get.toNamed(Routes.financial);
                         },
                       ),
+=======
+
+
+
+                      if(ServiceStorage.getUserType() == 1)...[
+                        HomeCard(
+                          icon: CupertinoIcons.group_solid,
+                          title: 'LISTAGEM\nCAPTADORES',
+                          onTap: () {
+                            fundRaiserController.getFundRaisers();
+                            Get.toNamed(Routes.fundraiser);
+                          },
+                        ),
+
+                        HomeCard(
+                          icon: Icons.domain_add_rounded,
+                          title: 'TODAS AS\nEMPRESAS',
+                          onTap: () {
+                            companyController.getAllCompanies();
+                            Get.toNamed(Routes.allcompany);
+                          },
+                        ),
+
+                        HomeCard(
+                          icon: Icons.post_add_rounded,
+                          title: 'LISTAGEM\nPROJETOS',
+                          onTap: () {
+                            billsController.getAllBills();
+                            Get.toNamed(Routes.bill);
+                          },
+                        ),
+                        HomeCard(
+                          icon: Icons.price_check_rounded,
+                          title: 'CAPTAÇÕES\nPENDENTES',
+                          onTap: () {
+                            fundRaiserController.getAllPendingFundRising();
+                            Get.toNamed(Routes.pendingfundrising);
+                          },
+                        ),
+
+                      ],
+
+                      if(ServiceStorage.getUserType() != 1)...[
+                        HomeCard(
+                          icon: Icons.account_balance_wallet_outlined,
+                          title: 'MINHA\nCARTEIRA',
+                          onTap: () {
+                            walletController.getWallet(0);
+                            walletController.getWalletBalance(0);
+                            Get.toNamed(Routes.financial);
+                          },
+                        ),
+                        HomeCard(
+                          icon: Icons.history_rounded,
+                          title: 'EMPRESAS\nEXPIRANDO',
+                          onTap: () {
+                            companyController.getExpirianCompanies();
+                            Get.toNamed(Routes.expiringcompany);
+                          },
+                        ),
+                        HomeCard(
+                          icon: Icons.factory_rounded,
+                          title: 'MINHAS\nEMPRESAS',
+                          onTap: () {
+                            companyController.getCompanies(0);
+                            Get.toNamed(Routes.mycompany);
+                          },
+                        ),
+
+                        HomeCard(
+                          icon: Icons.pin_drop_rounded,
+                          title: 'EMPRESAS\nDISPONÍVEIS',
+                          onTap: () {
+                            companyController.getAvailableCompanies();
+                            Get.toNamed(Routes.availablecompany);
+                          },
+                        ),
+                      ],
+
+
+>>>>>>> b4c3498fb03e2282ff8601dc37a31a50f8c701e4
                     ],
                   ),
                 )

@@ -128,7 +128,8 @@ class FundRaiserController extends GetxController {
         'success': mensagem['success'],
         'message': mensagem['message']
       };
-      companyController.getCompanies();
+      int idd = ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
+      companyController.getCompanies(idd);
     }
     return retorno;
   }

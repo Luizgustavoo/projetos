@@ -4,10 +4,10 @@ import 'package:projetos/app/data/providers/company_provider.dart';
 class CompanyRepository {
   final CompanyApiClient apiClient = CompanyApiClient();
 
-  gettAll(String token) async {
+  gettAll(String token, int id) async {
     List<Company> list = <Company>[];
 
-    var response = await apiClient.gettAll(token);
+    var response = await apiClient.gettAll(token, id);
 
     if (response != null) {
       response['data'].forEach((e) {

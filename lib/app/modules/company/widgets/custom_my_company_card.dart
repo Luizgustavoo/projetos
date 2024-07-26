@@ -8,6 +8,7 @@ import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/modules/company/widgets/contact_modal.dart';
 import 'package:projetos/app/modules/company/widgets/create_my_company_modal.dart';
 import 'package:projetos/app/routes/app_routes.dart';
+import 'package:projetos/app/utils/service_storage.dart';
 
 class CustomCompanyCard extends StatelessWidget {
   final String? name;
@@ -54,7 +55,8 @@ class CustomCompanyCard extends StatelessWidget {
               ),
         leading: Get.currentRoute == Routes.allcompany ||
                 Get.currentRoute == Routes.expiringcompany ||
-                Get.currentRoute == Routes.availablecompany
+                Get.currentRoute == Routes.availablecompany ||
+                ServiceStorage.getUserType() == 1
             ? const Icon(
                 Icons.business_rounded,
                 size: 35,

@@ -36,11 +36,11 @@ class CompanyController extends GetxController {
   };
   dynamic mensagem;
 
-  Future<void> getCompanies() async {
+  Future<void> getCompanies(int id) async {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
-      listCompany.value = await repository.gettAll("Bearer $token");
+      listCompany.value = await repository.gettAll("Bearer $token", id);
     } catch (e) {
       Exception(e);
     }
@@ -98,7 +98,8 @@ class CompanyController extends GetxController {
         'message': mensagem['message']
       };
       if (Get.currentRoute == Routes.mycompany) {
-        getCompanies();
+        int idd = ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
+        getCompanies(idd);
       } else {
         getAllCompanies();
       }
@@ -122,7 +123,8 @@ class CompanyController extends GetxController {
         'success': mensagem['success'],
         'message': mensagem['message']
       };
-      getCompanies();
+      int idd = ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
+      getCompanies(idd);
     }
     return retorno;
   }
@@ -134,7 +136,8 @@ class CompanyController extends GetxController {
     final token = ServiceStorage.getToken();
     mensagem = await repository.unlinkCompany("Bearer $token", company);
     retorno = {'success': mensagem['success'], 'message': mensagem['message']};
-    getCompanies();
+    int idd = ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
+    getCompanies(idd);
     return retorno;
   }
 
