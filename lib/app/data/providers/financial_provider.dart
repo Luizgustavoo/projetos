@@ -43,11 +43,15 @@ class FinancialApiClient {
     return null;
   }
 
-  getFinancialBalance(String token) async {
+  getFinancialBalance(String token, int id) async {
     try {
+
       Uri statisticUrl;
+
+      String user_id = id <= 0 ? ServiceStorage.getUserId().toString() : id.toString();
+
       String url =
-          '$baseUrl/v1/fundraisercomission/${ServiceStorage.getUserId().toString()}';
+          '$baseUrl/v1/fundraisercomission/${user_id}';
       statisticUrl = Uri.parse(url);
       var response = await httpClient.get(
         statisticUrl,

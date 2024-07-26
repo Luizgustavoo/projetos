@@ -18,8 +18,8 @@ class FinancialRepository {
     return list;
   }
 
-  getWalletBalance(String token) async {
-    var response = await apiClient.getFinancialBalance(token);
+  getWalletBalance(String token, int id) async {
+    var response = await apiClient.getFinancialBalance(token, id);
 
     if (response != null) {
       return response['data'];

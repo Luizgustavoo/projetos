@@ -24,11 +24,11 @@ class FinancialController extends GetxController {
     isLoading.value = false;
   }
 
-  Future<void> getWalletBalance() async {
+  Future<void> getWalletBalance(int id) async {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
-      final data = await repository.getWalletBalance("Bearer $token");
+      final data = await repository.getWalletBalance("Bearer $token", id);
 
       if (data != null) {
         sumToReceive.value = (data['sum_to_receive'] as num).toDouble();
