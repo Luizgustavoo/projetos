@@ -1,3 +1,4 @@
+import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
 
 class FundRaising {
@@ -13,6 +14,7 @@ class FundRaising {
   String? updatedAt;
   String? empresa;
   User? user;
+  Company? company;
 
   FundRaising(
       {this.id,
@@ -26,6 +28,7 @@ class FundRaising {
       this.createdAt,
       this.updatedAt,
       this.empresa,
+      this.company,
       this.user});
 
   FundRaising.fromJson(Map<String, dynamic> json) {
@@ -41,6 +44,8 @@ class FundRaising {
     updatedAt = json['updated_at'];
     empresa = json['empresa'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
+    company =
+        json['company'] != null ? Company.fromJson(json['company']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -58,6 +63,9 @@ class FundRaising {
     data['empresa'] = empresa;
     if (user != null) {
       data['user'] = user!.toJson();
+    }
+    if (company != null) {
+      data['company'] = company!.toJson();
     }
     return data;
   }

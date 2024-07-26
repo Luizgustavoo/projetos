@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/bill_controller.dart';
-import 'package:projetos/app/data/models/company_model.dart';
+import 'package:projetos/app/data/models/bill_model.dart';
+import 'package:projetos/app/utils/formatter.dart';
 
 class CreateBillModal extends GetView<BillController> {
-  const CreateBillModal({super.key, this.company});
+  const CreateBillModal({super.key, this.bill});
 
-  final Company? company;
+  final Bill? bill;
 
   @override
   Widget build(BuildContext context) {
-    bool isUpdate = company != null;
+    bool isUpdate = bill != null;
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Form(
@@ -66,42 +69,78 @@ class CreateBillModal extends GetView<BillController> {
                   },
                 ),
                 const SizedBox(height: 10),
-                TextFormField(
-                  controller: controller.aprovedValueController,
-                  decoration: const InputDecoration(
-                    labelText: 'VALOR APROVADO',
-                  ),
-                  onChanged: (value) {
-                    controller.onValueChanged(value);
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, insira o valor';
-                    }
-                    return null;
-                  },
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: TextFormField(
+                        controller: controller.aprovedValueController,
+                        keyboardType: TextInputType.number,
+                        decoration:
+                            const InputDecoration(labelText: 'VALOR APROVADO'),
+                        onChanged: (value) {
+                          controller.onValueChanged(value);
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira o valor';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      flex: 2,
+                      child: TextFormField(
+                        controller: controller.percentageValueController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          PercentageInputFormatter(),
+                        ],
+                        decoration: const InputDecoration(
+                          labelText: 'PORCENTAGEM',
+                        ),
+                        onChanged: (value) {
+                          controller.onPercentageChanged(value);
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira o valor';
+                          }
+                          return null;
+                        },
+                      ),
+                    )
+                  ],
                 ),
                 const SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    labelText: 'STATUS',
-                  ),
-                  items: ['aberto', 'fechado'].map((String valor) {
-                    return DropdownMenuItem<String>(
-                      value: valor,
-                      child: Text(valor.toUpperCase()),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    controller.statusController.text = value!;
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Por favor, selecione um usuário';
-                    }
-                    return null;
-                  },
-                ),
+                Obx(() {
+                  return DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      labelText: 'STATUS',
+                    ),
+                    value: controller.status.value.isEmpty
+                        ? null
+                        : controller.status.value,
+                    items: ['aberto', 'fechado'].map((String valor) {
+                      return DropdownMenuItem<String>(
+                        value: valor,
+                        child: Text(valor.toUpperCase()),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      controller.status.value = value!;
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Por favor, selecione um status';
+                      }
+                      return null;
+                    },
+                  );
+                }),
                 const SizedBox(height: 10),
                 TextFormField(
                   maxLines: 3,
@@ -124,8 +163,9 @@ class CreateBillModal extends GetView<BillController> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        Map<String, dynamic> retorno =
-                            await controller.insertBill();
+                        Map<String, dynamic> retorno = isUpdate
+                            ? await controller.updateBill(bill!.id)
+                            : await controller.insertBill();
 
                         if (retorno['success'] == true) {
                           Get.back();
@@ -168,6 +208,18 @@ class CreateBillModal extends GetView<BillController> {
               ],
             ),
           )),
+    );
+  }
+}
+
+class PercentageInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final newText = FormattedInputers.formatPercentage(newValue.text);
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
     );
   }
 }

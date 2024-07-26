@@ -12,4 +12,6 @@ abstract class Routes {
   static const report = '/report';
   static const contacttimeline = '/contacttimeline';
   static const bill = '/bill';
+  static const detailbill = '/detailbill';
+  static const wallet = '/wallet';
 }

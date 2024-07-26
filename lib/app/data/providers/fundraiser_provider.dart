@@ -56,6 +56,7 @@ class FundRaiserApiClient {
           "Authorization": token,
         },
       );
+      print(json.decode(response.body));
       if (response.statusCode == 201) {
         return json.decode(response.body);
       } else if (response.statusCode == 401 &&
@@ -160,6 +161,7 @@ class FundRaiserApiClient {
         "date_of_capture": fundRaising.dateOfCapture.toString(),
         "captured_value": fundRaising.capturedValue.toString(),
       });
+      print(json.decode(response.body));
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

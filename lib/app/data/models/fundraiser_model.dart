@@ -5,7 +5,7 @@ class FundRaiser {
   int? userId;
   int? companyId;
   String? expectedDate;
-  int? predictedValue;
+  dynamic predictedValue;
   dynamic capturedValue;
   dynamic dateOfCapture;
   String? status;

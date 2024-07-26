@@ -64,6 +64,34 @@ abstract class FormattedInputers {
     return buffer.toString();
   }
 
+  static String formatPercentage(String value) {
+    var text = value.replaceAll(RegExp(r'[^0-9]'), '');
+    if (text.isEmpty) {
+      return '0,00%';
+    }
+
+    var number = int.parse(text);
+    var formattedNumber =
+        NumberFormat.decimalPercentPattern(decimalDigits: 2, locale: 'pt_BR')
+            .format(number / 10000.0);
+
+    return formattedNumber;
+  }
+
+  static String formatPercentageSend(String value) {
+    var text = value.replaceAll(RegExp(r'[^0-9]'), '');
+    if (text.isEmpty) {
+      return '0,00%';
+    }
+
+    var number = int.parse(text);
+    var formattedNumber =
+        NumberFormat.decimalPercentPattern(decimalDigits: 2, locale: 'pt_BR')
+            .format(number / 1000.0);
+
+    return formattedNumber;
+  }
+
   static String formatApiDate(String dateString) {
     try {
       DateTime dateTime = DateTime.parse(dateString);
@@ -80,7 +108,24 @@ abstract class FormattedInputers {
       valorSemMoeda = valorSemMoeda.replaceAll(",", ".");
       double valorDouble = double.parse(valorSemMoeda);
 
-      return valorDouble; // Output: 2356.5
+      return valorDouble;
+    } catch (e) {
+      print("Erro ao converter o valor: $e");
+    }
+
+    return 0;
+  }
+
+  static double convertPercentageToDouble(String percentageString) {
+    try {
+      String valueWithoutPercentage =
+          percentageString.replaceAll("%", "").trim();
+
+      valueWithoutPercentage = valueWithoutPercentage.replaceAll(",", ".");
+
+      double percentageValue = double.parse(valueWithoutPercentage);
+
+      return percentageValue;
     } catch (e) {
       print("Erro ao converter o valor: $e");
     }

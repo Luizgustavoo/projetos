@@ -11,7 +11,7 @@ import 'package:projetos/app/utils/service_storage.dart';
 
 class FundRaiserController extends GetxController {
   RxList<User> listFundRaiser = RxList<User>([]);
-  RxList<FundRaising> listAproveFundRising = RxList<FundRaising>([]);
+  RxList<FundRaising> listPendingFundRising = RxList<FundRaising>([]);
   RxBool isLoading = true.obs;
 
   final dateFundController = TextEditingController();
@@ -26,7 +26,6 @@ class FundRaiserController extends GetxController {
   final passwordRaiserController = TextEditingController();
   final fundRaiserKey = GlobalKey<FormState>();
 
-  //MODAL PENDENTE CONTROLLER E KEY
   final pendingFundRaisingKey = GlobalKey<FormState>();
   final datePendingFundController = TextEditingController();
   final pendingValueFundController = TextEditingController();
@@ -44,7 +43,6 @@ class FundRaiserController extends GetxController {
 
   @override
   void onInit() {
-    getFundRaisers();
     getAllPendingFundRising();
     super.onInit();
   }
@@ -65,8 +63,11 @@ class FundRaiserController extends GetxController {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
-      listAproveFundRising.value =
+      var aqui = listPendingFundRising.value =
           await repository.getAllPendingFundRising("Bearer $token");
+      print(
+          '-------------------------------------------------------------------------------');
+      print(aqui);
     } catch (e) {
       Exception(e);
     }
@@ -99,10 +100,26 @@ class FundRaiserController extends GetxController {
     final token = ServiceStorage.getToken();
     final companyController = Get.put(CompanyController());
 
+    // Remove todos os caracteres não numéricos exceto a vírgula
     String valueString =
-        valueFundController.text.replaceAll(RegExp(r'[^0-9]'), '');
+        valueFundController.text.replaceAll(RegExp(r'[^0-9,]'), '');
 
-    int? predictedValue = int.tryParse(valueString);
+    // Remove os zeros finais depois da vírgula
+    if (valueString.contains(',')) {
+      valueString = valueString.replaceAll(RegExp(r'(?<=,\d*)0+$'), '');
+    }
+
+    // Substitui a vírgula por um ponto para conversão
+    valueString = valueString.replaceAll(',', '.');
+
+    // Tenta converter para double
+    double? predictedValue = double.tryParse(valueString);
+
+    // Verifica se o valor é válido
+    if (predictedValue == null) {
+      return {'success': false, 'message': 'Valor previsto inválido'};
+    }
+
     FundRaiser fundRaiser = FundRaiser(
         predictedValue: predictedValue,
         expectedDate: dateFundController.text,

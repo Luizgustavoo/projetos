@@ -21,20 +21,45 @@ class FundRaiserView extends GetView<FundRaiserController> {
           child: Column(
             children: [
               const SizedBox(height: 15),
-              Obx(
-                () => Expanded(
-                    child: ListView.builder(
-                        padding: const EdgeInsets.only(right: 15, left: 15),
-                        itemCount: controller.listFundRaiser.length,
-                        itemBuilder: (context, index) {
-                          User user = controller.listFundRaiser[index];
-                          return CustomFundRaiserCard(
-                            user: user,
-                            fundRaiserName: user.name,
-                            fundRaiserPhone: user.contact,
-                          );
-                        })),
-              ),
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return const Expanded(
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Carregando...'),
+                          SizedBox(height: 20.0),
+                          CircularProgressIndicator(
+                            value: 5,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                } else if (!controller.isLoading.value &&
+                    controller.listFundRaiser.isNotEmpty) {
+                  return Expanded(
+                      child: ListView.builder(
+                          padding: const EdgeInsets.only(right: 15, left: 15),
+                          itemCount: controller.listFundRaiser.length,
+                          itemBuilder: (context, index) {
+                            User user = controller.listFundRaiser[index];
+                            return CustomFundRaiserCard(
+                              user: user,
+                              fundRaiserName: user.name,
+                              fundRaiserPhone: user.contact,
+                            );
+                          }));
+                } else {
+                  return const Expanded(
+                    child: Center(
+                      child: Text('NÃO HÁ EMPRESAS CAPTAÇÕES PENDENTES'),
+                    ),
+                  );
+                }
+              }),
               const SizedBox(height: 15)
             ],
           ),

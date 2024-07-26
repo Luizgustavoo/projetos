@@ -38,14 +38,14 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                   ),
                 );
               } else if (!controller.isLoading.value &&
-                  controller.listAproveFundRising.isNotEmpty) {
+                  controller.listPendingFundRising.isNotEmpty) {
                 return Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.only(right: 15, left: 15),
-                    itemCount: controller.listAproveFundRising.length,
+                    itemCount: controller.listPendingFundRising.length,
                     itemBuilder: (context, index) {
                       FundRaising fundRaising =
-                          controller.listAproveFundRising[index];
+                          controller.listPendingFundRising[index];
                       return Dismissible(
                         key: UniqueKey(),
                         direction: DismissDirection.endToStart,

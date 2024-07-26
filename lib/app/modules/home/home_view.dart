@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
+import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/controllers/home_controller.dart';
 import 'package:projetos/app/data/controllers/statistic_controller.dart';
-import 'package:projetos/app/modules/home/widgets/custom_drawer.dart';
+import 'package:projetos/app/data/controllers/wallet_controller.dart';
 import 'package:projetos/app/modules/home/widgets/custom_home_card.dart';
 import 'package:projetos/app/routes/app_routes.dart';
 import 'package:projetos/app/utils/service_storage.dart';
@@ -15,116 +16,138 @@ class HomeView extends GetView<HomeController> {
 
   final companyController = Get.put(CompanyController());
   final billsController = Get.put(BillController());
-
+  final fundRaiserController = Get.put(FundRaiserController());
+  final walletController = Get.put(WalletController());
   @override
   Widget build(BuildContext context) {
     final statisticController = Get.put(StatisticController());
-    final RxBool isDrawerOpen = false.obs;
     return Stack(
       children: [
-        GestureDetector(
-          onTap: () => isDrawerOpen.value = false,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Padding(
-                padding: const EdgeInsets.only(bottom: 50, left: 15),
-                child: Text(ServiceStorage.getUserName().toUpperCase()),
-              ),
-              leading: Padding(
-                padding: const EdgeInsets.only(bottom: 50, left: 15),
-                child: IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () {
-                    isDrawerOpen.value = !isDrawerOpen.value;
+        Scaffold(
+          appBar: AppBar(
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 50, left: 15),
+              child: Text(ServiceStorage.getUserName().toUpperCase()),
+            ),
+            leading: Padding(
+              padding: const EdgeInsets.only(bottom: 50, left: 15),
+              child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: Image.asset('assets/images/logo_drawer.png')),
+            ),
+            toolbarHeight: 200.0,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 50, right: 15),
+                child: PopupMenuButton<String>(
+                  onSelected: (String value) {
+                    switch (value) {
+                      case 'Perfil':
+                        // Get.toNamed(Routes.profile);
+                        break;
+                      case 'Sair':
+                        ServiceStorage.clearBox();
+                        Get.offAllNamed(Routes.login);
+                        break;
+                    }
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return {'Perfil', 'Sair'}.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
                   },
                 ),
               ),
-              toolbarHeight: 200.0,
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 50, right: 15),
-                  child: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Image.asset('assets/images/logo_drawer.png')),
-                ),
-              ],
-              iconTheme: const IconThemeData(
-                color: Colors.white,
-              ),
+            ],
+            iconTheme: const IconThemeData(
+              color: Colors.white,
             ),
-            body: Padding(
-              padding: const EdgeInsets.only(left: 32, right: 32, bottom: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: MediaQuery.of(context).size.height * .09),
-                  const SizedBox(height: 20),
-                  Expanded(
-                    child: GridView.count(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
-                      children: [
-                        HomeCard(
-                          icon: Icons.price_check_rounded,
-                          title: 'CAPTAÇÕES\nPENDENTES',
-                          onTap: () {
-                            Get.toNamed(Routes.pendingfundrising);
-                          },
-                        ),
-                        HomeCard(
-                          icon: Icons.factory_rounded,
-                          title: 'MINHAS\nEMPRESAS',
-                          onTap: () {
-                            companyController.getCompanies();
-                            Get.toNamed(Routes.mycompany);
-                          },
-                        ),
-                        HomeCard(
-                          icon: Icons.domain_add_rounded,
-                          title: 'TODAS AS\nEMPRESAS',
-                          onTap: () {
-                            companyController.getAllCompanies();
-                            Get.toNamed(Routes.allcompany);
-                          },
-                        ),
-                        HomeCard(
-                          icon: Icons.pin_drop_rounded,
-                          title: 'EMPRESAS\nDISPONÍVEIS',
-                          onTap: () {
-                            companyController.getAvailableCompanies();
-                            Get.toNamed(Routes.availablecompany);
-                          },
-                        ),
-                        HomeCard(
-                          icon: Icons.history_rounded,
-                          title: 'EMPRESAS\nEXPIRANDO',
-                          onTap: () {
-                            companyController.getExpirianCompanies();
-                            Get.toNamed(Routes.expiringcompany);
-                          },
-                        ),
-                        HomeCard(
-                          icon: CupertinoIcons.group_solid,
-                          title: 'LISTAGEM\nCAPTADORES',
-                          onTap: () {
-                            Get.toNamed(Routes.fundraiser);
-                          },
-                        ),
-                        HomeCard(
-                          icon: Icons.post_add_rounded,
-                          title: 'LISTAGEM\nPROJETOS',
-                          onTap: () {
-                            billsController.getAllBills();
-                            Get.toNamed(Routes.bill);
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.only(left: 32, right: 32, bottom: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * .09),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: GridView.count(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    children: [
+                      HomeCard(
+                        icon: Icons.price_check_rounded,
+                        title: 'CAPTAÇÕES\nPENDENTES',
+                        onTap: () {
+                          fundRaiserController.getAllPendingFundRising();
+                          Get.toNamed(Routes.pendingfundrising);
+                        },
+                      ),
+                      HomeCard(
+                        icon: Icons.factory_rounded,
+                        title: 'MINHAS\nEMPRESAS',
+                        onTap: () {
+                          companyController.getCompanies();
+                          Get.toNamed(Routes.mycompany);
+                        },
+                      ),
+                      HomeCard(
+                        icon: Icons.domain_add_rounded,
+                        title: 'TODAS AS\nEMPRESAS',
+                        onTap: () {
+                          companyController.getAllCompanies();
+                          Get.toNamed(Routes.allcompany);
+                        },
+                      ),
+                      HomeCard(
+                        icon: Icons.pin_drop_rounded,
+                        title: 'EMPRESAS\nDISPONÍVEIS',
+                        onTap: () {
+                          companyController.getAvailableCompanies();
+                          Get.toNamed(Routes.availablecompany);
+                        },
+                      ),
+                      HomeCard(
+                        icon: Icons.history_rounded,
+                        title: 'EMPRESAS\nEXPIRANDO',
+                        onTap: () {
+                          companyController.getExpirianCompanies();
+                          Get.toNamed(Routes.expiringcompany);
+                        },
+                      ),
+                      HomeCard(
+                        icon: CupertinoIcons.group_solid,
+                        title: 'LISTAGEM\nCAPTADORES',
+                        onTap: () {
+                          fundRaiserController.getFundRaisers();
+                          Get.toNamed(Routes.fundraiser);
+                        },
+                      ),
+                      HomeCard(
+                        icon: Icons.post_add_rounded,
+                        title: 'LISTAGEM\nPROJETOS',
+                        onTap: () {
+                          billsController.getAllBills();
+                          Get.toNamed(Routes.bill);
+                        },
+                      ),
+                      HomeCard(
+                        icon: Icons.account_balance_wallet_outlined,
+                        title: 'MINHA\nCARTEIRA',
+                        onTap: () {
+                          walletController.getWallet();
+                          Get.toNamed(Routes.wallet);
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
         ),
@@ -231,24 +254,6 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
         ),
-        Obx(() => AnimatedPositioned(
-              duration: const Duration(milliseconds: 300),
-              left: isDrawerOpen.value ? 0 : -250,
-              top: 0,
-              bottom: 0,
-              child: GestureDetector(
-                onHorizontalDragEnd: (details) {
-                  if (details.primaryVelocity! < 0) {
-                    isDrawerOpen.value = false;
-                  }
-                },
-                child: CustomDrawer(
-                  onClose: () {
-                    isDrawerOpen.value = false;
-                  },
-                ),
-              ),
-            )),
       ],
     );
   }

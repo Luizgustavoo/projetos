@@ -20,13 +20,30 @@ class BillRepository {
 
   insertBill(String token, Bill bill) async {
     try {
-      var response = await apiClient.insertBill(
-          token,bill);
+      var response = await apiClient.insertBill(token, bill);
       return response;
     } catch (e) {
       Exception(e);
     }
   }
 
+  updateBill(String token, Bill bill) async {
+    try {
+      var response = await apiClient.updateBill(token, bill);
 
+      return response;
+    } catch (e) {
+      Exception(e);
+    }
+  }
+
+  deleteBill(String token, Bill bill) async {
+    try {
+      var response = await apiClient.deleteBill(token, bill);
+
+      return response;
+    } catch (e) {
+      Exception(e);
+    }
+  }
 }

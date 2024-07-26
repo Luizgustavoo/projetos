@@ -7,6 +7,7 @@ class Bill {
   String? status;
   String? observacoes;
   dynamic valorAprovado;
+  dynamic porcentagem;
   List<FundRaising>? fundraisings;
 
   Bill(
@@ -16,6 +17,7 @@ class Bill {
       this.status,
       this.observacoes,
       this.valorAprovado,
+      this.porcentagem,
       this.fundraisings});
 
   Bill.fromJson(Map<String, dynamic> json) {
@@ -25,6 +27,7 @@ class Bill {
     status = json['status'];
     observacoes = json['observacoes'];
     valorAprovado = json['valor_aprovado'].toString();
+    porcentagem = json['porcentagem_comissao'].toString();
     if (json['fundraisings'] != null) {
       fundraisings = <FundRaising>[];
       json['fundraisings'].forEach((v) {
@@ -41,6 +44,7 @@ class Bill {
     data['status'] = status;
     data['observacoes'] = observacoes;
     data['valor_aprovado'] = valorAprovado;
+    data['porcentagem_comissao'] = porcentagem;
     if (fundraisings != null) {
       data['fundraisings'] = fundraisings!.map((v) => v.toJson()).toList();
     }

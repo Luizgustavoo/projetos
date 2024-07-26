@@ -54,6 +54,7 @@ class BillApiClient {
         "status": bill.status.toString(),
         "valor_aprovado": bill.valorAprovado.toString(),
         "observacoes": bill.observacoes.toString(),
+        "porcentagem_comissao": bill.porcentagem.toString()
       });
 
       request.headers.addAll({
@@ -67,6 +68,49 @@ class BillApiClient {
       var httpResponse = http.Response(responseStream, response.statusCode);
 
       return json.decode(httpResponse.body);
+    } catch (err) {
+      Exception(err);
+    }
+    return null;
+  }
+
+  updateBill(String token, Bill bill) async {
+    try {
+      Uri billUrl;
+      String url = '$baseUrl/v1/bills/${bill.id.toString()}';
+      billUrl = Uri.parse(url);
+      var response = await httpClient.put(billUrl, headers: {
+        "Accept": "application/json",
+        "Authorization": token,
+      }, body: {
+        "nome": bill.nome.toString(),
+        "ano": bill.ano.toString(),
+        "status": bill.status.toString(),
+        "valor_aprovado": bill.valorAprovado.toString(),
+        "observacoes": bill.observacoes.toString(),
+        "porcentagem_comissao": bill.porcentagem.toString()
+      });
+      return json.decode(response.body);
+    } catch (err) {
+      Exception(err);
+    }
+    return null;
+  }
+
+  deleteBill(String token, Bill bill) async {
+    try {
+      Uri billUrl;
+      String url = '$baseUrl/v1/bills/${bill.id.toString()}';
+      billUrl = Uri.parse(url);
+      var response = await httpClient.delete(
+        billUrl,
+        headers: {
+          "Accept": "application/json",
+          "Authorization": token,
+        },
+      );
+      print(json.decode(response.body));
+      return json.decode(response.body);
     } catch (err) {
       Exception(err);
     }
