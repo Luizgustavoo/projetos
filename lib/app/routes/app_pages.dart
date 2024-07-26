@@ -6,7 +6,7 @@ import 'package:projetos/app/data/bindings/login_binding.dart';
 import 'package:projetos/app/data/bindings/fundraiser_binding.dart';
 import 'package:projetos/app/data/bindings/bill_binding.dart';
 import 'package:projetos/app/data/bindings/report_binding.dart';
-import 'package:projetos/app/data/bindings/wallet_binding.dart';
+import 'package:projetos/app/data/bindings/financial_binding.dart';
 import 'package:projetos/app/modules/bill/views/detail_bill_view.dart';
 import 'package:projetos/app/modules/company/views/all_company_view.dart';
 import 'package:projetos/app/modules/company/views/available_company_view.dart';
@@ -21,7 +21,7 @@ import 'package:projetos/app/modules/login/login_view.dart';
 import 'package:projetos/app/modules/fundraiser/fundraiser_view.dart';
 import 'package:projetos/app/modules/bill/views/bill_view.dart';
 import 'package:projetos/app/modules/report/report_view.dart';
-import 'package:projetos/app/modules/wallet/wallet_view.dart';
+import 'package:projetos/app/modules/financial/financial_view.dart';
 import 'package:projetos/app/routes/app_routes.dart';
 
 class AppPages {
@@ -97,9 +97,9 @@ class AppPages {
       binding: BillBinding(),
     ),
     GetPage(
-      name: Routes.wallet,
-      page: () => const WalletView(),
-      binding: WalletBinding(),
+      name: Routes.financial,
+      page: () => const FinancialView(),
+      binding: FinancialBinding(),
     ),
   ];
 }

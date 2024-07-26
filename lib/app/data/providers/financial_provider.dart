@@ -7,15 +7,15 @@ import 'package:http/http.dart' as http;
 import 'package:projetos/app/data/base_url.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
-class WalletApiClient {
+class FinancialApiClient {
   final http.Client httpClient = http.Client();
 
   getAll(String token, int id) async {
     try {
-      String user_id = id <= 0? ServiceStorage.getUserId().toString() : id.toString();
+      String userId =
+          id <= 0 ? ServiceStorage.getUserId().toString() : id.toString();
       Uri statisticUrl;
-      String url =
-          '$baseUrl/v1/bills/my/${user_id}';
+      String url = '$baseUrl/v1/bills/my/$userId';
       statisticUrl = Uri.parse(url);
       var response = await httpClient.get(
         statisticUrl,
@@ -43,7 +43,7 @@ class WalletApiClient {
     return null;
   }
 
-  getWalletBalance(String token) async {
+  getFinancialBalance(String token) async {
     try {
       Uri statisticUrl;
       String url =

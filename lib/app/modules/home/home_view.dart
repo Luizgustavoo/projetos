@@ -6,7 +6,7 @@ import 'package:projetos/app/data/controllers/company_controller.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/controllers/home_controller.dart';
 import 'package:projetos/app/data/controllers/statistic_controller.dart';
-import 'package:projetos/app/data/controllers/wallet_controller.dart';
+import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/modules/home/widgets/custom_home_card.dart';
 import 'package:projetos/app/routes/app_routes.dart';
 import 'package:projetos/app/utils/service_storage.dart';
@@ -17,7 +17,7 @@ class HomeView extends GetView<HomeController> {
   final companyController = Get.put(CompanyController());
   final billsController = Get.put(BillController());
   final fundRaiserController = Get.put(FundRaiserController());
-  final walletController = Get.put(WalletController());
+  final walletController = Get.put(FinancialController());
   @override
   Widget build(BuildContext context) {
     final statisticController = Get.put(StatisticController());
@@ -142,7 +142,7 @@ class HomeView extends GetView<HomeController> {
                         onTap: () {
                           walletController.getWallet(0);
                           walletController.getWalletBalance();
-                          Get.toNamed(Routes.wallet);
+                          Get.toNamed(Routes.financial);
                         },
                       ),
                     ],

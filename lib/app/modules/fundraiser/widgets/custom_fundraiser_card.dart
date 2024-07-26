@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/modules/fundraiser/widgets/create_fundraiser_modal.dart';
+import 'package:projetos/app/routes/app_routes.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
 class CustomFundRaiserCard extends StatelessWidget {
@@ -70,6 +72,17 @@ class CustomFundRaiserCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         margin: const EdgeInsets.all(5),
         child: ListTile(
+          leading: IconButton(
+              onPressed: () {
+                final financialController = Get.put(FinancialController());
+                financialController.getWallet(user!.id!);
+                financialController.getWalletBalance();
+                Get.toNamed(Routes.financial, arguments: user);
+              },
+              icon: const Icon(
+                Icons.account_balance_wallet_rounded,
+                color: Colors.green,
+              )),
           dense: true,
           trailing: IconButton(
               onPressed: () {

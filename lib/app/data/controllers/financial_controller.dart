@@ -1,15 +1,13 @@
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:intl/intl.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
-import 'package:projetos/app/data/repositories/wallet_repository.dart';
+import 'package:projetos/app/data/repositories/financial_repository.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
-class WalletController extends GetxController {
+class FinancialController extends GetxController {
   RxList<Bill> listWallet = RxList<Bill>([]);
   RxBool isLoading = true.obs;
-  final repository = Get.put(WalletRepository());
+  final repository = Get.put(FinancialRepository());
 
   var sumToReceive = 0.0.obs;
   var sumReceived = 0.0.obs;

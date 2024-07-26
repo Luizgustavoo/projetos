@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projetos/app/data/controllers/wallet_controller.dart';
+import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
-import 'package:projetos/app/modules/wallet/widgets/custom_wallet_card.dart';
+import 'package:projetos/app/modules/financial/widgets/custom_financial_card.dart';
 
-class WalletView extends GetView<WalletController> {
-  const WalletView({super.key});
+class FinancialView extends GetView<FinancialController> {
+  const FinancialView({super.key});
 
   double calculateCommission(int capturedValue, double percentage) {
     return capturedValue * (percentage / 100);
@@ -14,7 +14,6 @@ class WalletView extends GetView<WalletController> {
 
   @override
   Widget build(BuildContext context) {
-
     String carteira = "MINHA CARTEIRA";
     if (Get.arguments != null && Get.arguments is User) {
       final User user = Get.arguments as User;
@@ -123,7 +122,7 @@ class WalletView extends GetView<WalletController> {
                     shrinkWrap: true,
                     itemBuilder: ((context, index) {
                       Bill bill = controller.listWallet[index];
-                      return CustomWalletCard(
+                      return CustomFinancialCard(
                           bill: bill, controller: controller);
                     }),
                   ),

@@ -1,8 +1,8 @@
 import 'package:projetos/app/data/models/bill_model.dart';
-import 'package:projetos/app/data/providers/wallet_provider.dart';
+import 'package:projetos/app/data/providers/financial_provider.dart';
 
-class WalletRepository {
-  final WalletApiClient apiClient = WalletApiClient();
+class FinancialRepository {
+  final FinancialApiClient apiClient = FinancialApiClient();
 
   getAll(String token, int id) async {
     List<Bill> list = <Bill>[];
@@ -19,7 +19,7 @@ class WalletRepository {
   }
 
   getWalletBalance(String token) async {
-    var response = await apiClient.getWalletBalance(token);
+    var response = await apiClient.getFinancialBalance(token);
 
     if (response != null) {
       return response['data'];

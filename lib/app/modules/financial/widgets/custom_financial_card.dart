@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:projetos/app/data/controllers/wallet_controller.dart';
+import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 
-class CustomWalletCard extends StatelessWidget {
+class CustomFinancialCard extends StatelessWidget {
   final Bill bill;
-  final WalletController controller;
+  final FinancialController controller;
 
-  const CustomWalletCard(
+  const CustomFinancialCard(
       {super.key, required this.bill, required this.controller});
 
   double calculateCommission(int capturedValue, double percentage) {
@@ -28,7 +28,6 @@ class CustomWalletCard extends StatelessWidget {
           style: const TextStyle(fontFamily: 'Poppinss'),
         ),
         children: bill.fundraisings!.map((e) {
-
           int capturedValue =
               e.capturedValue != null ? e.capturedValue!.toInt() : 0;
           double percentage =
@@ -40,13 +39,15 @@ class CustomWalletCard extends StatelessWidget {
               e.company!.nome!.toUpperCase(),
               style: const TextStyle(fontFamily: 'Poppinss'),
             ),
-            trailing: e.fundRaiserComission != null && e.fundRaiserComission!.status! == 'a_receber' ? IconButton(
+            trailing: e.fundRaiserComission != null &&
+                    e.fundRaiserComission!.status! == 'a_receber'
+                ? IconButton(
                     onPressed: () {},
                     icon: const Icon(
                       Icons.payments_rounded,
                       color: Colors.green,
-                    )):SizedBox(),
-
+                    ))
+                : const SizedBox(),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
