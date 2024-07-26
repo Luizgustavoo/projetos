@@ -115,6 +115,13 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
   void showModal(
       context, FundRaising fundRaising, FundRaiserController controller) {
     controller.clearAllFields();
+
+    controller.datePendingFundController.text = controller
+        .formatDate(fundRaising.expectedDate.toString());
+
+    controller.pendingValueFundController.text = "R\$ ${controller.formatValue(double.parse(
+        fundRaising.predictedValue.toString()))}";
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: false,
@@ -136,18 +143,29 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    'ARRECADAÇÕES',
+                    'CONFIRMAR ARRECADAÇÃO',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
                   Text(
                     fundRaising.empresa!.toUpperCase(),
                     style: const TextStyle(
                       fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                  "PREVISÃO: ${controller
+                      .formatDate(fundRaising.expectedDate.toString())} - R\$ ${controller.formatValue(double.parse(
+                      fundRaising.predictedValue.toString()))}",
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                   ),

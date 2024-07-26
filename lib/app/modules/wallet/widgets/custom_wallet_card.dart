@@ -28,6 +28,7 @@ class CustomWalletCard extends StatelessWidget {
           style: const TextStyle(fontFamily: 'Poppinss'),
         ),
         children: bill.fundraisings!.map((e) {
+
           int capturedValue =
               e.capturedValue != null ? e.capturedValue!.toInt() : 0;
           double percentage =
@@ -39,14 +40,13 @@ class CustomWalletCard extends StatelessWidget {
               e.company!.nome!.toUpperCase(),
               style: const TextStyle(fontFamily: 'Poppinss'),
             ),
-            trailing: e.pago == 'nao'
-                ? IconButton(
+            trailing: e.fundRaiserComission != null && e.fundRaiserComission!.status! == 'a_receber' ? IconButton(
                     onPressed: () {},
                     icon: const Icon(
                       Icons.payments_rounded,
                       color: Colors.green,
-                    ))
-                : const SizedBox(),
+                    )):SizedBox(),
+
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

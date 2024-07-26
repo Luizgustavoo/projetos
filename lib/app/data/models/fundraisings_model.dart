@@ -1,4 +1,5 @@
 import 'package:projetos/app/data/models/company_model.dart';
+import 'package:projetos/app/data/models/fund_raiser_comission_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
 
 class FundRaising {
@@ -17,6 +18,7 @@ class FundRaising {
   dynamic payDay;
   User? user;
   Company? company;
+  FundRaiserComission? fundRaiserComission;
 
   FundRaising(
       {this.id,
@@ -33,6 +35,7 @@ class FundRaising {
       this.pago,
       this.payDay,
       this.company,
+      this.fundRaiserComission,
       this.user});
 
   FundRaising.fromJson(Map<String, dynamic> json) {
@@ -50,6 +53,7 @@ class FundRaising {
     pago = json['pago'];
     payDay = json['payday'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
+    fundRaiserComission = json['fundraisercomission'] != null ? FundRaiserComission.fromJson(json['fundraisercomission']) : null;
     company =
         json['company'] != null ? Company.fromJson(json['company']) : null;
   }
@@ -74,6 +78,9 @@ class FundRaising {
     }
     if (company != null) {
       data['company'] = company!.toJson();
+    }
+    if (fundRaiserComission != null) {
+      data['fundraisercomission'] = fundRaiserComission!.toJson();
     }
     return data;
   }
