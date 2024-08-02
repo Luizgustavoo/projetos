@@ -28,8 +28,9 @@ class MaterialRepository {
     String? videoLink,
   ) async {
     try {
-      await apiClient.insertMaterial(
+      var response = await apiClient.insertMaterial(
           token, description, fileType, pdfUrl, selectedFile, videoLink);
+      return response;
     } catch (e) {
       print(e);
     }
