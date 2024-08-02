@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:projetos/app/data/base_url.dart';
 
 class MaterialApiClient {
@@ -41,18 +42,14 @@ class MaterialApiClient {
   }
 
   insertMaterial(
-    String token,
-    String description,
-    String fileType,
-    String? pdfUrl,
-    PlatformFile? selectedFile,
-    String? videoLink,
-  ) async {
+      String token,
+      String description,
+      String fileType,
+      String? pdfUrl,
+      PlatformFile? selectedFile,
+      String? videoLink,
+      ) async {
     var request = http.MultipartRequest('POST', Uri.parse(materialUrl));
-    request.headers.addAll({
-      'Content-Type': 'multipart/form-data',
-      'Authorization': 'Bearer $token',
-    });
 
     request.fields['descricao'] = description;
     request.fields['tipo'] = fileType;
@@ -60,16 +57,28 @@ class MaterialApiClient {
 
     if (selectedFile != null) {
       request.files.add(await http.MultipartFile.fromPath(
-          'arquivo_video', selectedFile.path!));
+          'arquivo_video',
+          selectedFile.path!,
+          contentType: MediaType('application', 'pdf')
+      ));
     } else if (videoLink != null) {
       request.fields['arquivo_video'] = videoLink;
     }
 
+    request.headers.addAll({
+      'Content-Type': 'multipart/form-data',
+      'Authorization': 'Bearer $token',
+    });
+
     var response = await request.send();
-    if (response.statusCode != 201) {
+    var responseStream = await response.stream.bytesToString();
+    var httpResponse = http.Response(responseStream, response.statusCode);
+
+    if (httpResponse.statusCode != 201) {
       throw Exception('Failed to register material');
     } else {
-      return response;
+      return json.decode(httpResponse.body);
     }
   }
+
 }
