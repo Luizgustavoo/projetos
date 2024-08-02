@@ -3,31 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
-import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/controllers/home_controller.dart';
 import 'package:projetos/app/data/controllers/statistic_controller.dart';
 import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/modules/home/widgets/custom_home_card.dart';
 import 'package:projetos/app/routes/app_routes.dart';
 import 'package:projetos/app/utils/service_storage.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 class HomeView extends GetView<HomeController> {
   HomeView({super.key});
 
   final companyController = Get.put(CompanyController());
   final billsController = Get.put(BillController());
-  final fundRaiserController = Get.put(FundRaiserController());
   final walletController = Get.put(FinancialController());
+  final statisticController = Get.put(StatisticController());
   @override
   Widget build(BuildContext context) {
-    final statisticController = Get.put(StatisticController());
     return Stack(
       children: [
         Scaffold(
           appBar: AppBar(
+            backgroundColor: ServiceStorage.getUserType() == 1
+                ? const Color(0xFF1d1d1d)
+                : const Color(0xFFd1d1d1),
             title: Padding(
               padding: const EdgeInsets.only(bottom: 50, left: 15),
-              child: Text(ServiceStorage.getUserName().toUpperCase()),
+              child: Text(
+                ServiceStorage.getUserName().toUpperCase(),
+                style: TextStyle(
+                    fontSize: kIsWeb ||
+                            defaultTargetPlatform == TargetPlatform.windows
+                        ? 28
+                        : 16),
+              ),
             ),
             leading: Padding(
               padding: const EdgeInsets.only(bottom: 50, left: 15),
@@ -41,10 +50,12 @@ class HomeView extends GetView<HomeController> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 50, right: 15),
                 child: PopupMenuButton<String>(
+                  tooltip: 'Mostrar menu',
                   onSelected: (String value) {
                     switch (value) {
-                      case 'Perfil':
-                        // Get.toNamed(Routes.profile);
+                      case 'Alterar senha':
+                        controller.clearAllFields();
+                        showChangePasswordDialog(context, controller);
                         break;
                       case 'Sair':
                         ServiceStorage.clearBox();
@@ -53,10 +64,13 @@ class HomeView extends GetView<HomeController> {
                     }
                   },
                   itemBuilder: (BuildContext context) {
-                    return {'Perfil', 'Sair'}.map((String choice) {
+                    return {'Alterar senha', 'Sair'}.map((String choice) {
                       return PopupMenuItem<String>(
                         value: choice,
-                        child: Text(choice),
+                        child: Text(
+                          choice,
+                          style: const TextStyle(fontFamily: 'Poppins'),
+                        ),
                       );
                     }).toList();
                   },
@@ -80,95 +94,24 @@ class HomeView extends GetView<HomeController> {
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
                     children: [
-<<<<<<< HEAD
-                      HomeCard(
-                        icon: Icons.price_check_rounded,
-                        title: 'CAPTAÇÕES\nPENDENTES',
-                        onTap: () {
-                          fundRaiserController.getAllPendingFundRising();
-                          Get.toNamed(Routes.pendingfundrising);
-                        },
-                      ),
-                      HomeCard(
-                        icon: Icons.factory_rounded,
-                        title: 'MINHAS\nEMPRESAS',
-                        onTap: () {
-                          companyController.getCompanies();
-                          Get.toNamed(Routes.mycompany);
-                        },
-                      ),
-                      HomeCard(
-                        icon: Icons.domain_add_rounded,
-                        title: 'TODAS AS\nEMPRESAS',
-                        onTap: () {
-                          companyController.getAllCompanies();
-                          Get.toNamed(Routes.allcompany);
-                        },
-                      ),
-                      HomeCard(
-                        icon: Icons.pin_drop_rounded,
-                        title: 'EMPRESAS\nDISPONÍVEIS',
-                        onTap: () {
-                          companyController.getAvailableCompanies();
-                          Get.toNamed(Routes.availablecompany);
-                        },
-                      ),
-                      HomeCard(
-                        icon: Icons.history_rounded,
-                        title: 'EMPRESAS\nEXPIRANDO',
-                        onTap: () {
-                          companyController.getExpirianCompanies();
-                          Get.toNamed(Routes.expiringcompany);
-                        },
-                      ),
-                      HomeCard(
-                        icon: CupertinoIcons.group_solid,
-                        title: 'LISTAGEM\nCAPTADORES',
-                        onTap: () {
-                          fundRaiserController.getFundRaisers();
-                          Get.toNamed(Routes.fundraiser);
-                        },
-                      ),
-                      HomeCard(
-                        icon: Icons.post_add_rounded,
-                        title: 'LISTAGEM\nPROJETOS',
-                        onTap: () {
-                          billsController.getAllBills();
-                          Get.toNamed(Routes.bill);
-                        },
-                      ),
-                      HomeCard(
-                        icon: Icons.account_balance_wallet_outlined,
-                        title: 'MINHA\nCARTEIRA',
-                        onTap: () {
-                          walletController.getFinancial(0);
-                          walletController.getFinancialBalance(0);
-                          Get.toNamed(Routes.financial);
-                        },
-                      ),
-=======
-
-
-
-                      if(ServiceStorage.getUserType() == 1)...[
+                      if (ServiceStorage.getUserType() == 1) ...[
                         HomeCard(
                           icon: CupertinoIcons.group_solid,
                           title: 'LISTAGEM\nCAPTADORES',
                           onTap: () {
-                            fundRaiserController.getFundRaisers();
                             Get.toNamed(Routes.fundraiser);
                           },
                         ),
-
                         HomeCard(
                           icon: Icons.domain_add_rounded,
                           title: 'TODAS AS\nEMPRESAS',
                           onTap: () {
+                            companyController.searchControllerAllCompany.text =
+                                '';
                             companyController.getAllCompanies();
                             Get.toNamed(Routes.allcompany);
                           },
                         ),
-
                         HomeCard(
                           icon: Icons.post_add_rounded,
                           title: 'LISTAGEM\nPROJETOS',
@@ -181,20 +124,24 @@ class HomeView extends GetView<HomeController> {
                           icon: Icons.price_check_rounded,
                           title: 'CAPTAÇÕES\nPENDENTES',
                           onTap: () {
-                            fundRaiserController.getAllPendingFundRising();
                             Get.toNamed(Routes.pendingfundrising);
                           },
                         ),
-
+                        HomeCard(
+                          icon: Icons.phone_android_rounded,
+                          title: 'MATERIAIS\nDIVULGAÇÃO',
+                          onTap: () {
+                            Get.toNamed(Routes.material);
+                          },
+                        ),
                       ],
-
-                      if(ServiceStorage.getUserType() != 1)...[
+                      if (ServiceStorage.getUserType() != 1) ...[
                         HomeCard(
                           icon: Icons.account_balance_wallet_outlined,
-                          title: 'MINHA\nCARTEIRA',
+                          title: 'MEU\nFINANCEIRO',
                           onTap: () {
-                            walletController.getWallet(0);
-                            walletController.getWalletBalance(0);
+                            walletController.getFinancial(0);
+                            walletController.getFinancialBalance(0);
                             Get.toNamed(Routes.financial);
                           },
                         ),
@@ -210,11 +157,12 @@ class HomeView extends GetView<HomeController> {
                           icon: Icons.factory_rounded,
                           title: 'MINHAS\nEMPRESAS',
                           onTap: () {
+                            companyController.searchControllerMyCompany.text =
+                                '';
                             companyController.getCompanies(0);
                             Get.toNamed(Routes.mycompany);
                           },
                         ),
-
                         HomeCard(
                           icon: Icons.pin_drop_rounded,
                           title: 'EMPRESAS\nDISPONÍVEIS',
@@ -224,9 +172,6 @@ class HomeView extends GetView<HomeController> {
                           },
                         ),
                       ],
-
-
->>>>>>> b4c3498fb03e2282ff8601dc37a31a50f8c701e4
                     ],
                   ),
                 )
@@ -235,7 +180,9 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
         Positioned(
-          top: MediaQuery.of(context).size.width * .35,
+          top: kIsWeb || defaultTargetPlatform == TargetPlatform.windows
+              ? MediaQuery.of(context).size.width * .09
+              : MediaQuery.of(context).size.width * .35,
           left: MediaQuery.of(context).size.width * .04,
           right: MediaQuery.of(context).size.width * .04,
           child: Card(
@@ -251,10 +198,14 @@ class HomeView extends GetView<HomeController> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       'EMPRESAS',
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: kIsWeb ||
+                                  defaultTargetPlatform ==
+                                      TargetPlatform.windows
+                              ? 25
+                              : 18,
                           color: Colors.white,
                           fontFamily: 'Poppinss'),
                     ),
@@ -338,6 +289,66 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
       ],
+    );
+  }
+
+  void showChangePasswordDialog(
+      BuildContext context, HomeController controller) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Alterar Senha'),
+          titleTextStyle: const TextStyle(
+              fontFamily: 'Poppinss', fontSize: 18, color: Colors.black),
+          content: Form(
+            key: controller.changePasswordKey,
+            child: TextFormField(
+              controller: controller.passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Nova Senha',
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text(
+                'CANCELAR',
+                style: TextStyle(fontFamily: 'Poppins'),
+              ),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+            ElevatedButton(
+              child: const Text(
+                'CONFIRMAR',
+                style: TextStyle(fontFamily: 'Poppins', color: Colors.white),
+              ),
+              onPressed: () async {
+                Map<String, dynamic> retorno = await controller
+                    .updatePasswordUser(ServiceStorage.getUserId());
+
+                if (retorno['success'] == true) {
+                  Get.back();
+                  Get.snackbar('Sucesso!', retorno['message'].join('\n'),
+                      backgroundColor: Colors.green,
+                      colorText: Colors.white,
+                      duration: const Duration(seconds: 2),
+                      snackPosition: SnackPosition.BOTTOM);
+                } else {
+                  Get.snackbar('Falha!', retorno['message'].join('\n'),
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                      duration: const Duration(seconds: 2),
+                      snackPosition: SnackPosition.BOTTOM);
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

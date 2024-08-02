@@ -24,6 +24,17 @@ class AllCompanyView extends GetView<CompanyController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: TextField(
+                controller: controller.searchControllerAllCompany,
+                decoration: const InputDecoration(
+                  labelText: 'Pesquisar Empresas',
+                  prefixIcon: Icon(Icons.search),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
             Obx(() {
               if (controller.isLoading.value) {
                 return const Expanded(
@@ -34,21 +45,19 @@ class AllCompanyView extends GetView<CompanyController> {
                       children: [
                         Text('Carregando...'),
                         SizedBox(height: 20.0),
-                        CircularProgressIndicator(
-                          value: 5,
-                        ),
+                        CircularProgressIndicator(),
                       ],
                     ),
                   ),
                 );
               } else if (!controller.isLoading.value &&
-                  controller.listAllCompany.isNotEmpty) {
+                  controller.filteredAllCompanies.isNotEmpty) {
                 return Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.only(right: 15, left: 15),
-                    itemCount: controller.listAllCompany.length,
+                    itemCount: controller.filteredAllCompanies.length,
                     itemBuilder: (context, index) {
-                      Company company = controller.listAllCompany[index];
+                      Company company = controller.filteredAllCompanies[index];
                       return GestureDetector(
                         onTap: () {
                           Get.toNamed(Routes.contacttimeline,
@@ -86,7 +95,7 @@ class AllCompanyView extends GetView<CompanyController> {
           showModalBottomSheet(
             isScrollControlled: true,
             context: context,
-            builder: (context) => const CreateCompanyModal(),
+            builder: (context) => CreateCompanyModal(),
           );
         },
         child: const Icon(

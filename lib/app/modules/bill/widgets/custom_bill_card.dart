@@ -36,7 +36,10 @@ class CustomBillCard extends StatelessWidget {
               builder: (context) => CreateBillModal(bill: bill),
             );
           },
-          icon: const Icon(Icons.edit_rounded),
+          icon: const Icon(
+            Icons.edit_rounded,
+            color: Colors.black54,
+          ),
         ),
         dense: true,
         title: Text(

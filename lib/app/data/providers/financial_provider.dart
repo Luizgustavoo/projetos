@@ -89,7 +89,6 @@ class FinancialApiClient {
         "Accept": "application/json",
         "Authorization": token,
       });
-      print(json.decode(response.body));
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

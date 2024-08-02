@@ -113,6 +113,15 @@ class CustomContactCompanyCard extends StatelessWidget {
         ),
       ),
       actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: const Text(
+            "CANCELAR",
+            style: TextStyle(fontFamily: 'Poppinss'),
+          ),
+        ),
         ElevatedButton(
           onPressed: () async {
             final contactController = Get.put(ContactController());
@@ -137,15 +146,6 @@ class CustomContactCompanyCard extends StatelessWidget {
           child: const Text(
             "CONFIRMAR",
             style: TextStyle(fontFamily: 'Poppinss', color: Colors.white),
-          ),
-        ),
-        TextButton(
-          onPressed: () {
-            Get.back();
-          },
-          child: const Text(
-            "CANCELAR",
-            style: TextStyle(fontFamily: 'Poppinss'),
           ),
         ),
       ],

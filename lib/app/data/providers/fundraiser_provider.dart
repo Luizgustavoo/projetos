@@ -88,7 +88,7 @@ class FundRaiserApiClient {
         "email": user.email.toString(),
         "password": user.password.toString(),
         "start_date": user.startDate.toString(),
-        "usertype_id": "2",
+        "usertype_id": user.usertypeId.toString(),
         "cpf_cnpj": user.cpfCnpj.toString(),
         "contact": user.contact.toString(),
         "status": "1",
@@ -136,7 +136,7 @@ class FundRaiserApiClient {
         "email": user.email.toString(),
         "password": user.password.toString(),
         "start_date": user.startDate.toString(),
-        "usertype_id": "2",
+        "usertype_id": user.usertypeId.toString(),
         "cpf_cnpj": user.cpfCnpj.toString(),
         "contact": user.contact.toString(),
         "status": "1",
@@ -162,7 +162,6 @@ class FundRaiserApiClient {
         "pago": fundRaising.pago.toString(),
         "payday": fundRaising.payDay.toString()
       });
-      print(json.decode(response.body));
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

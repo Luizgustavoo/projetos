@@ -9,6 +9,7 @@ import 'package:projetos/app/utils/service_storage.dart';
 class BillController extends GetxController {
   var listAllBills = <Bill>[].obs;
   var isLoading = true.obs;
+
   final repository = Get.put(BillRepository());
 
   final billKey = GlobalKey<FormState>();

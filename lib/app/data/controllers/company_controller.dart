@@ -7,17 +7,17 @@ import 'package:projetos/app/utils/formatter.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
 class CompanyController extends GetxController {
-  // RxList<Company> listCompany = RxList<Company>([]);
   RxList<Company> listAvailableCompany = RxList<Company>([]);
   var listExpirianCompany = <Company>[].obs;
   var listAllCompany = <Company>[].obs;
   var isLoading = true.obs;
   var listCompany = <Company>[].obs;
+  var filteredAllCompanies = <Company>[].obs;
+  var filteredMyCompanies = <Company>[].obs;
 
   Company? selectedCompany;
-
-  var selectedUserId = 0.obs;
   var selectedBillId = 0.obs;
+  var selectedUserId = 0.obs;
 
   final companyKey = GlobalKey<FormState>();
 
@@ -26,6 +26,8 @@ class CompanyController extends GetxController {
   final responsibleCompanyController = TextEditingController();
   final contactController = TextEditingController();
   final peopleContactController = TextEditingController();
+  final searchControllerAllCompany = TextEditingController();
+  final searchControllerMyCompany = TextEditingController();
 
   final repository = Get.put(CompanyRepository());
 
@@ -36,11 +38,28 @@ class CompanyController extends GetxController {
   };
   dynamic mensagem;
 
+  @override
+  void onInit() {
+    super.onInit();
+    searchControllerAllCompany.addListener(onSearchChanged);
+    searchControllerMyCompany.addListener(onMySearchChanged);
+  }
+
+  @override
+  void onClose() {
+    searchControllerAllCompany.removeListener(onSearchChanged);
+    searchControllerMyCompany.removeListener(onMySearchChanged);
+    searchControllerAllCompany.dispose();
+    searchControllerMyCompany.dispose();
+    super.onClose();
+  }
+
   Future<void> getCompanies(int id) async {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
       listCompany.value = await repository.gettAll("Bearer $token", id);
+      filteredMyCompanies.value = listCompany;
     } catch (e) {
       Exception(e);
     }
@@ -76,6 +95,7 @@ class CompanyController extends GetxController {
     try {
       final token = ServiceStorage.getToken();
       listAllCompany.value = await repository.gettAllCompany("Bearer $token");
+      filteredAllCompanies.value = listAllCompany;
     } catch (e) {
       Exception(e);
     }
@@ -98,7 +118,8 @@ class CompanyController extends GetxController {
         'message': mensagem['message']
       };
       if (Get.currentRoute == Routes.mycompany) {
-        int idd = ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
+        int idd =
+            ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
         getCompanies(idd);
       } else {
         getAllCompanies();
@@ -123,7 +144,8 @@ class CompanyController extends GetxController {
         'success': mensagem['success'],
         'message': mensagem['message']
       };
-      int idd = ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
+      int idd =
+          ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
       getCompanies(idd);
     }
     return retorno;
@@ -136,7 +158,8 @@ class CompanyController extends GetxController {
     final token = ServiceStorage.getToken();
     mensagem = await repository.unlinkCompany("Bearer $token", company);
     retorno = {'success': mensagem['success'], 'message': mensagem['message']};
-    int idd = ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
+    int idd =
+        ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
     getCompanies(idd);
     return retorno;
   }
@@ -150,6 +173,38 @@ class CompanyController extends GetxController {
     retorno = {'success': mensagem['success'], 'message': mensagem['message']};
     getAvailableCompanies();
     return retorno;
+  }
+
+  void onSearchChanged() {
+    filterAllCompanies(searchControllerAllCompany.text);
+    // filterMyCompanies(searchControllerMyCompany.text);
+  }
+
+  void onMySearchChanged() {
+    filterMyCompanies(searchControllerMyCompany.text);
+    // filterMyCompanies(searchControllerMyCompany.text);
+  }
+
+  void filterAllCompanies(String query) {
+    if (query.isEmpty) {
+      filteredAllCompanies.value = listAllCompany;
+    } else {
+      filteredAllCompanies.value = listAllCompany
+          .where((company) =>
+              company.nome!.toUpperCase().contains(query.toUpperCase()))
+          .toList();
+    }
+  }
+
+  void filterMyCompanies(String query) {
+    if (query.isEmpty) {
+      filteredMyCompanies.value = listCompany;
+    } else {
+      filteredMyCompanies.value = listCompany
+          .where((company) =>
+              company.nome!.toUpperCase().contains(query.toUpperCase()))
+          .toList();
+    }
   }
 
   void fillInFields() {

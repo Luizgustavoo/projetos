@@ -13,10 +13,10 @@ class CompanyApiClient {
 
   gettAll(String token, int id) async {
     try {
-      String user_id = id <= 0 ? ServiceStorage.getUserId().toString(): id.toString();
+      String userId =
+          id <= 0 ? ServiceStorage.getUserId().toString() : id.toString();
       Uri companyUrl;
-      String url =
-          '$baseUrl/v1/company/mycompanies/${user_id}';
+      String url = '$baseUrl/v1/company/mycompanies/$userId';
       companyUrl = Uri.parse(url);
       var response = await httpClient.get(
         companyUrl,

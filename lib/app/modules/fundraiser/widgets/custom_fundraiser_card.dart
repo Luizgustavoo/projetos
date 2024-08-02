@@ -125,6 +125,15 @@ class CustomFundRaiserCard extends StatelessWidget {
         ),
       ),
       actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: const Text(
+            "CANCELAR",
+            style: TextStyle(fontFamily: 'Poppins'),
+          ),
+        ),
         ElevatedButton(
           onPressed: () async {
             final fundRaiser = Get.put(FundRaiserController());
@@ -149,15 +158,6 @@ class CustomFundRaiserCard extends StatelessWidget {
           child: const Text(
             "CONFIRMAR",
             style: TextStyle(fontFamily: 'Poppins', color: Colors.white),
-          ),
-        ),
-        TextButton(
-          onPressed: () {
-            Get.back();
-          },
-          child: const Text(
-            "CANCELAR",
-            style: TextStyle(fontFamily: 'Poppins'),
           ),
         ),
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/login_controller.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -11,6 +12,11 @@ class LoginView extends GetView<LoginController> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+              horizontal:
+                  kIsWeb || defaultTargetPlatform == TargetPlatform.windows
+                      ? 150
+                      : 0),
           child: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,

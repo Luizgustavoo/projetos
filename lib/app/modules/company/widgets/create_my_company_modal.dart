@@ -6,8 +6,8 @@ import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
 
 class CreateCompanyModal extends GetView<CompanyController> {
-  const CreateCompanyModal({super.key, this.company});
-
+  CreateCompanyModal({super.key, this.company});
+  final userController = Get.put(FundRaiserController());
   final Company? company;
 
   @override
@@ -115,35 +115,45 @@ class CreateCompanyModal extends GetView<CompanyController> {
                 ),
                 const SizedBox(height: 15),
                 Obx(() {
-                  final userController = Get.put(FundRaiserController());
-                  if (userController.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    return DropdownButtonFormField<int>(
-                      decoration: const InputDecoration(
-                        labelText: 'CAPTADOR',
-                      ),
-                      items: userController.listFundRaiser.map((User user) {
-                        return DropdownMenuItem<int>(
-                          value: user.id,
-                          child: Text(user.name!),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        controller.selectedUserId.value = value!;
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Por favor, selecione um usuário';
-                        }
-                        return null;
-                      },
-                    );
-                  }
+                  return DropdownButtonFormField<int>(
+                    decoration: const InputDecoration(
+                      labelText: 'CAPTADOR',
+                    ),
+                    items: userController.listFundRaiser.map((User user) {
+                      return DropdownMenuItem<int>(
+                        value: user.id,
+                        child: Text(user.name!),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      controller.selectedUserId.value = value!;
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Por favor, selecione um captador';
+                      }
+                      return null;
+                    },
+                  );
                 }),
                 const SizedBox(height: 16),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    SizedBox(
+                      width: 120,
+                      child: TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: const Text(
+                            'CANCELAR',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Color(0xFFEBAE1F)),
+                          )),
+                    ),
+                    const SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () async {
                         Map<String, dynamic> retorno = isUpdate
@@ -172,20 +182,6 @@ class CreateCompanyModal extends GetView<CompanyController> {
                             fontFamily: 'Poppins', color: Colors.white),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    SizedBox(
-                      width: 120,
-                      child: TextButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: const Text(
-                            'CANCELAR',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Color(0xFFEBAE1F)),
-                          )),
-                    )
                   ],
                 ),
               ],

@@ -50,7 +50,10 @@ class FundRaiserView extends GetView<FundRaiserController> {
                             User user = controller.listFundRaiser[index];
                             return InkWell(
                               onTap: () {
+                                companyController
+                                    .searchControllerMyCompany.text = '';
                                 companyController.getCompanies(user.id!);
+
                                 Get.toNamed(Routes.mycompany, arguments: user);
                               },
                               child: CustomFundRaiserCard(

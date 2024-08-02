@@ -159,7 +159,22 @@ class CreateBillModal extends GetView<BillController> {
                 ),
                 const SizedBox(height: 16),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    SizedBox(
+                      width: 120,
+                      child: TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text(
+                          'CANCELAR',
+                          style: TextStyle(
+                              fontFamily: 'Poppins', color: Color(0xFFEBAE1F)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () async {
                         Map<String, dynamic> retorno = isUpdate
@@ -188,20 +203,6 @@ class CreateBillModal extends GetView<BillController> {
                             fontFamily: 'Poppins', color: Colors.white),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    SizedBox(
-                      width: 120,
-                      child: TextButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: const Text(
-                          'CANCELAR',
-                          style: TextStyle(
-                              fontFamily: 'Poppins', color: Color(0xFFEBAE1F)),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 class HomeCard extends StatelessWidget {
   const HomeCard({
@@ -24,7 +25,9 @@ class HomeCard extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 40,
+              size: kIsWeb || defaultTargetPlatform == TargetPlatform.windows
+                  ? 120
+                  : 40,
               color: const Color(0xFFEBAE1F),
             ),
             const SizedBox(
@@ -32,7 +35,12 @@ class HomeCard extends StatelessWidget {
             ),
             Text(
               title!,
-              style: const TextStyle(fontSize: 10, fontFamily: 'Poppins'),
+              style: TextStyle(
+                  fontSize:
+                      kIsWeb || defaultTargetPlatform == TargetPlatform.windows
+                          ? 20
+                          : 10,
+                  fontFamily: 'Poppins'),
               textAlign: TextAlign.center,
             )
           ],

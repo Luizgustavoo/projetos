@@ -104,8 +104,8 @@ class DetailBillView extends GetView<BillController> {
                                   ),
                                   Text(
                                     status
-                                        ? 'VALOR CAPTADO: R\$${controller.formatValue(int.parse(fundRaising.capturedValue.toString()))}'
-                                        : 'VALOR PREVISTO: R\$${controller.formatValue(int.parse(fundRaising.predictedValue.toString()))}',
+                                        ? 'VALOR CAPTADO: R\$${controller.formatValue(double.parse(fundRaising.capturedValue.toString()))}'
+                                        : 'VALOR PREVISTO: R\$${controller.formatValue(double.parse(fundRaising.predictedValue.toString()))}',
                                     style: TextStyle(
                                         fontFamily: 'Poppins',
                                         color: status

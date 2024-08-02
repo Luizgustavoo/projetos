@@ -97,8 +97,8 @@ class BillView extends GetView<BillController> {
                             value: controller.formatValue(
                                 double.parse(bill.valorAprovado.toString())),
                             color: bill.status == 'aberto'
-                                ? Colors.green.shade300
-                                : Colors.red.shade300,
+                                ? Colors.green.shade400
+                                : Colors.red.shade400,
                           ),
                         ),
                       );

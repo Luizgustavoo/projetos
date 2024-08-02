@@ -130,8 +130,25 @@ class CreateFundRaiserModal extends GetView<FundRaiserController> {
                     return null;
                   },
                 ),
+                const SizedBox(height: 10),
+                Obx(() => DropdownButtonFormField<int>(
+                      value: controller.selectedUserType.value,
+                      items: const [
+                        DropdownMenuItem(
+                            value: 1, child: Text('ADMINISTRADOR')),
+                        DropdownMenuItem(value: 2, child: Text('CAPTADOR')),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) {
+                          controller.selectedUserType.value = value;
+                        }
+                      },
+                      decoration:
+                          const InputDecoration(labelText: 'Tipo de Usuário'),
+                    )),
                 const SizedBox(height: 16),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
                       onPressed: () async {
@@ -174,7 +191,7 @@ class CreateFundRaiserModal extends GetView<FundRaiserController> {
                                 fontFamily: 'Poppins',
                                 color: Color(0xFFEBAE1F)),
                           )),
-                    )
+                    ),
                   ],
                 ),
               ],

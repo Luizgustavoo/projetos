@@ -16,6 +16,8 @@ class FundRaiserController extends GetxController {
   var paidOutCheckboxValue = false.obs;
   var showPaymentDateField = false.obs;
 
+  var selectedUserType = 2.obs;
+
   final dateFundController = TextEditingController();
   final valueFundController = TextEditingController();
   final fundRaisingKey = GlobalKey<FormState>();
@@ -46,6 +48,7 @@ class FundRaiserController extends GetxController {
 
   @override
   void onInit() {
+    getFundRaisers();
     getAllPendingFundRising();
     super.onInit();
   }
@@ -78,12 +81,14 @@ class FundRaiserController extends GetxController {
   Future<Map<String, dynamic>> insertFundRaiser() async {
     final token = ServiceStorage.getToken();
     User user = User(
-        name: nameRaiserController.text,
-        email: emailRaiserController.text,
-        password: passwordRaiserController.text,
-        startDate: startDateRaiserController.text,
-        cpfCnpj: cpfCnpjRaiserController.text,
-        contact: phoneRaiserController.text);
+      name: nameRaiserController.text,
+      email: emailRaiserController.text,
+      password: passwordRaiserController.text,
+      startDate: startDateRaiserController.text,
+      cpfCnpj: cpfCnpjRaiserController.text,
+      contact: phoneRaiserController.text,
+      usertypeId: selectedUserType.value,
+    );
 
     if (fundRaiserKey.currentState!.validate()) {
       mensagem = await repository.insertFundRaiser("Bearer $token", user);
@@ -128,7 +133,8 @@ class FundRaiserController extends GetxController {
         'success': mensagem['success'],
         'message': mensagem['message']
       };
-      int idd = ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
+      int idd =
+          ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
       companyController.getCompanies(idd);
     }
     return retorno;
@@ -136,13 +142,15 @@ class FundRaiserController extends GetxController {
 
   Future<Map<String, dynamic>> updateFundRaiser(int? id) async {
     User user = User(
-        id: id,
-        name: nameRaiserController.text,
-        email: emailRaiserController.text,
-        password: passwordRaiserController.text,
-        startDate: startDateRaiserController.text,
-        cpfCnpj: cpfCnpjRaiserController.text,
-        contact: phoneRaiserController.text);
+      id: id,
+      name: nameRaiserController.text,
+      email: emailRaiserController.text,
+      password: passwordRaiserController.text,
+      startDate: startDateRaiserController.text,
+      cpfCnpj: cpfCnpjRaiserController.text,
+      contact: phoneRaiserController.text,
+      usertypeId: selectedUserType.value,
+    );
 
     final token = ServiceStorage.getToken();
     if (fundRaiserKey.currentState!.validate()) {
@@ -204,6 +212,7 @@ class FundRaiserController extends GetxController {
 
   void clearAllFields() {
     final textControllers = [
+      nameRaiserController,
       dateFundController,
       valueFundController,
       cpfCnpjRaiserController,

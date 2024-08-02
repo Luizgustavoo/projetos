@@ -118,8 +118,14 @@ class ContactModal extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: const Text("CANCELAR"),
+                  ),
                   ElevatedButton(
                     onPressed: () async {
                       Map<String, dynamic> retorno = isUpdate
@@ -147,12 +153,6 @@ class ContactModal extends StatelessWidget {
                       "CONFIRMAR",
                       style: TextStyle(color: Colors.white),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: const Text("CANCELAR"),
                   ),
                 ],
               ),

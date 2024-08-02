@@ -14,4 +14,5 @@ abstract class Routes {
   static const bill = '/bill';
   static const detailbill = '/detailbill';
   static const financial = '/financial';
+  static const material = '/material';
 }
