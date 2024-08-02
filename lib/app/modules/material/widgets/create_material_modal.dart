@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/material_controller.dart';
-import 'package:projetos/app/data/models/user_model.dart';
+import 'package:projetos/app/data/models/material_model.dart';
 
 class CreateMaterialModal extends GetView<MaterialController> {
-  const CreateMaterialModal({super.key, this.user});
+  const CreateMaterialModal({super.key, this.materialModel});
 
-  final User? user;
-
+  final MaterialModel? materialModel;
   @override
   Widget build(BuildContext context) {
-    bool isUpdate = user != null;
+    bool isUpdate = materialModel != null;
 
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
@@ -98,17 +97,35 @@ class CreateMaterialModal extends GetView<MaterialController> {
                 } else if (controller.selectedFileType.value == 'arquivo') {
                   return Column(
                     children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          await controller.pickPdf();
-                        },
-                        child: const Text('SELECIONAR PDF'),
-                      ),
+                      Obx(() {
+                        return ElevatedButton.icon(
+                          onPressed: () async {
+                            await controller.pickPdf();
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                              controller.pdfUrl.value.isNotEmpty
+                                  ? Colors.green
+                                  : const Color(0xFFEBAE1F),
+                            ),
+                          ),
+                          label: const Text(
+                            'PDF',
+                            style: TextStyle(
+                                fontFamily: 'Poppinss', color: Colors.white),
+                          ),
+                          icon: const Icon(
+                            Icons.upload,
+                            color: Colors.white,
+                          ),
+                        );
+                      }),
                       Obx(() {
                         if (controller.pdfUrl.value.isNotEmpty) {
                           return Text(
-                            'PDF selecionado: ${controller.pdfUrl.value}',
-                            style: const TextStyle(color: Colors.green),
+                            'PDF: ${controller.pdfUrl.value}',
+                            style: const TextStyle(
+                                color: Colors.green, fontFamily: 'Poppins'),
                           );
                         } else {
                           return const SizedBox.shrink();
@@ -127,8 +144,9 @@ class CreateMaterialModal extends GetView<MaterialController> {
                 children: [
                   ElevatedButton(
                     onPressed: () async {
-                      Map<String, dynamic> retorno =
-                          await controller.insertMaterial();
+                      Map<String, dynamic> retorno = isUpdate
+                          ? await controller.updateMaterial(materialModel!.id)
+                          : await controller.insertMaterial();
 
                       if (retorno['success'] == true) {
                         Get.back();
@@ -156,6 +174,7 @@ class CreateMaterialModal extends GetView<MaterialController> {
                     width: 120,
                     child: TextButton(
                       onPressed: () {
+                        controller.clearAllFields();
                         Get.back();
                       },
                       child: const Text(

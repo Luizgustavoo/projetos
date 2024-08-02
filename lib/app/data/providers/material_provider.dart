@@ -42,13 +42,13 @@ class MaterialApiClient {
   }
 
   insertMaterial(
-      String token,
-      String description,
-      String fileType,
-      String? pdfUrl,
-      PlatformFile? selectedFile,
-      String? videoLink,
-      ) async {
+    String token,
+    String description,
+    String fileType,
+    String? pdfUrl,
+    PlatformFile? selectedFile,
+    String? videoLink,
+  ) async {
     var request = http.MultipartRequest('POST', Uri.parse(materialUrl));
 
     request.fields['descricao'] = description;
@@ -57,10 +57,8 @@ class MaterialApiClient {
 
     if (selectedFile != null) {
       request.files.add(await http.MultipartFile.fromPath(
-          'arquivo_video',
-          selectedFile.path!,
-          contentType: MediaType('application', 'pdf')
-      ));
+          'arquivo_video', selectedFile.path!,
+          contentType: MediaType('application', 'pdf')));
     } else if (videoLink != null) {
       request.fields['arquivo_video'] = videoLink;
     }
@@ -81,4 +79,45 @@ class MaterialApiClient {
     }
   }
 
+  updateMaterial(
+      String token,
+      String description,
+      String fileType,
+      String? pdfUrl,
+      PlatformFile? selectedFile,
+      String? videoLink,
+      int? id) async {
+    try {
+      String url = '$baseUrl/v1/material/${id.toString()}';
+      var request = http.MultipartRequest('PUT', Uri.parse(url));
+      request.fields['descricao'] = description;
+      request.fields['tipo'] = fileType;
+      request.fields['status'] = '1';
+
+      if (selectedFile != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'arquivo_video', selectedFile.path!,
+            contentType: MediaType('application', 'pdf')));
+      } else if (videoLink != null) {
+        request.fields['arquivo_video'] = videoLink;
+      }
+
+      request.headers.addAll({
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer $token',
+      });
+
+      var response = await request.send();
+      var responseStream = await response.stream.bytesToString();
+      var httpResponse = http.Response(responseStream, response.statusCode);
+
+      if (httpResponse.statusCode != 201) {
+        throw Exception('Failed to register material');
+      } else {
+        return json.decode(httpResponse.body);
+      }
+    } catch (e) {
+      Exception(e);
+    }
+  }
 }

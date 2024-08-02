@@ -16,6 +16,8 @@ class MaterialController extends GetxController {
   final RxString pdfUrl = ''.obs;
   PlatformFile? selectedFile;
 
+  MaterialModel? selectedMaterial;
+
   Map<String, dynamic> retorno = {
     "success": false,
     "data": null,
@@ -54,6 +56,7 @@ class MaterialController extends GetxController {
 
     if (result != null) {
       selectedFile = result.files.first;
+      pdfUrl.value = selectedFile!.name;
       Get.snackbar('Sucesso', 'PDF selecionado com sucesso!');
     } else {
       Get.snackbar('Erro', 'Nenhum arquivo selecionado.');
@@ -90,6 +93,70 @@ class MaterialController extends GetxController {
     );
 
     retorno = {'success': mensagem['success'], 'message': mensagem['message']};
+    getAllMaterial();
     return retorno;
+  }
+
+  updateMaterial(int? id) async {
+    final token = ServiceStorage.getToken();
+    if (!materialKey.currentState!.validate()) {
+      return;
+    }
+
+    if (selectedFileType.value == 'arquivo' && selectedFile == null) {
+      Get.snackbar('Erro', 'Nenhum arquivo PDF selecionado.');
+      return;
+    }
+
+    String? videoLink;
+    String? pdfUrl;
+
+    if (selectedFileType.value == 'arquivo' && selectedFile != null) {
+      pdfUrl = selectedFile!.path;
+    } else {
+      videoLink = linkController.text;
+    }
+
+    mensagem = await repository.updateMaterial(
+        token,
+        descriptionController.text,
+        selectedFileType.value,
+        pdfUrl,
+        selectedFile,
+        videoLink,
+        id);
+
+    retorno = {'success': mensagem['success'], 'message': mensagem['message']};
+    getAllMaterial();
+    return retorno;
+  }
+
+  void clearAllFields() {
+    descriptionController.clear();
+    linkController.clear();
+    selectedFile = null;
+    selectedFileType.value = 'arquivo';
+    pdfUrl.value = '';
+  }
+
+  void fillAllFields() {
+    descriptionController.text = selectedMaterial?.descricao.toString() ?? '';
+    selectedFileType.value = selectedMaterial?.tipo.toString() ?? 'arquivo';
+
+    if (selectedMaterial?.arquivoVideo.toString() != null) {
+      if (selectedMaterial!.arquivoVideo!.contains('http')) {
+        linkController.text = selectedMaterial!.arquivoVideo!;
+      } else {
+        pdfUrl.value = selectedMaterial!.arquivoVideo!;
+        selectedFile = PlatformFile(
+          name: selectedMaterial!.arquivoVideo!.split('/').last,
+          size: 2,
+        );
+      }
+    } else {
+      linkController.clear();
+      pdfUrl.value = '';
+      selectedFile = null;
+    }
   }
 }

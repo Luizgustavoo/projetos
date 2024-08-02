@@ -32,6 +32,24 @@ class MaterialRepository {
           token, description, fileType, pdfUrl, selectedFile, videoLink);
       return response;
     } catch (e) {
+      Exception(e);
+    }
+  }
+
+  updateMaterial(
+      String token,
+      String description,
+      String fileType,
+      String? pdfUrl,
+      PlatformFile? selectedFile,
+      String? videoLink,
+      int? id) async {
+    try {
+      var response = await apiClient.updateMaterial(
+          token, description, fileType, pdfUrl, selectedFile, videoLink, id);
+
+      return response;
+    } catch (e) {
       print(e);
     }
   }
