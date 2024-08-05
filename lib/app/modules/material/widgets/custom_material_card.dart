@@ -25,10 +25,9 @@ class CustomMaterialCard extends StatelessWidget {
           if (materialModel!.tipo == 'arquivo' &&
               materialModel!.arquivoVideo != null) {
             // Navega para a página de visualização de PDF
-            print(materialModel!.arquivoVideo);
-            final controller = Get.put(MaterialController());
-            controller.openPdf(materialModel!.arquivoVideo!);
-            Get.to(() => PdfViewPage(pdfUrl: materialModel!.arquivoVideo!));
+            String url = 'http://192.168.25.50:8001/storage/arquivos/${materialModel!.arquivoVideo}';
+
+            Get.to(() => PdfViewPage(pdfUrl: url));
           }
         },
         trailing: IconButton(
