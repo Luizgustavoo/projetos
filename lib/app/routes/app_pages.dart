@@ -21,7 +21,7 @@ import 'package:projetos/app/modules/initial/initial_view.dart';
 import 'package:projetos/app/modules/login/login_view.dart';
 import 'package:projetos/app/modules/fundraiser/views/fundraiser_view.dart';
 import 'package:projetos/app/modules/bill/views/bill_view.dart';
-import 'package:projetos/app/modules/material/material_view.dart';
+import 'package:projetos/app/modules/material/views/material_view.dart';
 import 'package:projetos/app/modules/report/report_view.dart';
 import 'package:projetos/app/modules/financial/financial_view.dart';
 import 'package:projetos/app/routes/app_routes.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/material_controller.dart';
 import 'package:projetos/app/data/models/material_model.dart';
+import 'package:projetos/app/modules/material/views/pdf_view_page.dart';
 import 'package:projetos/app/modules/material/widgets/create_material_modal.dart';
 
 class CustomMaterialCard extends StatelessWidget {
@@ -20,6 +21,16 @@ class CustomMaterialCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.all(5),
       child: ListTile(
+        onTap: () {
+          if (materialModel!.tipo == 'arquivo' &&
+              materialModel!.arquivoVideo != null) {
+            // Navega para a página de visualização de PDF
+            print(materialModel!.arquivoVideo);
+            final controller = Get.put(MaterialController());
+            controller.openPdf(materialModel!.arquivoVideo!);
+            Get.to(() => PdfViewPage(pdfUrl: materialModel!.arquivoVideo!));
+          }
+        },
         trailing: IconButton(
             onPressed: () {
               final controller = Get.put(MaterialController());

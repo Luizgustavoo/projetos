@@ -8,6 +8,7 @@ class LoginController extends GetxController {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final loginKey = GlobalKey<FormState>();
+  var isPasswordVisible = false.obs;
 
   final repository = Get.find<AuthRepository>();
   final box = GetStorage('projeto');
@@ -47,5 +48,9 @@ class LoginController extends GetxController {
         showErrorSnackbar.value = false;
       });
     }
+  }
+
+  void togglePasswordVisibility() {
+    isPasswordVisible.value = !isPasswordVisible.value;
   }
 }

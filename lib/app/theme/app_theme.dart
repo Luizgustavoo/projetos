@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 final ThemeData appThemeData = ThemeData(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
     scaffoldBackgroundColor: Colors.white,
     cardTheme: CardTheme(
         margin: EdgeInsets.zero,

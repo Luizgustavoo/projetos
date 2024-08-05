@@ -53,4 +53,14 @@ class MaterialRepository {
       print(e);
     }
   }
+
+  deleteMaterial(String token, MaterialModel materialModel) async {
+    try {
+      var response = await apiClient.deleteMaterial(token, materialModel);
+
+      return response;
+    } catch (e) {
+      Exception(e);
+    }
+  }
 }

@@ -177,12 +177,10 @@ class CompanyController extends GetxController {
 
   void onSearchChanged() {
     filterAllCompanies(searchControllerAllCompany.text);
-    // filterMyCompanies(searchControllerMyCompany.text);
   }
 
   void onMySearchChanged() {
     filterMyCompanies(searchControllerMyCompany.text);
-    // filterMyCompanies(searchControllerMyCompany.text);
   }
 
   void filterAllCompanies(String query) {

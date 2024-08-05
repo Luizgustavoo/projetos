@@ -61,19 +61,31 @@ class LoginView extends GetView<LoginController> {
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Digite sua senha';
-                        }
-                        return null;
-                      },
-                      controller: controller.passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Senha',
-                      ),
-                    ),
+                    child: Obx(() {
+                      return TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Digite sua senha';
+                          }
+                          return null;
+                        },
+                        controller: controller.passwordController,
+                        obscureText: !controller.isPasswordVisible.value,
+                        decoration: InputDecoration(
+                          labelText: 'Senha',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              controller.isPasswordVisible.value
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              controller.togglePasswordVisibility();
+                            },
+                          ),
+                        ),
+                      );
+                    }),
                   ),
                   const SizedBox(height: 20),
                   Padding(
