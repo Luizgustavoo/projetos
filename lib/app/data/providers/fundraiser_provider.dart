@@ -100,22 +100,37 @@ class FundRaiserApiClient {
     return null;
   }
 
-  insertFundRaising(String token, FundRaiser fundRaiser, int billId) async {
+  insertFundRaising(
+      String token, FundRaiser fundRaiser, int billId, String payDay) async {
     try {
       Uri fundRaiserUrl;
       String url = '$baseUrl/v1/fundraising';
       fundRaiserUrl = Uri.parse(url);
-      var response = await httpClient.post(fundRaiserUrl, headers: {
-        "Accept": "application/json",
-        "Authorization": token,
-      }, body: {
+      var requestBody = {
         "bills_id": billId.toString(),
         "user_id": ServiceStorage.getUserId().toString(),
         "company_id": fundRaiser.companyId.toString(),
         "expected_date": fundRaiser.expectedDate.toString(),
         "predicted_value": fundRaiser.predictedValue.toString(),
-        "status": 'aguardando',
-      });
+        "status": ServiceStorage.getUserType() == 1 ? 'captado' : 'aguardando',
+        "pessoa_lancamento":
+            ServiceStorage.getUserType() == 1 ? 'admin' : 'captador',
+      };
+
+      if (ServiceStorage.getUserType() == 1) {
+        requestBody['pago'] = 'sim';
+        requestBody['payday'] = payDay.toString();
+        requestBody['date_of_capture'] = fundRaiser.expectedDate.toString();
+        requestBody['captured_value'] = fundRaiser.predictedValue.toString();
+      }
+
+      var response = await httpClient.post(fundRaiserUrl,
+          headers: {
+            "Accept": "application/json",
+            "Authorization": token,
+          },
+          body: requestBody);
+      print(json.decode(response.body));
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

@@ -15,6 +15,9 @@ class CompanyController extends GetxController {
   var filteredAllCompanies = <Company>[].obs;
   var filteredMyCompanies = <Company>[].obs;
 
+  var paidOutCheckboxValue = false.obs;
+  var showPaymentDateField = false.obs;
+
   Company? selectedCompany;
   var selectedBillId = 0.obs;
   var selectedUserId = 0.obs;
@@ -28,6 +31,11 @@ class CompanyController extends GetxController {
   final peopleContactController = TextEditingController();
   final searchControllerAllCompany = TextEditingController();
   final searchControllerMyCompany = TextEditingController();
+  final streetController = TextEditingController();
+  final numberController = TextEditingController();
+  final neighborhoodController = TextEditingController();
+  final cityController = TextEditingController();
+  final selectedState = ''.obs;
 
   final repository = Get.put(CompanyRepository());
 
@@ -104,15 +112,20 @@ class CompanyController extends GetxController {
 
   Future<Map<String, dynamic>> insertCompany() async {
     final token = ServiceStorage.getToken();
+    Company company = Company(
+        nome: nameCompanyController.text,
+        cnpj: cnpjController.text,
+        responsavel: responsibleCompanyController.text,
+        telefone: contactController.text,
+        nomePessoa: peopleContactController.text,
+        endereco: streetController.text,
+        numero: numberController.text,
+        bairro: neighborhoodController.text,
+        cidade: cityController.text,
+        estado: selectedState.value);
     if (companyKey.currentState!.validate()) {
       mensagem = await repository.insertCompany(
-          "Bearer $token",
-          nameCompanyController.text,
-          cnpjController.text,
-          responsibleCompanyController.text,
-          contactController.text,
-          peopleContactController.text,
-          selectedUserId.value);
+          "Bearer $token", company, selectedUserId.value);
       retorno = {
         'success': mensagem['success'],
         'message': mensagem['message']
@@ -130,13 +143,17 @@ class CompanyController extends GetxController {
 
   Future<Map<String, dynamic>> updateCompany(int? id) async {
     Company company = Company(
-      id: id,
-      nome: nameCompanyController.text,
-      cnpj: cnpjController.text,
-      responsavel: responsibleCompanyController.text,
-      telefone: contactController.text,
-      nomePessoa: peopleContactController.text,
-    );
+        id: id,
+        nome: nameCompanyController.text,
+        cnpj: cnpjController.text,
+        responsavel: responsibleCompanyController.text,
+        telefone: contactController.text,
+        nomePessoa: peopleContactController.text,
+        endereco: streetController.text,
+        numero: numberController.text,
+        bairro: neighborhoodController.text,
+        cidade: cityController.text,
+        estado: selectedState.value);
     final token = ServiceStorage.getToken();
     if (companyKey.currentState!.validate()) {
       mensagem = await repository.updateCompany("Bearer $token", company);
@@ -211,6 +228,11 @@ class CompanyController extends GetxController {
     responsibleCompanyController.text = selectedCompany!.responsavel.toString();
     contactController.text = selectedCompany!.telefone.toString();
     peopleContactController.text = selectedCompany!.nomePessoa.toString();
+    streetController.text = selectedCompany!.endereco.toString();
+    numberController.text = selectedCompany!.numero.toString();
+    neighborhoodController.text = selectedCompany!.bairro.toString();
+    cityController.text = selectedCompany!.cidade.toString();
+    selectedState.value = selectedCompany!.estado.toString();
   }
 
   void clearAllFields() {
@@ -219,8 +241,13 @@ class CompanyController extends GetxController {
       cnpjController,
       responsibleCompanyController,
       contactController,
-      peopleContactController
+      peopleContactController,
+      streetController,
+      numberController,
+      neighborhoodController,
+      cityController,
     ];
+    selectedState.value = '';
 
     for (final controller in textControllers) {
       controller.clear();

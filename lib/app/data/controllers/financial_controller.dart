@@ -6,7 +6,7 @@ import 'package:projetos/app/data/repositories/financial_repository.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
 class FinancialController extends GetxController {
-  RxList<Bill> listWallet = RxList<Bill>([]);
+  RxList<Bill> listFinancial = RxList<Bill>([]);
   RxBool isLoading = true.obs;
   final repository = Get.put(FinancialRepository());
 
@@ -24,7 +24,7 @@ class FinancialController extends GetxController {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
-      listWallet.value = await repository.getAll("Bearer $token", id);
+      listFinancial.value = await repository.getAll("Bearer $token", id);
       update();
     } catch (e) {
       Exception(e);

@@ -25,9 +25,16 @@ class CustomMaterialCard extends StatelessWidget {
           if (materialModel!.tipo == 'arquivo' &&
               materialModel!.arquivoVideo != null) {
             // Navega para a página de visualização de PDF
-            String url = 'http://192.168.25.50:8001/storage/arquivos/${materialModel!.arquivoVideo}';
+            String url =
+                'https://captacao.casadobommeninodearapongas.org/public/storage/arquivos/${materialModel!.arquivoVideo}';
 
             Get.to(() => PdfViewPage(pdfUrl: url));
+          } else if (materialModel!.tipo == 'video' &&
+              materialModel!.arquivoVideo != null) {
+            final controller = Get.put(MaterialController());
+            List url = materialModel!.arquivoVideo!.split('=');
+
+            controller.youtube(url[1]);
           }
         },
         trailing: IconButton(

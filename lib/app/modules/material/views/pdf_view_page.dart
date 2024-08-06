@@ -1,7 +1,6 @@
 // pdf_view_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 class PdfViewPage extends StatelessWidget {
   final String pdfUrl;
@@ -15,11 +14,15 @@ class PdfViewPage extends StatelessWidget {
         title: const Text('Visualizar PDF'),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: const PDF().cachedFromUrl(pdfUrl,
-          placeholder: (double progress) => Center(child: Text('$progress %'),),
-          errorWidget: (dynamic error) => Center(child: Text(error.toString()),),),
-
-
+      body: const PDF().cachedFromUrl(
+        pdfUrl,
+        placeholder: (double progress) => Center(
+          child: Text('$progress %'),
+        ),
+        errorWidget: (dynamic error) => Center(
+          child: Text(error.toString()),
+        ),
+      ),
     );
   }
 }

@@ -57,7 +57,7 @@ class CreateBillModal extends GetView<BillController> {
                 TextFormField(
                   controller: controller.yearController,
                   keyboardType: TextInputType.number,
-                  maxLength: 18,
+                  maxLength: 4,
                   decoration:
                       const InputDecoration(labelText: 'ANO', counterText: ''),
                   validator: (value) {

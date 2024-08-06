@@ -1,16 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:projetos/app/data/models/material_model.dart';
 import 'package:projetos/app/data/repositories/material_repository.dart';
-import 'package:projetos/app/modules/material/views/pdf_view_page.dart';
 import 'package:projetos/app/utils/service_storage.dart';
-import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class MaterialController extends GetxController {
   final repository = Get.put(MaterialRepository());
@@ -150,6 +147,25 @@ class MaterialController extends GetxController {
     return retorno;
   }
 
+  Future<void> youtube(String url) async {
+    var youtube = url;
+    var androidUrl = "https://www.youtube.com/watch?v=$youtube";
+    var iosUrl = "https://wa.me/$youtube";
+
+    try {
+      if (Platform.isIOS) {
+        await launchUrl(Uri.parse(iosUrl));
+      } else {
+        await launchUrl(Uri.parse(androidUrl));
+      }
+    } on Exception {
+      Get.snackbar('Falha', 'Youtube não instalado!',
+          backgroundColor: Colors.red.shade500,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
   void clearAllFields() {
     descriptionController.clear();
     linkController.clear();
@@ -176,44 +192,6 @@ class MaterialController extends GetxController {
       linkController.clear();
       pdfUrl.value = '';
       selectedFile = null;
-    }
-  }
-
-  void openPdf(String pdfUrl) async {
-    final token = ServiceStorage.getToken();
-    final url = 'http://192.168.25.50:8001/storage/arquivos/$pdfUrl';
-    final uri = Uri.parse(url);
-
-    try {
-      final response = await http.get(
-        uri,
-        headers: {
-          "Accept": "application/json",
-          "Authorization": "Bearer $token",
-        },
-      ).timeout(const Duration(seconds: 30)); // Timeout de 30 segundos
-
-      if (response.statusCode == 200) {
-        final directory = await getApplicationDocumentsDirectory();
-        final fileName = pdfUrl.split('/').last;
-        final file = File('${directory.path}/$fileName');
-
-        // Escrever o arquivo no disco
-        await file.writeAsBytes(response.bodyBytes);
-
-        // Navegar para a página de visualização de PDF
-        Get.to(() => PdfViewPage(pdfUrl: file.path));
-      } else {
-        Get.snackbar('Erro',
-            'Não foi possível abrir o PDF. Código de status: ${response.statusCode}');
-      }
-    } on TimeoutException catch (_) {
-      Get.snackbar('Erro', 'A conexão com o servidor expirou.');
-    } on SocketException catch (_) {
-      Get.snackbar('Erro', 'Problema de rede. Verifique sua conexão.');
-    } catch (e) {
-      print('Erro ao abrir o PDF: $e');
-      Get.snackbar('Erro', 'Não foi possível abrir o PDF.');
     }
   }
 }

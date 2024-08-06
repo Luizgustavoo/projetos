@@ -7,7 +7,7 @@ import 'package:projetos/app/data/controllers/contact_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/contact_company_model.dart';
 
-class ContactModal extends StatelessWidget {
+class ContactModal extends GetView<ContactController> {
   final String? name;
   final Company? company;
   final ContactCompany? contactCompany;
@@ -16,8 +16,8 @@ class ContactModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final contactController = Get.put(ContactController());
     bool isUpdate = contactCompany != null;
+
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -27,7 +27,7 @@ class ContactModal extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         child: Form(
-          key: contactController.contactKey,
+          key: controller.contactKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -53,7 +53,7 @@ class ContactModal extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               TextFormField(
-                controller: contactController.dateContactController,
+                controller: controller.dateContactController,
                 decoration: InputDecoration(
                   labelText: 'Data e Hora:',
                   border: OutlineInputBorder(
@@ -83,15 +83,15 @@ class ContactModal extends StatelessWidget {
                         pickedTime.hour,
                         pickedTime.minute,
                       );
-                      contactController.dateContactController.text =
+                      controller.dateContactController.text =
                           DateFormat('dd/MM/yyyy HH:mm').format(dateTime);
                     }
                   }
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               TextFormField(
-                controller: contactController.nameContactController,
+                controller: controller.nameContactController,
                 decoration: const InputDecoration(
                   labelText: 'NOME CONTATO',
                 ),
@@ -102,9 +102,88 @@ class ContactModal extends StatelessWidget {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
+              // Campo Data Retorno
               TextFormField(
-                controller: contactController.obsContactController,
+                controller: controller.dateReturnController,
+                decoration: InputDecoration(
+                  labelText: 'DATA DE RETORNO:',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  suffixIcon: const Icon(Icons.calendar_today),
+                ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null) {
+                    controller.dateReturnController.text =
+                        DateFormat('dd/MM/yyyy').format(pickedDate);
+                  }
+                },
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: controller.predictedValueController,
+                decoration: const InputDecoration(
+                  labelText: 'PREVISÃO DE VALOR',
+                ),
+                onChanged: (value) {
+                  controller.onPendingValueChanged(value);
+                },
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira a previsão de valor';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 12),
+              // Dropdown Mês de Depósito
+              DropdownButtonFormField<String>(
+                value: controller.selectedMonth,
+                decoration: const InputDecoration(
+                  labelText: 'MÊS DE DEPÓSITO',
+                ),
+                items: [
+                  'JANEIRO',
+                  'FEVEREIRO',
+                  'MARÇO',
+                  'ABRIL',
+                  'MAIO',
+                  'JUNHO',
+                  'JULHO',
+                  'AGOSTO',
+                  'SETEMBRO',
+                  'OUTUBRO',
+                  'NOVEMBRO',
+                  'DEZEMBRO'
+                ].map((String month) {
+                  return DropdownMenuItem<String>(
+                    value: month,
+                    child: Text(month),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  controller.selectedMonth = newValue!;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, selecione o mês de depósito';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: controller.obsContactController,
                 maxLines: 5,
                 decoration: const InputDecoration(
                   labelText: 'OBSERVAÇÕES',
@@ -129,10 +208,9 @@ class ContactModal extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () async {
                       Map<String, dynamic> retorno = isUpdate
-                          ? await contactController.updateContactCompany(
+                          ? await controller.updateContactCompany(
                               contactCompany!.companyId, contactCompany!.id)
-                          : await contactController
-                              .insertContactCompany(company!.id!);
+                          : await controller.insertContactCompany(company!.id!);
 
                       if (retorno['success'] == true) {
                         Get.back();
@@ -156,7 +234,7 @@ class ContactModal extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
             ],
           ),
         ),

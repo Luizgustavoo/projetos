@@ -55,7 +55,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.allcompany,
-      page: () => const AllCompanyView(),
+      page: () => AllCompanyView(),
       binding: CompanyBinding(),
     ),
     GetPage(

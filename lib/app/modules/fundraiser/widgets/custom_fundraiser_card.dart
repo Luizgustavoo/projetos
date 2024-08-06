@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
@@ -73,15 +74,16 @@ class CustomFundRaiserCard extends StatelessWidget {
         margin: const EdgeInsets.all(5),
         child: ListTile(
           leading: IconButton(
+              tooltip: 'Carteira',
               onPressed: () {
                 final financialController = Get.put(FinancialController());
                 financialController.getFinancial(user!.id!);
                 financialController.getFinancialBalance(user!.id!);
                 Get.toNamed(Routes.financial, arguments: user);
               },
-              icon: const Icon(
-                Icons.account_balance_wallet_rounded,
-                color: Colors.green,
+              icon: Icon(
+                FontAwesomeIcons.wallet,
+                color: Colors.grey.shade700,
               )),
           dense: true,
           trailing: IconButton(

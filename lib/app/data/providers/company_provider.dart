@@ -137,23 +137,27 @@ class CompanyApiClient {
     return null;
   }
 
-  insertCompany(String token, String nome, String cnpj, String responsavel,
-      String telefone, String nomePessoa, int userId) async {
+  insertCompany(String token, Company company, int userId) async {
     try {
       var companyUrl = Uri.parse('$baseUrl/v1/company');
 
       var request = http.MultipartRequest('POST', companyUrl);
 
       request.fields.addAll({
-        "nome": nome,
-        "cnpj": cnpj,
-        "responsavel": responsavel,
-        "telefone": telefone,
-        "nome_pessoa": nomePessoa,
+        "nome": company.nome.toString(),
+        "cnpj": company.cnpj.toString(),
+        "responsavel": company.responsavel.toString(),
+        "telefone": company.telefone.toString(),
+        "nome_pessoa": company.nomePessoa.toString(),
         "user_id": ServiceStorage.getUserType() == 1
             ? userId.toString()
             : ServiceStorage.getUserId().toString(),
-        "status": "1"
+        "status": "1",
+        "endereco": company.endereco.toString(),
+        "numero": company.numero.toString(),
+        "cidade": company.cidade.toString(),
+        "estado": company.estado.toString(),
+        "bairro": company.bairro.toString()
       });
 
       request.headers.addAll({
@@ -188,7 +192,12 @@ class CompanyApiClient {
         "telefone": company.telefone.toString(),
         "nome_pessoa": company.nomePessoa.toString(),
         "user_id": ServiceStorage.getUserId().toString(),
-        "status": "1"
+        "status": "1",
+        "endereco": company.endereco.toString(),
+        "numero": company.numero.toString(),
+        "cidade": company.cidade.toString(),
+        "estado": company.estado.toString(),
+        "bairro": company.bairro.toString()
       });
       return json.decode(response.body);
     } catch (err) {

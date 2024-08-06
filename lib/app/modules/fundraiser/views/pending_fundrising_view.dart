@@ -116,11 +116,11 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
       context, FundRaising fundRaising, FundRaiserController controller) {
     controller.clearAllFields();
 
-    controller.datePendingFundController.text = controller
-        .formatDate(fundRaising.expectedDate.toString());
+    controller.datePendingFundController.text =
+        controller.formatDate(fundRaising.expectedDate.toString());
 
-    controller.pendingValueFundController.text = "R\$ ${controller.formatValue(double.parse(
-        fundRaising.predictedValue.toString()))}";
+    controller.pendingValueFundController.text =
+        "R\$ ${controller.formatValue(double.parse(fundRaising.predictedValue.toString()))}";
 
     showModalBottomSheet(
       context: context,
@@ -160,9 +160,7 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                   ),
                   const SizedBox(height: 3),
                   Text(
-                  "PREVISÃO: ${controller
-                      .formatDate(fundRaising.expectedDate.toString())} - R\$ ${controller.formatValue(double.parse(
-                      fundRaising.predictedValue.toString()))}",
+                    "PREVISÃO: ${controller.formatDate(fundRaising.expectedDate.toString())} - R\$ ${controller.formatValue(double.parse(fundRaising.predictedValue.toString()))}",
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -199,7 +197,7 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                   Row(
                     children: [
                       const Text(
-                        'PAGO: ',
+                        'COMISSÃO PAGA?: ',
                         style: TextStyle(fontFamily: 'Poppins'),
                       ),
                       Obx(() => Switch(

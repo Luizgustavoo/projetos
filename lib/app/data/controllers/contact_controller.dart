@@ -16,11 +16,13 @@ class ContactController extends GetxController {
       text: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now()));
   final nameContactController = TextEditingController();
   final obsContactController = TextEditingController();
-
+  final dateReturnController = TextEditingController();
+  final predictedValueController = TextEditingController();
   final contactKey = GlobalKey<FormState>();
   RxBool isLoading = true.obs;
-
   ContactCompany? selectedContactCompany;
+
+  String selectedMonth = 'JANEIRO';
 
   final repository = Get.put(ContactRepository());
 
@@ -47,10 +49,14 @@ class ContactController extends GetxController {
   Future<Map<String, dynamic>> insertContactCompany(int companyId) async {
     final token = ServiceStorage.getToken();
     final companyController = Get.put(CompanyController());
+
     ContactCompany contactCompany = ContactCompany(
       companyId: companyId,
       nomePessoa: nameContactController.text,
       dateContact: dateContactController.text,
+      dataRetorno: dateReturnController.text,
+      previsaoValor: predictedValueController.text,
+      mesDeposito: selectedMonth,
       observacoes: obsContactController.text,
     );
 
@@ -61,7 +67,8 @@ class ContactController extends GetxController {
         'success': mensagem['success'],
         'message': mensagem['message']
       };
-      int idd = ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
+      int idd =
+          ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
       companyController.getCompanies(idd);
     }
     return retorno;
@@ -74,6 +81,9 @@ class ContactController extends GetxController {
       companyId: companyId,
       nomePessoa: nameContactController.text,
       dateContact: dateContactController.text,
+      dataRetorno: dateReturnController.text,
+      previsaoValor: predictedValueController.text,
+      mesDeposito: selectedMonth,
       observacoes: obsContactController.text,
     );
 
@@ -103,11 +113,17 @@ class ContactController extends GetxController {
   }
 
   void clearAllFields() {
-    final textControllers = [nameContactController, obsContactController];
+    final textControllers = [
+      nameContactController,
+      obsContactController,
+      dateReturnController,
+      predictedValueController,
+    ];
 
     for (final controller in textControllers) {
       controller.clear();
     }
+    selectedMonth = 'JANEIRO';
   }
 
   void fillInFields() {
@@ -126,6 +142,21 @@ class ContactController extends GetxController {
     }
     nameContactController.text = selectedContactCompany!.nomePessoa.toString();
     obsContactController.text = selectedContactCompany!.observacoes.toString();
+
+    if (selectedContactCompany!.dataRetorno != null &&
+        selectedContactCompany!.dataRetorno!.isNotEmpty) {
+      try {
+        DateTime date = DateFormat('yyyy-MM-ddTHH:mm:ss')
+            .parse(selectedContactCompany!.dataRetorno!);
+        dateReturnController.text = DateFormat('dd/MM/yyyy HH:mm').format(date);
+      } catch (e) {
+        dateReturnController.clear();
+      }
+    } else {
+      dateReturnController.clear();
+    }
+    predictedValueController.text = selectedContactCompany!.previsaoValor ?? '';
+    selectedMonth = selectedContactCompany!.mesDeposito ?? 'Janeiro';
   }
 
   String formatApiDate(String apiDate) {
@@ -147,5 +178,22 @@ class ContactController extends GetxController {
       selection: TextSelection.collapsed(
           offset: FormattedInputers.formatDate(value).length),
     );
+  }
+
+  void onPendingValueChanged(String value) {
+    predictedValueController.value = predictedValueController.value.copyWith(
+      text: FormattedInputers.formatValue(value),
+      selection: TextSelection.collapsed(
+          offset: FormattedInputers.formatValue(value).length),
+    );
+  }
+
+  String formatValue(dynamic value) {
+    if (value is String) {
+      value = double.tryParse(value) ?? 0.0;
+    }
+    final NumberFormat formatter =
+        NumberFormat.currency(symbol: '', decimalDigits: 2, locale: 'pt_BR');
+    return formatter.format(value);
   }
 }

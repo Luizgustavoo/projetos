@@ -57,8 +57,12 @@ class ContactApiClient {
         "nome_pessoa": contactCompany.nomePessoa.toString(),
         "observacoes": contactCompany.observacoes.toString(),
         "user_id": ServiceStorage.getUserId().toString(),
-        "company_id": contactCompany.companyId.toString()
+        "company_id": contactCompany.companyId.toString(),
+        "data_retorno": contactCompany.dataRetorno.toString(),
+        "previsao_valor": contactCompany.previsaoValor.toString(),
+        "mes_deposito": contactCompany.mesDeposito.toString()
       });
+      print(json.decode(response.body));
       return json.decode(response.body);
     } catch (err) {
       Exception(err);
@@ -79,7 +83,10 @@ class ContactApiClient {
         "nome_pessoa": contactCompany.nomePessoa.toString(),
         "observacoes": contactCompany.observacoes.toString(),
         "user_id": ServiceStorage.getUserId().toString(),
-        "company_id": contactCompany.companyId.toString()
+        "company_id": contactCompany.companyId.toString(),
+        "data_retorno": contactCompany.dataRetorno.toString(),
+        "previsao_valor": contactCompany.previsaoValor.toString(),
+        "mes_deposito": contactCompany.mesDeposito.toString()
       });
       return json.decode(response.body);
     } catch (err) {

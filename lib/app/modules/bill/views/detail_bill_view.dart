@@ -11,7 +11,10 @@ class DetailBillView extends GetView<BillController> {
   Widget build(BuildContext context) {
     final bill = Get.arguments as Bill;
     double totalCapturedValue =
-        bill.fundraisings!.fold(0.0, (sum, e) => sum + e.capturedValue);
+        (bill.fundraisings != null && bill.fundraisings!.isNotEmpty)
+            ? bill.fundraisings!
+                .fold(0.0, (sum, e) => sum + (e.capturedValue ?? 0.0))
+            : 0.0;
     return Scaffold(
         appBar: AppBar(
           title: Text(

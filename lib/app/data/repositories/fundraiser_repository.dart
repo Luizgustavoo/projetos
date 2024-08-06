@@ -43,10 +43,11 @@ class FundRaiserRepository {
     }
   }
 
-  insertFundRaising(String token, FundRaiser fundRaiser, int billId) async {
+  insertFundRaising(
+      String token, FundRaiser fundRaiser, int billId, String payDay) async {
     try {
       var response =
-          await apiClient.insertFundRaising(token, fundRaiser, billId);
+          await apiClient.insertFundRaising(token, fundRaiser, billId, payDay);
 
       return response;
     } catch (e) {

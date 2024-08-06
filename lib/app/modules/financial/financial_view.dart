@@ -116,12 +116,12 @@ class FinancialView extends GetView<FinancialController> {
             ),
             Obx(() => Expanded(
                   child: ListView.builder(
-                    itemCount: controller.listWallet.length,
+                    itemCount: controller.listFinancial.length,
                     padding:
                         const EdgeInsets.only(top: 10, left: 12, right: 12),
                     shrinkWrap: true,
                     itemBuilder: ((context, index) {
-                      Bill bill = controller.listWallet[index];
+                      Bill bill = controller.listFinancial[index];
                       return CustomFinancialCard(
                           bill: bill, controller: controller);
                     }),

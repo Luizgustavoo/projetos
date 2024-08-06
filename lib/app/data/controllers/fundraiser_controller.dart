@@ -128,7 +128,7 @@ class FundRaiserController extends GetxController {
 
     if (fundRaisingKey.currentState!.validate()) {
       mensagem = await repository.insertFundRaising(
-          "Bearer $token", fundRaiser, billId);
+          "Bearer $token", fundRaiser, billId, paymentDateController.text);
       retorno = {
         'success': mensagem['success'],
         'message': mensagem['message']

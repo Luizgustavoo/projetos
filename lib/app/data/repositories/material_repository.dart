@@ -50,7 +50,7 @@ class MaterialRepository {
 
       return response;
     } catch (e) {
-      print(e);
+      Exception(e);
     }
   }
 

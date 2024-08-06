@@ -5,13 +5,11 @@ import 'package:projetos/app/data/bindings/initial_binding.dart';
 import 'package:projetos/app/routes/app_pages.dart';
 import 'package:projetos/app/routes/app_routes.dart';
 import 'package:projetos/app/theme/app_theme.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 
 void main() async {
   await GetStorage.init('projeto');
-  await getDatabasesPath();
   WidgetsFlutterBinding.ensureInitialized();
   if (defaultTargetPlatform == TargetPlatform.windows) {
     await windowManager.ensureInitialized();

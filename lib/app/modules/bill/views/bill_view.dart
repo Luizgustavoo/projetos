@@ -108,7 +108,7 @@ class BillView extends GetView<BillController> {
               } else {
                 return const Expanded(
                   child: Center(
-                    child: Text('NÃO HÁ EMPRESAS PARA MOSTRAR'),
+                    child: Text('NÃO HÁ PROJETOS PARA MOSTRAR'),
                   ),
                 );
               }
