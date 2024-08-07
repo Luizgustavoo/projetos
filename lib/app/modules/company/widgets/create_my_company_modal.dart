@@ -185,7 +185,7 @@ class CreateCompanyModal extends GetView<CompanyController> {
                     return Expanded(
                       child: DropdownButtonFormField<String>(
                         decoration: const InputDecoration(
-                          labelText: 'STATUS',
+                          labelText: 'ESTADO',
                         ),
                         value: controller.selectedState.value.isEmpty
                             ? null
@@ -230,7 +230,7 @@ class CreateCompanyModal extends GetView<CompanyController> {
                         },
                         validator: (value) {
                           if (value == null) {
-                            return 'Por favor, selecione um status';
+                            return 'Por favor, selecione um estado';
                           }
                           return null;
                         },
