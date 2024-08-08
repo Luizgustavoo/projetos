@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -41,30 +43,44 @@ class ReportController extends GetxController {
   Future<void> generatePdf(User user) async {
     final pdf = pw.Document();
     final String formattedDate =
-        DateFormat('dd/MM/yyyy HH:mm:ss').format(DateTime.now());
+        DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
+    final int randomNum = Random().nextInt(100000);
+    final ByteData imageData = await rootBundle.load('assets/images/bg.jpg');
+    final Uint8List bytes = imageData.buffer.asUint8List();
+    final image = pw.MemoryImage(bytes);
     pdf.addPage(
       pw.MultiPage(
-        header: (context) => pw.Text('RELATÓRIO CAPTADOR: ${user.name!}',
-            style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-        footer: (context) => pw.Text(formattedDate,
+        pageTheme: pw.PageTheme(
+          buildBackground: (context) => pw.Positioned.fill(
+            child: pw.Image(image, fit: pw.BoxFit.cover),
+          ),
+        ),
+        header: (context) => pw.Padding(
+          padding: const pw.EdgeInsets.only(top: 70),
+          child: pw.Text('RELATÓRIO CAPTADOR: ${user.name!}',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+        ),
+        footer: (context) => pw.Text('DATA RELATÓRIO: $formattedDate',
             style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
         build: (context) => listReport.map((report) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.SizedBox(height: 10),
-              pw.Text('EMPRESA: ${report.empresa}'),
-              pw.Text('CONTATO: ${report.nomePessoa}'),
-              pw.Text('RETORNO: ${report.dataRetorno}'),
-              pw.Text('PREVISÃO VALOR: ${report.previsaoValor}'),
-              pw.Text('MÊS DEPÓSITO: ${report.mesDeposito}'),
-              pw.SizedBox(height: 10),
-              pw.Text('OBSERVAÇÕES:',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-              pw.Text(report.observacoes!),
-              pw.Divider(),
-            ],
-          );
+          return pw.Padding(
+              padding: const pw.EdgeInsets.only(bottom: 10),
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.SizedBox(height: 10),
+                  pw.Text('EMPRESA: ${report.empresa}'),
+                  pw.Text('CONTATO: ${report.nomePessoa}'),
+                  pw.Text('RETORNO: ${report.dataRetorno}'),
+                  pw.Text('PREVISÃO VALOR: ${report.previsaoValor}'),
+                  pw.Text('MÊS DEPÓSITO: ${report.mesDeposito}'),
+                  pw.SizedBox(height: 10),
+                  pw.Text('OBSERVAÇÕES:',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  pw.Text(report.observacoes!),
+                  pw.Divider(),
+                ],
+              ));
         }).toList(),
       ),
     );
@@ -72,7 +88,7 @@ class ReportController extends GetxController {
     final output = await pdf.save();
     await showShareDialog(
       Get.context!,
-      'Relatório_Empresas',
+      'Relatório_Empresas_$randomNum',
       output,
     );
   }

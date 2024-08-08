@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -196,7 +198,7 @@ class MyCompanyView extends GetView<CompanyController> {
               onPressed: () async {
                 final pdf = pw.Document();
                 final User user = Get.arguments as User;
-
+                final int randomNum = Random().nextInt(100000);
                 // Carregar a imagem do fundo
                 final ByteData imageData =
                     await rootBundle.load('assets/images/bg.jpg');
@@ -326,7 +328,7 @@ class MyCompanyView extends GetView<CompanyController> {
                 final pdfData = await pdf.save();
                 await showShareDialog(
                   context,
-                  'Relatório_Empresas',
+                  'Relatório_Empresas_$randomNum',
                   pdfData,
                 );
               },
