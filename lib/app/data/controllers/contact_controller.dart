@@ -100,10 +100,8 @@ class ContactController extends GetxController {
     return retorno;
   }
 
-  Future<Map<String, dynamic>> unlinkContactCompany(int? contactId) async {
-    ContactCompany contactCompany = ContactCompany(
-      id: contactId,
-    );
+  Future<Map<String, dynamic>> unlinkContactCompany(ContactCompany contactCompany) async {
+
     final token = ServiceStorage.getToken();
     mensagem =
         await repository.unlinkContactCompany("Bearer $token", contactCompany);

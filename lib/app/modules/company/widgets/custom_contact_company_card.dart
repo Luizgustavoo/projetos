@@ -156,7 +156,7 @@ class CustomContactCompanyCard extends StatelessWidget {
           onPressed: () async {
             final contactController = Get.put(ContactController());
             Map<String, dynamic> retorno =
-                await contactController.unlinkContactCompany(contactCompany.id);
+                await contactController.unlinkContactCompany(contactCompany);
 
             if (retorno['success'] == true) {
               Get.back();
