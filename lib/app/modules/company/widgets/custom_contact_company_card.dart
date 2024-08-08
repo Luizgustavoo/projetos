@@ -51,6 +51,7 @@ class CustomContactCompanyCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         margin: const EdgeInsets.all(5),
         child: ExpansionTile(
+          expandedAlignment: Alignment.topLeft,
           leading: IconButton(
               onPressed: () {
                 final contactController = Get.put(ContactController());

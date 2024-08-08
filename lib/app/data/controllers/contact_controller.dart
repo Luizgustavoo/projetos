@@ -67,9 +67,9 @@ class ContactController extends GetxController {
         'success': mensagem['success'],
         'message': mensagem['message']
       };
-      int idd =
-          ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
-      companyController.getCompanies(idd);
+
+      getContactCompanies(Company(id: companyId));
+
     }
     return retorno;
   }
