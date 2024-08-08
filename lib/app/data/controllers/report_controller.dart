@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projetos/app/data/models/contact_company_model.dart';
+import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/data/repositories/report_repository.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -14,7 +16,7 @@ import 'package:share_plus/share_plus.dart';
 class ReportController extends GetxController {
   RxList<ContactCompany> listReport = RxList<ContactCompany>([]);
   RxBool isLoading = true.obs;
-  var selectedUserId = 0.obs;
+  var selectedUserId = Rxn<User>();
   final repository = Get.put(ReportRepository());
   Map<String, dynamic> retorno = {
     "success": false,
@@ -23,11 +25,12 @@ class ReportController extends GetxController {
   };
   dynamic mensagem;
 
-  Future<void> getReport(int id) async {
+  Future<void> getReport(User user) async {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
-      listReport.value = await repository.getAllReport("Bearer $token", id);
+      listReport.value =
+          await repository.getAllReport("Bearer $token", user.id!);
       update();
     } catch (e) {
       Exception(e);
@@ -35,28 +38,28 @@ class ReportController extends GetxController {
     isLoading.value = false;
   }
 
-  Future<void> generatePdf() async {
+  Future<void> generatePdf(User user) async {
     final pdf = pw.Document();
-
+    final String formattedDate =
+        DateFormat('dd/MM/yyyy HH:mm:ss').format(DateTime.now());
     pdf.addPage(
       pw.MultiPage(
+        header: (context) => pw.Text('RELATÓRIO CAPTADOR: ${user.name!}',
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+        footer: (context) => pw.Text(formattedDate,
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
         build: (context) => listReport.map((report) {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Text('RELATÓRIO ${report.nomePessoa}',
-                  style: pw.TextStyle(
-                    fontSize: 18,
-                    fontWeight: pw.FontWeight.bold,
-                  )),
               pw.SizedBox(height: 10),
-              pw.Text('Empresa: ${report.empresa}'),
-              pw.Text('Contato: ${report.nomePessoa}'),
-              pw.Text('Retorno: ${report.dataRetorno}'),
-              pw.Text('Previsão Valor: ${report.previsaoValor}'),
-              pw.Text('Mês Depósito: ${report.mesDeposito}'),
+              pw.Text('EMPRESA: ${report.empresa}'),
+              pw.Text('CONTATO: ${report.nomePessoa}'),
+              pw.Text('RETORNO: ${report.dataRetorno}'),
+              pw.Text('PREVISÃO VALOR: ${report.previsaoValor}'),
+              pw.Text('MÊS DEPÓSITO: ${report.mesDeposito}'),
               pw.SizedBox(height: 10),
-              pw.Text('Observações:',
+              pw.Text('OBSERVAÇÕES:',
                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
               pw.Text(report.observacoes!),
               pw.Divider(),

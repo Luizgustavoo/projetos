@@ -49,8 +49,9 @@ class CustomContactCompanyCard extends StatelessWidget {
         color: Colors.grey.shade200,
         shadowColor: Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        margin: const EdgeInsets.all(5),
+        margin: const EdgeInsets.only(left: 5, right: 5, bottom: 5, top: 10),
         child: ExpansionTile(
+          dense: true,
           expandedAlignment: Alignment.topLeft,
           leading: IconButton(
               onPressed: () {

@@ -25,8 +25,9 @@ class ReportView extends GetView<ReportController> {
             children: [
               CustomReportCard(
                 onTap: () async {
-                  await controller.getReport(controller.selectedUserId.value);
-                  await controller.generatePdf();
+                  await controller.getReport(controller.selectedUserId.value!);
+                  await controller
+                      .generatePdf(controller.selectedUserId.value!);
                 },
                 title: 'RELATÓRIO CAPTADOR',
                 subtitle: Column(
@@ -34,16 +35,14 @@ class ReportView extends GetView<ReportController> {
                   children: [
                     const SizedBox(height: 10),
                     Obx(() {
-                      return DropdownButtonFormField<int>(
+                      return DropdownButtonFormField<User>(
                         decoration: const InputDecoration(
                           hintText: 'CAPTADOR',
                         ),
-                        value: controller.selectedUserId.value <= 0
-                            ? null
-                            : controller.selectedUserId.value,
+                        value: controller.selectedUserId.value,
                         items: userController.listFundRaiser.map((User user) {
-                          return DropdownMenuItem<int>(
-                            value: user.id,
+                          return DropdownMenuItem<User>(
+                            value: user,
                             child: Text(
                               user.name!,
                               style: const TextStyle(fontFamily: 'Poppins'),

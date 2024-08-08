@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:projetos/app/data/controllers/company_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/contact_company_model.dart';
 import 'package:projetos/app/data/repositories/contact_repository.dart';
@@ -48,7 +47,6 @@ class ContactController extends GetxController {
 
   Future<Map<String, dynamic>> insertContactCompany(int companyId) async {
     final token = ServiceStorage.getToken();
-    final companyController = Get.put(CompanyController());
 
     ContactCompany contactCompany = ContactCompany(
       companyId: companyId,
@@ -69,7 +67,6 @@ class ContactController extends GetxController {
       };
 
       getContactCompanies(Company(id: companyId));
-
     }
     return retorno;
   }
@@ -100,8 +97,8 @@ class ContactController extends GetxController {
     return retorno;
   }
 
-  Future<Map<String, dynamic>> unlinkContactCompany(ContactCompany contactCompany) async {
-
+  Future<Map<String, dynamic>> unlinkContactCompany(
+      ContactCompany contactCompany) async {
     final token = ServiceStorage.getToken();
     mensagem =
         await repository.unlinkContactCompany("Bearer $token", contactCompany);
