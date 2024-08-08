@@ -1,4 +1,6 @@
 import 'package:intl/intl.dart';
+import 'package:timezone/data/latest.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 abstract class FormattedInputers {
   static String formatCpfCnpj(String value) {
@@ -114,6 +116,19 @@ abstract class FormattedInputers {
     }
 
     return 0;
+  }
+
+  static String formatApiDateReturn(String apiDate) {
+    initializeTimeZones();
+
+    final location = tz.getLocation('America/Sao_Paulo');
+
+    DateTime date = DateTime.parse(apiDate);
+
+    final tz.TZDateTime localDate = tz.TZDateTime.from(date, location);
+
+    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    return formatter.format(localDate);
   }
 
   static double convertPercentageToDouble(String percentageString) {

@@ -3,12 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
-import 'package:projetos/app/data/controllers/contact_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
-import 'package:projetos/app/modules/company/widgets/contact_modal.dart';
 import 'package:projetos/app/modules/company/widgets/create_my_company_modal.dart';
 import 'package:projetos/app/routes/app_routes.dart';
-import 'package:projetos/app/utils/service_storage.dart';
 
 class CustomCompanyCard extends StatelessWidget {
   final String? name;
@@ -58,37 +55,6 @@ class CustomCompanyCard extends StatelessWidget {
                 },
                 icon: const Icon(Icons.edit_rounded),
               ),
-        leading: Get.currentRoute == Routes.allcompany ||
-                Get.currentRoute == Routes.expiringcompany ||
-                Get.currentRoute == Routes.availablecompany ||
-                ServiceStorage.getUserType() == 1
-            ? const Icon(
-                Icons.business_rounded,
-                size: 35,
-              )
-            : IconButton(
-                onPressed: () {
-                  final contactController = Get.put(ContactController());
-                  contactController.clearAllFields();
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: false,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(25.0)),
-                    ),
-                    builder: (BuildContext context) {
-                      return ContactModal(
-                        name: name,
-                        company: company,
-                      );
-                    },
-                  );
-                },
-                icon: Icon(
-                  Icons.contacts_rounded,
-                  color: Colors.grey.shade500,
-                )),
         dense: true,
         title: Text(
           'EMPRESA: ${name!}'.toUpperCase(),
@@ -108,11 +74,7 @@ class CustomCompanyCard extends StatelessWidget {
               style: const TextStyle(fontFamily: 'Poppins'),
             ),
             Text(
-              'CIDADE: ${city!}'.toUpperCase(),
-              style: const TextStyle(fontFamily: 'Poppins'),
-            ),
-            Text(
-              'ESTADO: ${state!}'.toUpperCase(),
+              'CIDADE: ${city!}  ${state!}'.toUpperCase(),
               style: const TextStyle(fontFamily: 'Poppins'),
             ),
           ],

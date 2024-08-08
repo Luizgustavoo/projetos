@@ -168,7 +168,7 @@ class ContactController extends GetxController {
 
     final tz.TZDateTime localDate = tz.TZDateTime.from(date, location);
 
-    final DateFormat formatter = DateFormat('dd/MM/yyyy HH:mm\'h\'');
+    final DateFormat formatter = DateFormat('dd/MM/yyyy HH:mm');
     return formatter.format(localDate);
   }
 

@@ -4,6 +4,7 @@ import 'package:projetos/app/data/controllers/material_controller.dart';
 import 'package:projetos/app/data/models/material_model.dart';
 import 'package:projetos/app/modules/material/widgets/create_material_modal.dart';
 import 'package:projetos/app/modules/material/widgets/custom_material_card.dart';
+import 'package:projetos/app/utils/service_storage.dart';
 
 class MaterialView extends GetView<MaterialController> {
   const MaterialView({super.key});
@@ -80,26 +81,28 @@ class MaterialView extends GetView<MaterialController> {
             ],
           ),
         ),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(right: 8, bottom: 5),
-          child: FloatingActionButton(
-            mini: true,
-            elevation: 2,
-            backgroundColor: Colors.orange,
-            onPressed: () {
-              controller.clearAllFields();
-              showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: (context) => const CreateMaterialModal(),
-              );
-            },
-            child: const Icon(
-              Icons.add_rounded,
-              color: Colors.white,
-            ),
-          ),
-        ));
+        floatingActionButton: ServiceStorage.getUserType() != 1
+            ? const SizedBox()
+            : Padding(
+                padding: const EdgeInsets.only(right: 8, bottom: 5),
+                child: FloatingActionButton(
+                  mini: true,
+                  elevation: 2,
+                  backgroundColor: Colors.orange,
+                  onPressed: () {
+                    controller.clearAllFields();
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) => const CreateMaterialModal(),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.add_rounded,
+                    color: Colors.white,
+                  ),
+                ),
+              ));
   }
 
   void showDialog(context, MaterialModel materialModel) {

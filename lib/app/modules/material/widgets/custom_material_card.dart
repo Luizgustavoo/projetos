@@ -5,6 +5,7 @@ import 'package:projetos/app/data/controllers/material_controller.dart';
 import 'package:projetos/app/data/models/material_model.dart';
 import 'package:projetos/app/modules/material/views/pdf_view_page.dart';
 import 'package:projetos/app/modules/material/widgets/create_material_modal.dart';
+import 'package:projetos/app/utils/service_storage.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CustomMaterialCard extends StatelessWidget {
@@ -54,19 +55,21 @@ class CustomMaterialCard extends StatelessWidget {
                   FontAwesomeIcons.youtube,
                   color: Colors.grey.shade600,
                 )),
-        trailing: IconButton(
-            onPressed: () {
-              final controller = Get.put(MaterialController());
-              controller.selectedMaterial = materialModel;
-              controller.fillAllFields();
-              showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (context) => CreateMaterialModal(
-                        materialModel: materialModel,
-                      ));
-            },
-            icon: const Icon(Icons.edit_rounded)),
+        trailing: ServiceStorage.getUserType() != 1
+            ? const SizedBox()
+            : IconButton(
+                onPressed: () {
+                  final controller = Get.put(MaterialController());
+                  controller.selectedMaterial = materialModel;
+                  controller.fillAllFields();
+                  showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) => CreateMaterialModal(
+                            materialModel: materialModel,
+                          ));
+                },
+                icon: const Icon(Icons.edit_rounded)),
         title: Text(
           description!,
           style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),

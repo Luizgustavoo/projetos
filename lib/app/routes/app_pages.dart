@@ -65,7 +65,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.contactcompany,
-      page: () => const ContactCompanyView(),
+      page: () => ContactCompanyView(),
       binding: CompanyBinding(),
     ),
     GetPage(

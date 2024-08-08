@@ -157,7 +157,8 @@ class MyCompanyView extends GetView<CompanyController> {
                               final contactController =
                                   Get.put(ContactController());
                               contactController.getContactCompanies(company);
-                              Get.toNamed(Routes.contactcompany);
+                              Get.toNamed(Routes.contactcompany,
+                                  arguments: company);
                             },
                             child: CustomCompanyCard(
                               name: company.nome ?? "",

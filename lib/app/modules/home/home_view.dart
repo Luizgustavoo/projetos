@@ -128,13 +128,6 @@ class HomeView extends GetView<HomeController> {
                           },
                         ),
                         HomeCard(
-                          icon: Icons.phone_android_rounded,
-                          title: 'MATERIAIS\nDIVULGAÇÃO',
-                          onTap: () {
-                            Get.toNamed(Routes.material);
-                          },
-                        ),
-                        HomeCard(
                           icon: CupertinoIcons.chart_bar_alt_fill,
                           title: 'LISTAGEM\nRELATÓRIOS',
                           onTap: () {
@@ -180,6 +173,13 @@ class HomeView extends GetView<HomeController> {
                           },
                         ),
                       ],
+                      HomeCard(
+                        icon: Icons.phone_android_rounded,
+                        title: 'MATERIAIS\nDIVULGAÇÃO',
+                        onTap: () {
+                          Get.toNamed(Routes.material);
+                        },
+                      ),
                     ],
                   ),
                 )
