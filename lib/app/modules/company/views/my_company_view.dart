@@ -160,10 +160,12 @@ class MyCompanyView extends GetView<CompanyController> {
                               Get.toNamed(Routes.contactcompany);
                             },
                             child: CustomCompanyCard(
-                              name: company.nome,
-                              phone: company.telefone,
-                              contactName: company.nomePessoa,
-                              responsible: company.responsavel,
+                              name: company.nome ?? "",
+                              responsible: company.responsavel ?? "",
+                              phone: company.telefone ?? "",
+                              contactName: company.nomePessoa ?? "",
+                              city: company.cidade ?? "",
+                              state: company.estado ?? "",
                               color: const Color(0xFFFFF3DB),
                               company: company,
                             ),

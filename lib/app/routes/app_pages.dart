@@ -85,7 +85,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.report,
-      page: () => const ReportView(),
+      page: () => ReportView(),
       binding: ReportBinding(),
     ),
     GetPage(

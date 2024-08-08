@@ -15,6 +15,7 @@ class Company {
   String? cidade;
   String? estado;
   String? bairro;
+  String? tipoCaptacao;
   List<FundRaising>? fundraisings;
 
   Company(
@@ -32,6 +33,7 @@ class Company {
       this.cidade,
       this.estado,
       this.bairro,
+      this.tipoCaptacao,
       this.fundraisings});
 
   Company.fromJson(Map<String, dynamic> json) {
@@ -49,6 +51,7 @@ class Company {
     estado = json['estado'];
     numero = json['numero'];
     bairro = json['bairro'];
+    tipoCaptacao = json['tipo_captacao'];
     if (json['fundraisings'] != null) {
       fundraisings = <FundRaising>[];
       json['fundraisings'].forEach((v) {
@@ -73,6 +76,7 @@ class Company {
     data['cidade'] = cidade;
     data['estado'] = estado;
     data['bairro'] = bairro;
+    data['tipo_captacao'] = tipoCaptacao;
     if (fundraisings != null) {
       data['fundraisings'] = fundraisings!.map((v) => v.toJson()).toList();
     }

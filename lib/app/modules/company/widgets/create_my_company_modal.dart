@@ -4,6 +4,7 @@ import 'package:projetos/app/data/controllers/company_controller.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
+import 'package:projetos/app/utils/service_storage.dart';
 
 class CreateCompanyModal extends GetView<CompanyController> {
   CreateCompanyModal({super.key, this.company});
@@ -241,33 +242,67 @@ class CreateCompanyModal extends GetView<CompanyController> {
               ),
               const SizedBox(height: 15),
               Obx(() {
-                return DropdownButtonFormField<int>(
+                return DropdownButtonFormField<String>(
                   decoration: const InputDecoration(
-                    labelText: 'CAPTADOR',
+                    labelText: 'DOAÇÃO EMPRESA',
                   ),
-                  value: controller.selectedUserId.value <= 0
+                  value: controller.selectedCompanyDonation.value.isEmpty
                       ? null
-                      : controller.selectedUserId.value,
-                  items: userController.listFundRaiser.map((User user) {
-                    return DropdownMenuItem<int>(
-                      value: user.id,
-                      child: Text(
-                        user.name!,
-                        style: const TextStyle(fontFamily: 'Poppins'),
-                      ),
+                      : controller.selectedCompanyDonation.value,
+                  items: [
+                    'MENSAL',
+                    'TRIMESTRAL',
+                    'SEMESTRAL',
+                    'ANUAL',
+                  ].map((String donation) {
+                    return DropdownMenuItem<String>(
+                      value: donation,
+                      child: Text(donation.toUpperCase(),
+                          style: const TextStyle(fontFamily: 'Poppins')),
                     );
                   }).toList(),
                   onChanged: (value) {
-                    controller.selectedUserId.value = value!;
+                    controller.selectedCompanyDonation.value = value!;
                   },
                   validator: (value) {
                     if (value == null) {
-                      return 'Por favor, selecione um captador';
+                      return 'Por favor, selecione uma doação';
                     }
                     return null;
                   },
                 );
               }),
+              const SizedBox(height: 15),
+              if (ServiceStorage.getUserType() == 1) ...[
+                Obx(() {
+                  return DropdownButtonFormField<int>(
+                    decoration: const InputDecoration(
+                      labelText: 'CAPTADOR',
+                    ),
+                    value: controller.selectedUserId.value <= 0
+                        ? null
+                        : controller.selectedUserId.value,
+                    items: userController.listFundRaiser.map((User user) {
+                      return DropdownMenuItem<int>(
+                        value: user.id,
+                        child: Text(
+                          user.name!,
+                          style: const TextStyle(fontFamily: 'Poppins'),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      controller.selectedUserId.value = value!;
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Por favor, selecione um captador';
+                      }
+                      return null;
+                    },
+                  );
+                }),
+              ],
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

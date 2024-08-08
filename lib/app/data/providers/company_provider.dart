@@ -75,10 +75,12 @@ class CompanyApiClient {
     return null;
   }
 
-  getAllExpirian(String token) async {
+  getAllExpirian(String token, int id) async {
     try {
+      String userId =
+          id <= 0 ? ServiceStorage.getUserId().toString() : id.toString();
       Uri companyUrl;
-      String url = '$baseUrl/v1/company/expirian';
+      String url = '$baseUrl/v1/company/expirian/$userId';
       companyUrl = Uri.parse(url);
       var response = await httpClient.get(
         companyUrl,
@@ -157,7 +159,8 @@ class CompanyApiClient {
         "numero": company.numero.toString(),
         "cidade": company.cidade.toString(),
         "estado": company.estado.toString(),
-        "bairro": company.bairro.toString()
+        "bairro": company.bairro.toString(),
+        "tipo_captacao": company.tipoCaptacao.toString()
       });
 
       request.headers.addAll({
@@ -177,7 +180,7 @@ class CompanyApiClient {
     return null;
   }
 
-  updateCompany(String token, Company company) async {
+  updateCompany(String token, Company company, int userId) async {
     try {
       Uri companyUrl;
       String url = '$baseUrl/v1/company/${company.id.toString()}';
@@ -191,13 +194,16 @@ class CompanyApiClient {
         "responsavel": company.responsavel.toString(),
         "telefone": company.telefone.toString(),
         "nome_pessoa": company.nomePessoa.toString(),
-        "user_id": ServiceStorage.getUserId().toString(),
+        "user_id": ServiceStorage.getUserType() == 1
+            ? userId.toString()
+            : ServiceStorage.getUserId().toString(),
         "status": "1",
         "endereco": company.endereco.toString(),
         "numero": company.numero.toString(),
         "cidade": company.cidade.toString(),
         "estado": company.estado.toString(),
-        "bairro": company.bairro.toString()
+        "bairro": company.bairro.toString(),
+        "tipo_captacao": company.tipoCaptacao.toString()
       });
       return json.decode(response.body);
     } catch (err) {

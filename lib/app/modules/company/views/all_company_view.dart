@@ -105,10 +105,12 @@ class AllCompanyView extends GetView<CompanyController> {
                                 arguments: company);
                           },
                           child: CustomCompanyCard(
-                            name: company.nome,
-                            responsible: company.responsavel,
-                            phone: company.telefone,
-                            contactName: company.nomePessoa,
+                            name: company.nome ?? "",
+                            responsible: company.responsavel ?? "",
+                            phone: company.telefone ?? "",
+                            contactName: company.nomePessoa ?? "",
+                            city: company.cidade ?? "",
+                            state: company.estado ?? "",
                             company: company,
                           ),
                         ),

@@ -26,7 +26,7 @@ class HomeView extends GetView<HomeController> {
           appBar: AppBar(
             backgroundColor: ServiceStorage.getUserType() == 1
                 ? const Color(0xFF1d1d1d)
-                : const Color(0xFFd1d1d1),
+                : const Color.fromARGB(255, 170, 170, 170),
             title: Padding(
               padding: const EdgeInsets.only(bottom: 50, left: 15),
               child: Text(
@@ -134,27 +134,18 @@ class HomeView extends GetView<HomeController> {
                             Get.toNamed(Routes.material);
                           },
                         ),
+                        HomeCard(
+                          icon: CupertinoIcons.chart_bar_alt_fill,
+                          title: 'LISTAGEM\nRELATÓRIOS',
+                          onTap: () {
+                            Get.toNamed(Routes.report);
+                          },
+                        ),
                       ],
                       if (ServiceStorage.getUserType() != 1) ...[
                         HomeCard(
-                          icon: Icons.account_balance_wallet_outlined,
-                          title: 'MEU\nFINANCEIRO',
-                          onTap: () {
-                            walletController.getFinancial(0);
-                            walletController.getFinancialBalance(0);
-                            Get.toNamed(Routes.financial);
-                          },
-                        ),
-                        HomeCard(
-                          icon: Icons.history_rounded,
-                          title: 'EMPRESAS\nEXPIRANDO',
-                          onTap: () {
-                            companyController.getExpirianCompanies();
-                            Get.toNamed(Routes.expiringcompany);
-                          },
-                        ),
-                        HomeCard(
                           icon: Icons.factory_rounded,
+                          color: Colors.black,
                           title: 'MINHAS\nEMPRESAS',
                           onTap: () {
                             companyController.searchControllerMyCompany.text =
@@ -169,6 +160,23 @@ class HomeView extends GetView<HomeController> {
                           onTap: () {
                             companyController.getAvailableCompanies();
                             Get.toNamed(Routes.availablecompany);
+                          },
+                        ),
+                        HomeCard(
+                          icon: Icons.history_rounded,
+                          title: 'EMPRESAS\nEXPIRANDO',
+                          onTap: () {
+                            companyController.getExpirianCompanies(0);
+                            Get.toNamed(Routes.expiringcompany);
+                          },
+                        ),
+                        HomeCard(
+                          icon: Icons.account_balance_wallet_outlined,
+                          title: 'MEU\nFINANCEIRO',
+                          onTap: () {
+                            walletController.getFinancial(0);
+                            walletController.getFinancialBalance(0);
+                            Get.toNamed(Routes.financial);
                           },
                         ),
                       ],

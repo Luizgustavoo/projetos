@@ -7,10 +7,12 @@ class HomeCard extends StatelessWidget {
     this.icon,
     this.onTap,
     super.key,
+    this.color = const Color(0xFFEBAE1F),
   });
   final String? title;
   final IconData? icon;
   final Function()? onTap;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class HomeCard extends StatelessWidget {
               size: kIsWeb || defaultTargetPlatform == TargetPlatform.windows
                   ? 120
                   : 40,
-              color: const Color(0xFFEBAE1F),
+              color: color,
             ),
             const SizedBox(
               height: 5,

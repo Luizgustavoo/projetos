@@ -16,7 +16,7 @@ class ContactApiClient {
     try {
       Uri contactCompanyUrl;
       String url =
-          '$baseUrl/v1/contactcompany/${ServiceStorage.getUserId().toString()}/${company.id}';
+          '$baseUrl/v1/contactcompany/company/${ServiceStorage.getUserId().toString()}/${company.id}';
       contactCompanyUrl = Uri.parse(url);
       var response = await httpClient.get(
         contactCompanyUrl,

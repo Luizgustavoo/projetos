@@ -32,10 +32,10 @@ class CompanyRepository {
     return list;
   }
 
-  getAllExpirian(String token) async {
+  getAllExpirian(String token, int id) async {
     List<Company> list = <Company>[];
 
-    var response = await apiClient.getAllExpirian(token);
+    var response = await apiClient.getAllExpirian(token, id);
 
     if (response != null) {
       response['data'].forEach((e) {
@@ -69,9 +69,9 @@ class CompanyRepository {
     }
   }
 
-  updateCompany(String token, Company company) async {
+  updateCompany(String token, Company company, int userId) async {
     try {
-      var response = await apiClient.updateCompany(token, company);
+      var response = await apiClient.updateCompany(token, company, userId);
 
       return response;
     } catch (e) {

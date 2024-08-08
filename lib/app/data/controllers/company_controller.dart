@@ -36,6 +36,7 @@ class CompanyController extends GetxController {
   final neighborhoodController = TextEditingController();
   final cityController = TextEditingController();
   final selectedState = ''.obs;
+  final selectedCompanyDonation = ''.obs;
 
   final repository = Get.put(CompanyRepository());
 
@@ -86,12 +87,12 @@ class CompanyController extends GetxController {
     isLoading.value = false;
   }
 
-  Future<void> getExpirianCompanies() async {
+  Future<void> getExpirianCompanies(int id) async {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
       listExpirianCompany.value =
-          await repository.getAllExpirian("Bearer $token");
+          await repository.getAllExpirian("Bearer $token", id);
     } catch (e) {
       Exception(e);
     }
@@ -113,16 +114,18 @@ class CompanyController extends GetxController {
   Future<Map<String, dynamic>> insertCompany() async {
     final token = ServiceStorage.getToken();
     Company company = Company(
-        nome: nameCompanyController.text,
-        cnpj: cnpjController.text,
-        responsavel: responsibleCompanyController.text,
-        telefone: contactController.text,
-        nomePessoa: peopleContactController.text,
-        endereco: streetController.text,
-        numero: numberController.text,
-        bairro: neighborhoodController.text,
-        cidade: cityController.text,
-        estado: selectedState.value);
+      nome: nameCompanyController.text,
+      cnpj: cnpjController.text,
+      responsavel: responsibleCompanyController.text,
+      telefone: contactController.text,
+      nomePessoa: peopleContactController.text,
+      endereco: streetController.text,
+      numero: numberController.text,
+      bairro: neighborhoodController.text,
+      cidade: cityController.text,
+      estado: selectedState.value,
+      tipoCaptacao: selectedCompanyDonation.value,
+    );
     if (companyKey.currentState!.validate()) {
       mensagem = await repository.insertCompany(
           "Bearer $token", company, selectedUserId.value);
@@ -143,27 +146,34 @@ class CompanyController extends GetxController {
 
   Future<Map<String, dynamic>> updateCompany(int? id) async {
     Company company = Company(
-        id: id,
-        nome: nameCompanyController.text,
-        cnpj: cnpjController.text,
-        responsavel: responsibleCompanyController.text,
-        telefone: contactController.text,
-        nomePessoa: peopleContactController.text,
-        endereco: streetController.text,
-        numero: numberController.text,
-        bairro: neighborhoodController.text,
-        cidade: cityController.text,
-        estado: selectedState.value);
+      id: id,
+      nome: nameCompanyController.text,
+      cnpj: cnpjController.text,
+      responsavel: responsibleCompanyController.text,
+      telefone: contactController.text,
+      nomePessoa: peopleContactController.text,
+      endereco: streetController.text,
+      numero: numberController.text,
+      bairro: neighborhoodController.text,
+      cidade: cityController.text,
+      estado: selectedState.value,
+      tipoCaptacao: selectedCompanyDonation.value,
+    );
     final token = ServiceStorage.getToken();
     if (companyKey.currentState!.validate()) {
-      mensagem = await repository.updateCompany("Bearer $token", company);
+      mensagem = await repository.updateCompany(
+          "Bearer $token", company, selectedUserId.value);
       retorno = {
         'success': mensagem['success'],
         'message': mensagem['message']
       };
-      int idd =
-          ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
-      getCompanies(idd);
+      if (Get.currentRoute == Routes.mycompany) {
+        int idd =
+            ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
+        getCompanies(idd);
+      } else {
+        getAllCompanies();
+      }
     }
     return retorno;
   }
@@ -223,16 +233,17 @@ class CompanyController extends GetxController {
   }
 
   void fillInFields() {
-    nameCompanyController.text = selectedCompany!.nome.toString();
-    cnpjController.text = selectedCompany!.cnpj.toString();
-    responsibleCompanyController.text = selectedCompany!.responsavel.toString();
-    contactController.text = selectedCompany!.telefone.toString();
-    peopleContactController.text = selectedCompany!.nomePessoa.toString();
-    streetController.text = selectedCompany!.endereco.toString();
-    numberController.text = selectedCompany!.numero.toString();
-    neighborhoodController.text = selectedCompany!.bairro.toString();
-    cityController.text = selectedCompany!.cidade.toString();
-    selectedState.value = selectedCompany!.estado.toString();
+    nameCompanyController.text = selectedCompany!.nome ?? "";
+    cnpjController.text = selectedCompany!.cnpj ?? "";
+    responsibleCompanyController.text = selectedCompany!.responsavel ?? "";
+    contactController.text = selectedCompany!.telefone ?? "";
+    peopleContactController.text = selectedCompany!.nomePessoa ?? "";
+    streetController.text = selectedCompany!.endereco ?? "";
+    numberController.text = selectedCompany!.numero ?? "";
+    neighborhoodController.text = selectedCompany!.bairro ?? "";
+    cityController.text = selectedCompany!.cidade ?? "";
+    selectedState.value = selectedCompany!.estado ?? "";
+    selectedCompanyDonation.value = selectedCompany!.tipoCaptacao ?? "";
   }
 
   void clearAllFields() {
@@ -248,6 +259,7 @@ class CompanyController extends GetxController {
       cityController,
     ];
     selectedState.value = '';
+    selectedCompanyDonation.value = '';
 
     for (final controller in textControllers) {
       controller.clear();

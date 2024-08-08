@@ -17,6 +17,8 @@ class CustomCompanyCard extends StatelessWidget {
   final String? contactName;
   final Color? color;
   final Company? company;
+  final String? state;
+  final String? city;
 
   const CustomCompanyCard(
       {super.key,
@@ -25,6 +27,8 @@ class CustomCompanyCard extends StatelessWidget {
       this.responsible,
       this.contactName,
       this.color,
+      this.state,
+      this.city,
       this.company});
 
   @override
@@ -36,7 +40,8 @@ class CustomCompanyCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.all(5),
       child: ListTile(
-        trailing: Get.currentRoute == Routes.availablecompany
+        trailing: Get.currentRoute == Routes.availablecompany ||
+                Get.currentRoute == Routes.expiringcompany
             ? const SizedBox()
             : IconButton(
                 onPressed: () {
@@ -100,6 +105,14 @@ class CustomCompanyCard extends StatelessWidget {
             ),
             Text(
               'NOME DO CONTATO: ${contactName!}'.toUpperCase(),
+              style: const TextStyle(fontFamily: 'Poppins'),
+            ),
+            Text(
+              'CIDADE: ${city!}'.toUpperCase(),
+              style: const TextStyle(fontFamily: 'Poppins'),
+            ),
+            Text(
+              'ESTADO: ${state!}'.toUpperCase(),
               style: const TextStyle(fontFamily: 'Poppins'),
             ),
           ],
