@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:projetos/app/data/models/contact_company_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/data/repositories/report_repository.dart';
+import 'package:projetos/app/utils/formatter.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:share_plus/share_plus.dart';
@@ -51,27 +52,32 @@ class ReportController extends GetxController {
     pdf.addPage(
       pw.MultiPage(
         pageTheme: pw.PageTheme(
+          margin: pw.EdgeInsets.zero,
           buildBackground: (context) => pw.Positioned.fill(
             child: pw.Image(image, fit: pw.BoxFit.cover),
           ),
         ),
         header: (context) => pw.Padding(
-          padding: const pw.EdgeInsets.only(top: 70),
+          padding: const pw.EdgeInsets.only(top: 70, left: 20),
           child: pw.Text('RELATÓRIO CAPTADOR: ${user.name!}',
               style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
         ),
-        footer: (context) => pw.Text('DATA RELATÓRIO: $formattedDate',
-            style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+        footer: (context) => pw.Padding(
+          padding: const pw.EdgeInsets.only(left: 20, bottom: 10),
+          child: pw.Text('DATA RELATÓRIO: $formattedDate',
+              style: const pw.TextStyle(fontSize: 12, height: 10)),
+        ),
         build: (context) => listReport.map((report) {
           return pw.Padding(
-              padding: const pw.EdgeInsets.only(bottom: 10),
+              padding: const pw.EdgeInsets.only(left: 20),
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
                   pw.SizedBox(height: 10),
                   pw.Text('EMPRESA: ${report.empresa}'),
                   pw.Text('CONTATO: ${report.nomePessoa}'),
-                  pw.Text('RETORNO: ${report.dataRetorno}'),
+                  pw.Text(
+                      'RETORNO: ${FormattedInputers.formatDate(report.dataRetorno!)}'),
                   pw.Text('PREVISÃO VALOR: ${report.previsaoValor}'),
                   pw.Text('MÊS DEPÓSITO: ${report.mesDeposito}'),
                   pw.SizedBox(height: 10),
@@ -88,7 +94,7 @@ class ReportController extends GetxController {
     final output = await pdf.save();
     await showShareDialog(
       Get.context!,
-      'Relatório_Empresas_$randomNum',
+      'Relatório_Captador_$randomNum',
       output,
     );
   }

@@ -62,7 +62,6 @@ class ContactApiClient {
         "previsao_valor": contactCompany.previsaoValor.toString(),
         "mes_deposito": contactCompany.mesDeposito.toString()
       });
-      print(json.decode(response.body));
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

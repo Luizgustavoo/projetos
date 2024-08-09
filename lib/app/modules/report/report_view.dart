@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
@@ -39,21 +41,33 @@ class ReportView extends GetView<ReportController> {
                         decoration: const InputDecoration(
                           hintText: 'CAPTADOR',
                         ),
-                        value: controller.selectedUserId.value,
-                        items: userController.listFundRaiser.map((User user) {
-                          return DropdownMenuItem<User>(
-                            value: user,
+                        value: controller.selectedUserId.value == 0
+                            ? null
+                            : controller.selectedUserId.value,
+                        items: [
+                          const DropdownMenuItem<User>(
+                            value: null,
                             child: Text(
-                              user.name!,
-                              style: const TextStyle(fontFamily: 'Poppins'),
+                              'Selecione um captador',
+                              style: TextStyle(fontFamily: 'Poppins'),
                             ),
-                          );
-                        }).toList(),
+                          ),
+                          ...userController.listFundRaiser.map((User user) {
+                            return DropdownMenuItem<User>(
+                              value: user,
+                              child: Text(
+                                user.name!,
+                                style: const TextStyle(fontFamily: 'Poppins'),
+                              ),
+                            );
+                          }),
+                        ],
                         onChanged: (value) {
-                          controller.selectedUserId.value = value!;
+                          controller.selectedUserId.value = value ??
+                              User(); // Define o modelo User vazio caso o valor seja null
                         },
                         validator: (value) {
-                          if (value == null) {
+                          if (value == null || value.id == 0) {
                             return 'Por favor, selecione um captador';
                           }
                           return null;

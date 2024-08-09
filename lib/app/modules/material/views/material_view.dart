@@ -32,7 +32,9 @@ class MaterialView extends GetView<MaterialController> {
                             controller.listMaterial[index];
                         return Dismissible(
                           key: UniqueKey(),
-                          direction: DismissDirection.endToStart,
+                          direction: ServiceStorage.getUserType() == 1
+                              ? DismissDirection.endToStart
+                              : DismissDirection.none,
                           confirmDismiss: (DismissDirection direction) async {
                             if (direction == DismissDirection.endToStart) {
                               showDialog(context, materialModel);

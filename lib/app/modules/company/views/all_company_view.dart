@@ -9,6 +9,7 @@ import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/modules/company/widgets/create_my_company_modal.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
 import 'package:projetos/app/routes/app_routes.dart';
+import 'package:projetos/app/utils/service_storage.dart';
 
 class AllCompanyView extends GetView<CompanyController> {
   AllCompanyView({super.key});
@@ -66,7 +67,9 @@ class AllCompanyView extends GetView<CompanyController> {
                       Company company = controller.filteredAllCompanies[index];
                       return Dismissible(
                         key: UniqueKey(),
-                        direction: DismissDirection.startToEnd,
+                        direction: ServiceStorage.getUserType() == 1
+                            ? DismissDirection.none
+                            : DismissDirection.startToEnd,
                         confirmDismiss: (DismissDirection direction) async {
                           showModal(context, company);
                           return false;
