@@ -28,6 +28,7 @@ final ThemeData appThemeData = ThemeData(
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
+      
       isDense: true,
       filled: true,
       fillColor: const Color(0xFFE8E3E3),

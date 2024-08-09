@@ -113,14 +113,6 @@ class HomeView extends GetView<HomeController> {
                           },
                         ),
                         HomeCard(
-                          icon: Icons.post_add_rounded,
-                          title: 'LISTAGEM\nPROJETOS',
-                          onTap: () {
-                            billsController.getAllBills();
-                            Get.toNamed(Routes.bill);
-                          },
-                        ),
-                        HomeCard(
                           icon: Icons.price_check_rounded,
                           title: 'CAPTAÇÕES\nPENDENTES',
                           onTap: () {
@@ -178,6 +170,14 @@ class HomeView extends GetView<HomeController> {
                         title: 'MATERIAIS\nDIVULGAÇÃO',
                         onTap: () {
                           Get.toNamed(Routes.material);
+                        },
+                      ),
+                      HomeCard(
+                        icon: Icons.post_add_rounded,
+                        title: 'LISTAGEM\nPROJETOS',
+                        onTap: () {
+                          billsController.getAllBills();
+                          Get.toNamed(Routes.bill);
                         },
                       ),
                     ],

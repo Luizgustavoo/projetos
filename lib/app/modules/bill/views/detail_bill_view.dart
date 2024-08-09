@@ -15,6 +15,9 @@ class DetailBillView extends GetView<BillController> {
             ? bill.fundraisings!
                 .fold(0.0, (sum, e) => sum + (e.capturedValue ?? 0.0))
             : 0.0;
+    double totalValue = double.tryParse(bill.valorAprovado) ?? 0.0;
+
+    double finalValue = totalValue - totalCapturedValue;
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -39,19 +42,46 @@ class DetailBillView extends GetView<BillController> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     margin: const EdgeInsets.all(5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'VALOR CAPTADO',
-                          style: TextStyle(fontFamily: 'Poppins', fontSize: 15),
-                        ),
-                        Text(
-                          'R\$${controller.formatValue(double.parse(totalCapturedValue.toString()))}',
-                          style: const TextStyle(
-                              fontFamily: 'Poppinss', fontSize: 26),
-                        ),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, top: 8, bottom: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'VALOR CAPTADO',
+                                style: TextStyle(
+                                    fontFamily: 'Poppins', fontSize: 15),
+                              ),
+                              Text(
+                                'R\$${controller.formatValue(double.parse(totalCapturedValue.toString()))}',
+                                style: const TextStyle(
+                                    fontFamily: 'Poppinss', fontSize: 23),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'VALOR A CAPTAR',
+                                style: TextStyle(
+                                    fontFamily: 'Poppins', fontSize: 15),
+                              ),
+                              Text(
+                                'R\$${controller.formatValue(double.parse(finalValue.toString()))}',
+                                style: const TextStyle(
+                                    fontFamily: 'Poppinss',
+                                    fontSize: 23,
+                                    color: Colors.green),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     )),
               ),
             ),

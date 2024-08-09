@@ -5,6 +5,7 @@ import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/modules/bill/widgets/create_bill_modal.dart';
 import 'package:projetos/app/modules/bill/widgets/custom_bill_card.dart';
 import 'package:projetos/app/routes/app_routes.dart';
+import 'package:projetos/app/utils/service_storage.dart';
 
 class BillView extends GetView<BillController> {
   const BillView({super.key});
@@ -49,7 +50,9 @@ class BillView extends GetView<BillController> {
                       final Bill bill = controller.listAllBills[index];
                       return Dismissible(
                         key: UniqueKey(),
-                        direction: DismissDirection.endToStart,
+                        direction: ServiceStorage.getUserType() == 1
+                            ? DismissDirection.endToStart
+                            : DismissDirection.none,
                         confirmDismiss: (DismissDirection direction) async {
                           if (direction == DismissDirection.endToStart) {
                             showDialog(context, bill);
@@ -117,23 +120,25 @@ class BillView extends GetView<BillController> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        mini: true,
-        elevation: 2,
-        backgroundColor: Colors.orange,
-        onPressed: () {
-          controller.clearAllFields();
-          showModalBottomSheet(
-            isScrollControlled: true,
-            context: context,
-            builder: (context) => const CreateBillModal(),
-          );
-        },
-        child: const Icon(
-          Icons.add_rounded,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton: ServiceStorage.getUserType() == 1
+          ? FloatingActionButton(
+              mini: true,
+              elevation: 2,
+              backgroundColor: Colors.orange,
+              onPressed: () {
+                controller.clearAllFields();
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) => const CreateBillModal(),
+                );
+              },
+              child: const Icon(
+                Icons.add_rounded,
+                color: Colors.white,
+              ),
+            )
+          : const SizedBox(),
     );
   }
 
