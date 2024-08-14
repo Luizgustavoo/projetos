@@ -66,7 +66,7 @@ class FundRaiserView extends GetView<FundRaiserController> {
                 } else {
                   return const Expanded(
                     child: Center(
-                      child: Text('NÃO HÁ EMPRESAS CAPTAÇÕES PENDENTES'),
+                      child: Text('NÃO HÁ EMPRESAS CAPTADORES CADASTRADOS'),
                     ),
                   );
                 }

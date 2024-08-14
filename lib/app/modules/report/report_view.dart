@@ -27,9 +27,18 @@ class ReportView extends GetView<ReportController> {
             children: [
               CustomReportCard(
                 onTap: () async {
-                  await controller.getReport(controller.selectedUserId.value!);
-                  await controller
-                      .generatePdf(controller.selectedUserId.value!);
+                  if (controller.selectedUserId.value == null) {
+                    Get.snackbar('ATENÇÃO', 'Selecione um captador',
+                        backgroundColor: Colors.orange,
+                        snackPosition: SnackPosition.BOTTOM,
+                        duration: const Duration(seconds: 2),
+                        colorText: Colors.white);
+                  } else {
+                    await controller
+                        .getReport(controller.selectedUserId.value!);
+                    await controller
+                        .generatePdf(controller.selectedUserId.value!);
+                  }
                 },
                 title: 'RELATÓRIO CAPTADOR',
                 subtitle: Column(
@@ -55,9 +64,19 @@ class ReportView extends GetView<ReportController> {
                           ...userController.listFundRaiser.map((User user) {
                             return DropdownMenuItem<User>(
                               value: user,
-                              child: Text(
-                                user.name!,
-                                style: const TextStyle(fontFamily: 'Poppins'),
+                              child: Tooltip(
+                                message: user
+                                    .name!, // Mostrar nome completo no tooltip
+                                child: Text(
+                                  user.name!,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize:
+                                        14, // Reduzir tamanho da fonte, se necessário
+                                  ),
+                                  overflow: TextOverflow
+                                      .ellipsis, // Truncar texto longo
+                                ),
                               ),
                             );
                           }),

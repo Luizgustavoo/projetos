@@ -4,10 +4,24 @@ import 'package:projetos/app/data/providers/bill_provider.dart';
 class BillRepository {
   final BillApiClient apiClient = BillApiClient();
 
-  gettAll(String token) async {
+  getAll(String token) async {
     List<Bill> list = <Bill>[];
 
-    var response = await apiClient.gettAll(token);
+    var response = await apiClient.getAll(token);
+
+    if (response != null) {
+      response['data'].forEach((e) {
+        list.add(Bill.fromJson(e));
+      });
+    }
+
+    return list;
+  }
+
+  getAllDropDown(String token) async {
+    List<Bill> list = <Bill>[];
+
+    var response = await apiClient.getAllDropDown(token);
 
     if (response != null) {
       response['data'].forEach((e) {

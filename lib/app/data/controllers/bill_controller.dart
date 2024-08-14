@@ -8,6 +8,7 @@ import 'package:projetos/app/utils/service_storage.dart';
 
 class BillController extends GetxController {
   var listAllBills = <Bill>[].obs;
+  var listAllBillsDropDown = <Bill>[].obs;
   var isLoading = true.obs;
 
   final repository = Get.put(BillRepository());
@@ -34,6 +35,7 @@ class BillController extends GetxController {
   @override
   void onInit() {
     getAllBills();
+    getAllBillsDropDown();
     super.onInit();
   }
 
@@ -41,7 +43,19 @@ class BillController extends GetxController {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
-      listAllBills.value = await repository.gettAll("Bearer $token");
+      listAllBills.value = await repository.getAll("Bearer $token");
+    } catch (e) {
+      Exception(e);
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> getAllBillsDropDown() async {
+    isLoading.value = true;
+    try {
+      final token = ServiceStorage.getToken();
+      listAllBillsDropDown.value =
+          await repository.getAllDropDown("Bearer $token");
     } catch (e) {
       Exception(e);
     }

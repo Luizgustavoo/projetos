@@ -11,20 +11,25 @@ class ContactCompany {
   String? dataRetorno;
   String? previsaoValor;
   String? mesDeposito;
+  String? cargoContato;
+  String? ultimaCaptacao;
 
-  ContactCompany(
-      {this.id,
-      this.userId,
-      this.companyId,
-      this.dateContact,
-      this.nomePessoa,
-      this.observacoes,
-      this.createdAt,
-      this.updatedAt,
-      this.dataRetorno,
-      this.previsaoValor,
-      this.mesDeposito,
-      this.empresa});
+  ContactCompany({
+    this.id,
+    this.userId,
+    this.companyId,
+    this.dateContact,
+    this.nomePessoa,
+    this.observacoes,
+    this.createdAt,
+    this.updatedAt,
+    this.dataRetorno,
+    this.previsaoValor,
+    this.mesDeposito,
+    this.cargoContato,
+    this.empresa,
+    this.ultimaCaptacao,
+  });
 
   ContactCompany.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -39,6 +44,8 @@ class ContactCompany {
     dataRetorno = json['data_retorno'];
     previsaoValor = json['previsao_valor'];
     mesDeposito = json['mes_deposito'];
+    cargoContato = json['cargo_contato'];
+    ultimaCaptacao = json['ultima_captacao'];
   }
 
   Map<String, dynamic> toJson() {
@@ -55,6 +62,8 @@ class ContactCompany {
     data['data_retorno'] = dataRetorno;
     data['previsao_valor'] = previsaoValor;
     data['mes_deposito'] = mesDeposito;
+    data['cargo_contato'] = cargoContato;
+    data['ultima_captacao'] = ultimaCaptacao;
     return data;
   }
 }

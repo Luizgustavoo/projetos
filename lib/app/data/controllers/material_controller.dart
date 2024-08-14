@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:projetos/app/data/models/material_model.dart';
 import 'package:projetos/app/data/repositories/material_repository.dart';
 import 'package:projetos/app/utils/service_storage.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class MaterialController extends GetxController {
@@ -150,7 +151,7 @@ class MaterialController extends GetxController {
   Future<void> youtube(String url) async {
     var youtube = url;
     var androidUrl = "https://www.youtube.com/watch?v=$youtube";
-    var iosUrl = "https://wa.me/$youtube";
+    var iosUrl = "https://www.youtube.com/watch?v=$youtube";
 
     try {
       if (Platform.isIOS) {

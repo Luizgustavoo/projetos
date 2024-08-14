@@ -6,10 +6,9 @@ import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
-import 'package:projetos/app/modules/company/widgets/create_my_company_modal.dart';
+import 'package:projetos/app/modules/company/widgets/create_company_modal.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
 import 'package:projetos/app/routes/app_routes.dart';
-import 'package:projetos/app/utils/service_storage.dart';
 
 class AllCompanyView extends GetView<CompanyController> {
   AllCompanyView({super.key});
@@ -67,11 +66,13 @@ class AllCompanyView extends GetView<CompanyController> {
                       Company company = controller.filteredAllCompanies[index];
                       return Dismissible(
                         key: UniqueKey(),
-                        direction: ServiceStorage.getUserType() == 1
-                            ? DismissDirection.none
-                            : DismissDirection.startToEnd,
+                        direction: DismissDirection.horizontal,
                         confirmDismiss: (DismissDirection direction) async {
-                          showModal(context, company);
+                          if (direction == DismissDirection.endToStart) {
+                            showDeleteDialog(context, company);
+                          } else if (direction == DismissDirection.startToEnd) {
+                            showModal(context, company);
+                          }
                           return false;
                         },
                         background: Container(
@@ -97,6 +98,35 @@ class AllCompanyView extends GetView<CompanyController> {
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )),
+                          ),
+                        ),
+                        secondaryBackground: Container(
+                          margin: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.red,
+                          ),
+                          child: const Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'EXCLUIR',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Icon(
+                                      Icons.delete_forever,
+                                      size: 25,
+                                      color: Colors.white,
                                     ),
                                   ],
                                 )),
@@ -224,7 +254,8 @@ class AllCompanyView extends GetView<CompanyController> {
                       decoration: const InputDecoration(
                         labelText: 'PROJETOS',
                       ),
-                      items: billController.listAllBills.map((Bill bill) {
+                      items:
+                          billController.listAllBillsDropDown.map((Bill bill) {
                         return DropdownMenuItem<int>(
                           value: bill.id,
                           child: Text(bill.nome!),
@@ -347,6 +378,90 @@ class AllCompanyView extends GetView<CompanyController> {
                     ],
                   ),
                   const SizedBox(height: 16),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> showDeleteDialog(BuildContext context, Company company) async {
+    await showGeneralDialog(
+      context: context,
+      pageBuilder: (BuildContext buildContext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        return Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width - 40,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Material(
+              type: MaterialType.transparency,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Tem certeza que deseja excluir?',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Empresa: ${company.nome}',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text('Cancelar',
+                            style: TextStyle(
+                                fontFamily: 'Poppins', color: Colors.white)),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          Map<String, dynamic> retorno =
+                              await controller.unlinkCompany(company.id);
+
+                          if (retorno['success'] == true) {
+                            Get.back();
+                            Get.snackbar(
+                                'Sucesso!', retorno['message'].join('\n'),
+                                backgroundColor: Colors.green,
+                                colorText: Colors.white,
+                                duration: const Duration(seconds: 2),
+                                snackPosition: SnackPosition.BOTTOM);
+                          } else {
+                            Get.snackbar(
+                                'Falha!', retorno['message'].join('\n'),
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                                duration: const Duration(seconds: 2),
+                                snackPosition: SnackPosition.BOTTOM);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                        ),
+                        child: const Text(
+                          'Excluir',
+                          style: TextStyle(
+                              fontFamily: 'Poppins', color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

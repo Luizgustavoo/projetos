@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
@@ -156,7 +157,7 @@ class HomeView extends GetView<HomeController> {
                           },
                         ),
                         HomeCard(
-                          icon: Icons.account_balance_wallet_outlined,
+                          icon: FontAwesomeIcons.wallet,
                           title: 'MEU\nFINANCEIRO',
                           onTap: () {
                             walletController.getFinancial(0);
@@ -228,7 +229,7 @@ class HomeView extends GetView<HomeController> {
                                 () => Text(
                                   '${statisticController.availableCompanies}',
                                   style: const TextStyle(
-                                    fontSize: 38,
+                                    fontSize: 25,
                                     fontFamily: 'Poppinss',
                                   ),
                                 ),
@@ -250,7 +251,7 @@ class HomeView extends GetView<HomeController> {
                                 () => Text(
                                   '${statisticController.expiredCompanies}',
                                   style: const TextStyle(
-                                    fontSize: 38,
+                                    fontSize: 25,
                                     fontFamily: 'Poppinss',
                                   ),
                                 ),
@@ -272,7 +273,7 @@ class HomeView extends GetView<HomeController> {
                                 () => Text(
                                   '${statisticController.totalCompanies}',
                                   style: const TextStyle(
-                                    fontSize: 38,
+                                    fontSize: 25,
                                     fontFamily: 'Poppinss',
                                   ),
                                 ),

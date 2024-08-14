@@ -116,6 +116,13 @@ class CreateCompanyModal extends GetView<CompanyController> {
                 },
               ),
               const SizedBox(height: 10),
+              TextFormField(
+                controller: controller.rolePeopleController,
+                decoration: const InputDecoration(
+                  labelText: 'CARGO PESSOA CONTATO',
+                ),
+              ),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Expanded(
@@ -125,12 +132,6 @@ class CreateCompanyModal extends GetView<CompanyController> {
                       decoration: const InputDecoration(
                         labelText: 'RUA',
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira a rua';
-                        }
-                        return null;
-                      },
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -140,12 +141,6 @@ class CreateCompanyModal extends GetView<CompanyController> {
                       decoration: const InputDecoration(
                         labelText: 'NÚMERO',
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira o número';
-                        }
-                        return null;
-                      },
                     ),
                   ),
                 ],
@@ -156,12 +151,6 @@ class CreateCompanyModal extends GetView<CompanyController> {
                 decoration: const InputDecoration(
                   labelText: 'BAIRRO',
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o bairro';
-                  }
-                  return null;
-                },
               ),
               const SizedBox(height: 10),
               Row(
@@ -173,12 +162,6 @@ class CreateCompanyModal extends GetView<CompanyController> {
                       decoration: const InputDecoration(
                         labelText: 'CIDADE',
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira a cidade';
-                        }
-                        return null;
-                      },
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -229,12 +212,6 @@ class CreateCompanyModal extends GetView<CompanyController> {
                         onChanged: (value) {
                           controller.selectedState.value = value!;
                         },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Por favor, selecione um estado';
-                          }
-                          return null;
-                        },
                       ),
                     );
                   }),
@@ -263,12 +240,6 @@ class CreateCompanyModal extends GetView<CompanyController> {
                   }).toList(),
                   onChanged: (value) {
                     controller.selectedCompanyDonation.value = value!;
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Por favor, selecione uma doação';
-                    }
-                    return null;
                   },
                 );
               }),

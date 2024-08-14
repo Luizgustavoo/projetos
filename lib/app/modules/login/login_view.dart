@@ -88,20 +88,6 @@ class LoginView extends GetView<LoginController> {
                     }),
                   ),
                   const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Esqueceu a senha?',
-                            style: TextStyle(
-                                fontFamily: 'Poppinss', color: Colors.black),
-                          )),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
                   Obx(
                     () => Visibility(
                       visible: !controller.loading.value,

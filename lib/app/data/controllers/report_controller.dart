@@ -77,9 +77,13 @@ class ReportController extends GetxController {
                   pw.Text('EMPRESA: ${report.empresa}'),
                   pw.Text('CONTATO: ${report.nomePessoa}'),
                   pw.Text(
-                      'RETORNO: ${FormattedInputers.formatDate(report.dataRetorno!)}'),
+                      'CARGO CONTATO: ${report.cargoContato ?? 'NÃO PREENCHIDO'}'),
+                  pw.Text(
+                      'RETORNO: ${FormattedInputers.formatApiDate(report.dataRetorno!)}'),
                   pw.Text('PREVISÃO VALOR: ${report.previsaoValor}'),
                   pw.Text('MÊS DEPÓSITO: ${report.mesDeposito}'),
+                  pw.Text(
+                      'ULTIMA CAPTAÇÃO: ${FormattedInputers.formatApiDate(report.ultimaCaptacao ?? '')}'),
                   pw.SizedBox(height: 10),
                   pw.Text('OBSERVAÇÕES:',
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),

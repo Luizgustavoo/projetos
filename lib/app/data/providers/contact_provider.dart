@@ -60,7 +60,8 @@ class ContactApiClient {
         "company_id": contactCompany.companyId.toString(),
         "data_retorno": contactCompany.dataRetorno.toString(),
         "previsao_valor": contactCompany.previsaoValor.toString(),
-        "mes_deposito": contactCompany.mesDeposito.toString()
+        "mes_deposito": contactCompany.mesDeposito.toString(),
+        "cargo_contato": contactCompany.cargoContato.toString(),
       });
       return json.decode(response.body);
     } catch (err) {
@@ -85,7 +86,8 @@ class ContactApiClient {
         "company_id": contactCompany.companyId.toString(),
         "data_retorno": contactCompany.dataRetorno.toString(),
         "previsao_valor": contactCompany.previsaoValor.toString(),
-        "mes_deposito": contactCompany.mesDeposito.toString()
+        "mes_deposito": contactCompany.mesDeposito.toString(),
+        "cargo_contato": contactCompany.cargoContato.toString(),
       });
       return json.decode(response.body);
     } catch (err) {

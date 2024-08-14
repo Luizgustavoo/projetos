@@ -55,7 +55,7 @@ class ContactModal extends GetView<ContactController> {
               TextFormField(
                 controller: controller.dateContactController,
                 decoration: InputDecoration(
-                  labelText: 'Data e Hora:',
+                  labelText: 'DATA E HORA:',
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(10),
@@ -98,6 +98,19 @@ class ContactModal extends GetView<ContactController> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira o nome';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: controller.roleContactController,
+                decoration: const InputDecoration(
+                  labelText: 'CARGO CONTATO',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira o cargo';
                   }
                   return null;
                 },

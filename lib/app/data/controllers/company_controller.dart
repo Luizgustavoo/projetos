@@ -34,6 +34,7 @@ class CompanyController extends GetxController {
   final streetController = TextEditingController();
   final numberController = TextEditingController();
   final neighborhoodController = TextEditingController();
+  final rolePeopleController = TextEditingController();
   final cityController = TextEditingController();
   final selectedState = ''.obs;
   final selectedCompanyDonation = ''.obs;
@@ -125,6 +126,7 @@ class CompanyController extends GetxController {
       cidade: cityController.text,
       estado: selectedState.value,
       tipoCaptacao: selectedCompanyDonation.value,
+      cargoContato: rolePeopleController.text,
     );
     if (companyKey.currentState!.validate()) {
       mensagem = await repository.insertCompany(
@@ -158,6 +160,7 @@ class CompanyController extends GetxController {
       cidade: cityController.text,
       estado: selectedState.value,
       tipoCaptacao: selectedCompanyDonation.value,
+      cargoContato: rolePeopleController.text,
     );
     final token = ServiceStorage.getToken();
     if (companyKey.currentState!.validate()) {
@@ -185,9 +188,13 @@ class CompanyController extends GetxController {
     final token = ServiceStorage.getToken();
     mensagem = await repository.unlinkCompany("Bearer $token", company);
     retorno = {'success': mensagem['success'], 'message': mensagem['message']};
-    int idd =
-        ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
-    getCompanies(idd);
+    if (ServiceStorage.getUserType() == 1) {
+      getAllCompanies();
+    } else {
+      int idd =
+          ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
+      getCompanies(idd);
+    }
     return retorno;
   }
 
@@ -241,6 +248,7 @@ class CompanyController extends GetxController {
     streetController.text = selectedCompany!.endereco ?? "";
     numberController.text = selectedCompany!.numero ?? "";
     neighborhoodController.text = selectedCompany!.bairro ?? "";
+    rolePeopleController.text = selectedCompany!.cargoContato ?? "";
     cityController.text = selectedCompany!.cidade ?? "";
     selectedState.value = selectedCompany!.estado ?? "";
     selectedCompanyDonation.value = selectedCompany!.tipoCaptacao ?? "";
@@ -257,6 +265,7 @@ class CompanyController extends GetxController {
       numberController,
       neighborhoodController,
       cityController,
+      rolePeopleController,
     ];
     selectedState.value = '';
     selectedCompanyDonation.value = '';

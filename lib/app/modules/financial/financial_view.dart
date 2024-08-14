@@ -4,6 +4,7 @@ import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/modules/financial/widgets/custom_financial_card.dart';
+import 'package:projetos/app/utils/service_storage.dart';
 
 class FinancialView extends GetView<FinancialController> {
   const FinancialView({super.key});
@@ -50,7 +51,9 @@ class FinancialView extends GetView<FinancialController> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'RECEBIDO',
+                              ServiceStorage.getUserType() == 1
+                                  ? 'PAGO'
+                                  : 'RECEBIDO',
                               style: TextStyle(
                                   fontFamily: 'Poppins',
                                   color: Colors.green.shade800),
@@ -84,7 +87,9 @@ class FinancialView extends GetView<FinancialController> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'A RECEBER',
+                              ServiceStorage.getUserType() == 1
+                                  ? 'A PAGAR'
+                                  : 'A RECEBER',
                               style: TextStyle(
                                   fontFamily: 'Poppins',
                                   color: Colors.red.shade800),

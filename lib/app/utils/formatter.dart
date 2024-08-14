@@ -99,7 +99,7 @@ abstract class FormattedInputers {
       DateTime dateTime = DateTime.parse(dateString);
       return DateFormat('dd/MM/yyyy').format(dateTime);
     } catch (e) {
-      return 'Data inválida';
+      return 'NÃO PREENCHIDO';
     }
   }
 

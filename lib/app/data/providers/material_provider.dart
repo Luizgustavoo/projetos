@@ -12,10 +12,9 @@ import 'package:projetos/app/data/models/material_model.dart';
 class MaterialApiClient {
   final http.Client httpClient = http.Client();
 
-  final String materialUrl = '$baseUrl/v1/material';
-
   getAll(String token) async {
     try {
+      final String materialUrl = '$baseUrl/v1/material';
       var response = await httpClient.get(
         Uri.parse(materialUrl),
         headers: {
@@ -50,6 +49,7 @@ class MaterialApiClient {
     PlatformFile? selectedFile,
     String? videoLink,
   ) async {
+    final String materialUrl = '$baseUrl/v1/material';
     var request = http.MultipartRequest('POST', Uri.parse(materialUrl));
 
     request.fields['descricao'] = description;
@@ -72,9 +72,8 @@ class MaterialApiClient {
     var response = await request.send();
     var responseStream = await response.stream.bytesToString();
     var httpResponse = http.Response(responseStream, response.statusCode);
-
     if (httpResponse.statusCode != 201) {
-      throw Exception('Failed to register material');
+      throw Exception('Falha ao registrar o material');
     } else {
       return json.decode(httpResponse.body);
     }

@@ -101,6 +101,30 @@ class FundRaiserController extends GetxController {
     return retorno;
   }
 
+  Future<Map<String, dynamic>> updateFundRaiser(int? id) async {
+    User user = User(
+      id: id,
+      name: nameRaiserController.text,
+      email: emailRaiserController.text,
+      password: passwordRaiserController.text,
+      startDate: startDateRaiserController.text,
+      cpfCnpj: cpfCnpjRaiserController.text,
+      contact: phoneRaiserController.text,
+      usertypeId: selectedUserType.value,
+    );
+
+    final token = ServiceStorage.getToken();
+    if (fundRaiserKey.currentState!.validate()) {
+      mensagem = await repository.updateFundRaise("Bearer $token", user);
+      retorno = {
+        'success': mensagem['success'],
+        'message': mensagem['message']
+      };
+      getFundRaisers();
+    }
+    return retorno;
+  }
+
   Future<Map<String, dynamic>> insertFundRaising(
       int companyId, int billId) async {
     final token = ServiceStorage.getToken();
@@ -128,7 +152,12 @@ class FundRaiserController extends GetxController {
 
     if (fundRaisingKey.currentState!.validate()) {
       mensagem = await repository.insertFundRaising(
-          "Bearer $token", fundRaiser, billId, paymentDateController.text);
+          "Bearer $token",
+          fundRaiser,
+          billId,
+          paymentDateController.text,
+          companyController.selectedUserId.value,
+          paidOutCheckboxValue.value);
       retorno = {
         'success': mensagem['success'],
         'message': mensagem['message']
@@ -136,30 +165,6 @@ class FundRaiserController extends GetxController {
       int idd =
           ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
       companyController.getCompanies(idd);
-    }
-    return retorno;
-  }
-
-  Future<Map<String, dynamic>> updateFundRaiser(int? id) async {
-    User user = User(
-      id: id,
-      name: nameRaiserController.text,
-      email: emailRaiserController.text,
-      password: passwordRaiserController.text,
-      startDate: startDateRaiserController.text,
-      cpfCnpj: cpfCnpjRaiserController.text,
-      contact: phoneRaiserController.text,
-      usertypeId: selectedUserType.value,
-    );
-
-    final token = ServiceStorage.getToken();
-    if (fundRaiserKey.currentState!.validate()) {
-      mensagem = await repository.updateFundRaise("Bearer $token", user);
-      retorno = {
-        'success': mensagem['success'],
-        'message': mensagem['message']
-      };
-      getFundRaisers();
     }
     return retorno;
   }

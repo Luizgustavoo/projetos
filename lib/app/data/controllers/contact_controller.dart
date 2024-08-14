@@ -17,6 +17,7 @@ class ContactController extends GetxController {
   final obsContactController = TextEditingController();
   final dateReturnController = TextEditingController();
   final predictedValueController = TextEditingController();
+  final roleContactController = TextEditingController();
   final contactKey = GlobalKey<FormState>();
   RxBool isLoading = true.obs;
   ContactCompany? selectedContactCompany;
@@ -56,6 +57,7 @@ class ContactController extends GetxController {
       previsaoValor: predictedValueController.text,
       mesDeposito: selectedMonth,
       observacoes: obsContactController.text,
+      cargoContato: roleContactController.text,
     );
 
     if (contactKey.currentState!.validate()) {
@@ -82,6 +84,7 @@ class ContactController extends GetxController {
       previsaoValor: predictedValueController.text,
       mesDeposito: selectedMonth,
       observacoes: obsContactController.text,
+      cargoContato: roleContactController.text,
     );
 
     final token = ServiceStorage.getToken();
@@ -113,6 +116,7 @@ class ContactController extends GetxController {
       obsContactController,
       dateReturnController,
       predictedValueController,
+      roleContactController,
     ];
 
     for (final controller in textControllers) {
@@ -137,6 +141,8 @@ class ContactController extends GetxController {
     }
     nameContactController.text = selectedContactCompany!.nomePessoa.toString();
     obsContactController.text = selectedContactCompany!.observacoes.toString();
+    roleContactController.text =
+        selectedContactCompany!.cargoContato.toString();
 
     if (selectedContactCompany!.dataRetorno != null &&
         selectedContactCompany!.dataRetorno!.isNotEmpty) {

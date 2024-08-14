@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
+import 'package:projetos/app/utils/formatter.dart';
 
 class CustomFinancialCard extends StatelessWidget {
   final Bill bill;
@@ -17,17 +18,29 @@ class CustomFinancialCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color(0xFFFFF3DB),
+      color: bill.status == 'aberto'
+          ? const Color(0xFFFFF3DB)
+          : Colors.red.shade100,
       elevation: 2,
       shadowColor: Colors.black,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.all(5),
       child: ExpansionTile(
+        dense: true,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        title: Text(
-          bill.nome!.toUpperCase(),
-          style: const TextStyle(fontFamily: 'Poppinss'),
-        ),
+        title: RichText(
+            text: TextSpan(children: [
+          TextSpan(
+              text: '${bill.nome} - '.toUpperCase(),
+              style: const TextStyle(
+                  fontFamily: 'Poppinss', color: Colors.black54, fontSize: 16)),
+          TextSpan(
+              text: 'SITUAÇÃO: ${bill.status}'.toUpperCase(),
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 12,
+                  color: bill.status == 'aberto' ? Colors.green : Colors.red))
+        ])),
         children: bill.fundraisings!.map((e) {
           int capturedValue =
               e.capturedValue != null ? e.capturedValue!.toInt() : 0;
@@ -77,7 +90,11 @@ class CustomFinancialCard extends StatelessWidget {
                 Text(
                   'COMISSÃO: R\$${controller.formatValue(commission.toInt())}',
                   style: const TextStyle(fontFamily: 'Poppins'),
-                )
+                ),
+                Text(
+                  'DATA DE PAGAMENTO: ${FormattedInputers.formatApiDate(e.fundRaiserComission!.payday.toString())}',
+                  style: const TextStyle(fontFamily: 'Poppins'),
+                ),
               ],
             ),
           );

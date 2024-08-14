@@ -16,7 +16,7 @@ import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
-import 'package:projetos/app/modules/company/widgets/create_my_company_modal.dart';
+import 'package:projetos/app/modules/company/widgets/create_company_modal.dart';
 import 'package:projetos/app/routes/app_routes.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 import 'dart:io';
@@ -569,7 +569,8 @@ class MyCompanyView extends GetView<CompanyController> {
                       decoration: const InputDecoration(
                         labelText: 'PROJETOS',
                       ),
-                      items: billController.listAllBills.map((Bill bill) {
+                      items:
+                          billController.listAllBillsDropDown.map((Bill bill) {
                         return DropdownMenuItem<int>(
                           value: bill.id,
                           child: Text(bill.nome!),

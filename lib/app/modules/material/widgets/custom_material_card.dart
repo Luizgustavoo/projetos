@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,9 @@ import 'package:projetos/app/modules/material/views/pdf_view_page.dart';
 import 'package:projetos/app/modules/material/widgets/create_material_modal.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 import 'package:share_plus/share_plus.dart';
+import 'dart:io' show Platform;
+
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomMaterialCard extends StatelessWidget {
   const CustomMaterialCard(
@@ -25,18 +29,34 @@ class CustomMaterialCard extends StatelessWidget {
       margin: const EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
-          if (materialModel!.tipo == 'arquivo' &&
-              materialModel!.arquivoVideo != null) {
-            String url =
-                'https://captacao.casadobommeninodearapongas.org/public/storage/arquivos/${materialModel!.arquivoVideo}';
+          if (materialModel != null) {
+            if (materialModel!.tipo == 'arquivo' &&
+                materialModel!.arquivoVideo != null) {
+              String url =
+                  'https://captacao.casadobommeninodearapongas.org/public/storage/arquivos/${materialModel!.arquivoVideo}';
 
-            Get.to(() => PdfViewPage(pdfUrl: url), arguments: materialModel);
-          } else if (materialModel!.tipo == 'video' &&
-              materialModel!.arquivoVideo != null) {
-            final controller = Get.put(MaterialController());
-            List url = materialModel!.arquivoVideo!.split('=');
-
-            controller.youtube(url[1]);
+              if (Platform.isWindows || kIsWeb) {
+                launchUrl(Uri.parse(url));
+              } else {
+                Get.to(() => PdfViewPage(pdfUrl: url),
+                    arguments: materialModel);
+              }
+            } else if (materialModel!.tipo == 'video' &&
+                materialModel!.arquivoVideo != null) {
+              final controller = Get.put(MaterialController());
+              String url = materialModel!.arquivoVideo!;
+              if (url.contains('youtube.com') || url.contains('youtu.be')) {
+                List<String> urlParts = url.split('v=');
+                if (urlParts.length > 1) {
+                  controller.youtube(urlParts[1]);
+                } else {
+                  urlParts = url.split('/');
+                  controller.youtube(urlParts.last);
+                }
+              } else {
+                launchUrl(Uri.parse(url));
+              }
+            }
           }
         },
         leading: materialModel!.tipo == 'arquivo' &&

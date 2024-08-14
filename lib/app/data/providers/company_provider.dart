@@ -160,7 +160,8 @@ class CompanyApiClient {
         "cidade": company.cidade.toString(),
         "estado": company.estado.toString(),
         "bairro": company.bairro.toString(),
-        "tipo_captacao": company.tipoCaptacao.toString()
+        "tipo_captacao": company.tipoCaptacao.toString(),
+        "cargo_contato": company.cargoContato.toString(),
       });
 
       request.headers.addAll({
@@ -203,7 +204,8 @@ class CompanyApiClient {
         "cidade": company.cidade.toString(),
         "estado": company.estado.toString(),
         "bairro": company.bairro.toString(),
-        "tipo_captacao": company.tipoCaptacao.toString()
+        "tipo_captacao": company.tipoCaptacao.toString(),
+        "cargo_contato": company.cargoContato.toString(),
       });
       return json.decode(response.body);
     } catch (err) {
@@ -218,13 +220,12 @@ class CompanyApiClient {
       String url =
           '$baseUrl/v1/company/desvincular/${ServiceStorage.getUserId().toString()}/${company.id.toString()}';
       companyUrl = Uri.parse(url);
-      var response = await httpClient.post(
-        companyUrl,
-        headers: {
-          "Accept": "application/json",
-          "Authorization": token,
-        },
-      );
+      var response = await httpClient.post(companyUrl, headers: {
+        "Accept": "application/json",
+        "Authorization": token,
+      }, body: {
+        "tipo_usuario": ServiceStorage.getUserType().toString()
+      });
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

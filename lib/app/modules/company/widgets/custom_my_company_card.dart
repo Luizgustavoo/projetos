@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
-import 'package:projetos/app/modules/company/widgets/create_my_company_modal.dart';
+import 'package:projetos/app/modules/company/widgets/create_company_modal.dart';
 import 'package:projetos/app/routes/app_routes.dart';
 
 class CustomCompanyCard extends StatelessWidget {

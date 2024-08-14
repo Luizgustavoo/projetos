@@ -5,6 +5,7 @@ import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/contact_company_model.dart';
 import 'package:projetos/app/modules/company/widgets/contact_modal.dart';
 import 'package:projetos/app/modules/company/widgets/custom_contact_company_card.dart';
+import 'package:projetos/app/utils/service_storage.dart';
 
 class ContactCompanyView extends GetView<ContactController> {
   ContactCompanyView({super.key});
@@ -80,32 +81,35 @@ class ContactCompanyView extends GetView<ContactController> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        mini: true,
-        elevation: 2,
-        backgroundColor: Colors.orange,
-        onPressed: () {
-          final contactController = Get.put(ContactController());
-          contactController.clearAllFields();
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: false,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      floatingActionButton: ServiceStorage.getUserType() == 1
+          ? const SizedBox()
+          : FloatingActionButton(
+              mini: true,
+              elevation: 2,
+              backgroundColor: Colors.orange,
+              onPressed: () {
+                final contactController = Get.put(ContactController());
+                contactController.clearAllFields();
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: false,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(25.0)),
+                  ),
+                  builder: (BuildContext context) {
+                    return ContactModal(
+                      name: company.nome,
+                      company: company,
+                    );
+                  },
+                );
+              },
+              child: const Icon(
+                Icons.add_rounded,
+                color: Colors.white,
+              ),
             ),
-            builder: (BuildContext context) {
-              return ContactModal(
-                name: company.nome,
-                company: company,
-              );
-            },
-          );
-        },
-        child: const Icon(
-          Icons.add_rounded,
-          color: Colors.white,
-        ),
-      ),
     );
   }
 }
