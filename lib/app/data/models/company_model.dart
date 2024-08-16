@@ -19,7 +19,7 @@ class Company {
   String? tipoCaptacao;
   String? cargoContato;
   List<FundRaising>? fundraisings;
-  User? companyuser;
+  List<User>? companyuser;
 
   Company({
     this.id,
@@ -65,9 +65,13 @@ class Company {
       json['fundraisings'].forEach((v) {
         fundraisings!.add(FundRaising.fromJson(v));
       });
-      companyuser = json['companyuser'] != null
-          ? User.fromJson(json['companyuser'])
-          : null;
+    }
+
+    if (json['companyuser'] != null) {
+      companyuser = <User>[];
+      json['companyuser'].forEach((v) {
+        companyuser!.add(User.fromJson(v));
+      });
     }
   }
 
@@ -94,7 +98,7 @@ class Company {
       data['fundraisings'] = fundraisings!.map((v) => v.toJson()).toList();
     }
     if (companyuser != null) {
-      data['companyuser'] = companyuser!.toJson();
+      data['companyuser'] = companyuser!.map((v) => v.toJson()).toList();
     }
 
     return data;

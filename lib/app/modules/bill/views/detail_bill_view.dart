@@ -1,26 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/fundraisings_model.dart';
+import 'package:projetos/app/routes/app_routes.dart';
 
 class DetailBillView extends GetView<BillController> {
-  const DetailBillView({super.key});
+  DetailBillView({super.key});
+
+  RxBool deleted = false.obs;
 
   @override
   Widget build(BuildContext context) {
     final bill = Get.arguments as Bill;
-    double totalCapturedValue =
+    RxDouble totalCapturedValue = 0.0.obs;
+    totalCapturedValue.value =
         (bill.fundraisings != null && bill.fundraisings!.isNotEmpty)
             ? bill.fundraisings!
                 .fold(0.0, (sum, e) => sum + (e.capturedValue ?? 0.0))
             : 0.0;
-    double totalValue = double.tryParse(bill.valorAprovado) ?? 0.0;
+    RxDouble totalValue = 0.0.obs;
+    totalValue.value = double.tryParse(bill.valorAprovado) ?? 0.0;
 
-    double finalValue = totalValue - totalCapturedValue;
+    RxDouble finalValue = 0.0.obs;
+    finalValue.value = totalValue.value - totalCapturedValue.value;
 
-    final listFund = bill.fundraisings!.obs;
+    RxList<FundRaising> fundraisings = <FundRaising>[].obs;
+
+    fundraisings.value = bill.fundraisings!;
+
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -59,10 +69,12 @@ class DetailBillView extends GetView<BillController> {
                                 style: TextStyle(
                                     fontFamily: 'Poppins', fontSize: 15),
                               ),
-                              Text(
-                                'R\$${controller.formatValue(double.parse(totalCapturedValue.toString()))}',
-                                style: const TextStyle(
-                                    fontFamily: 'Poppinss', fontSize: 23),
+                              Obx(
+                                () => Text(
+                                  'R\$${controller.formatValue(double.parse(totalCapturedValue.toString()))}',
+                                  style: const TextStyle(
+                                      fontFamily: 'Poppinss', fontSize: 23),
+                                ),
                               ),
                             ],
                           ),
@@ -74,12 +86,14 @@ class DetailBillView extends GetView<BillController> {
                                 style: TextStyle(
                                     fontFamily: 'Poppins', fontSize: 15),
                               ),
-                              Text(
-                                'R\$${controller.formatValue(double.parse(finalValue.toString()))}',
-                                style: const TextStyle(
-                                    fontFamily: 'Poppinss',
-                                    fontSize: 23,
-                                    color: Colors.green),
+                              Obx(
+                                () => Text(
+                                  'R\$${controller.formatValue(double.parse(finalValue.toString()))}',
+                                  style: const TextStyle(
+                                      fontFamily: 'Poppinss',
+                                      fontSize: 23,
+                                      color: Colors.green),
+                                ),
                               ),
                             ],
                           )
@@ -100,15 +114,15 @@ class DetailBillView extends GetView<BillController> {
               ),
             ),
             Obx(() => Expanded(
-                child: listFund.isNotEmpty
+                child: fundraisings.isNotEmpty
                     ? ListView.builder(
                         padding:
                             const EdgeInsets.only(top: 10, left: 16, right: 16),
-                        itemCount: listFund.length,
+                        itemCount: fundraisings.length,
                         shrinkWrap: true,
                         physics: const AlwaysScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          FundRaising fundRaising = bill.fundraisings![index];
+                          FundRaising fundRaising = fundraisings[index];
 
                           final status =
                               fundRaising.status == 'captado' ? true : false;
@@ -117,8 +131,23 @@ class DetailBillView extends GetView<BillController> {
                             direction: DismissDirection.horizontal,
                             confirmDismiss: (DismissDirection direction) async {
                               if (direction == DismissDirection.endToStart) {
-                                showDeleteDialog(
+                                deleted.value = false;
+                                bool? result = await showDeleteDialog(
                                     context, fundRaising, bill, controller);
+
+                                /*print("retorno do modal $result");
+                                if(result == true){
+                                  fundraisings.removeWhere(
+                                          (item) => item.id == fundRaising.id);
+                                  totalCapturedValue.value =
+                                      totalCapturedValue.value -
+                                          fundRaising.capturedValue!;
+
+                                  finalValue.value = finalValue.value + fundRaising.capturedValue!;
+
+                                }*/
+
+
                               }
                               return false;
                             },
@@ -206,7 +235,7 @@ class DetailBillView extends GetView<BillController> {
         )));
   }
 
-  Future<void> showDeleteDialog(BuildContext context, FundRaising fundRaising,
+ Future<bool?>showDeleteDialog(BuildContext context, FundRaising fundRaising,
       Bill bill, BillController billController) async {
     final controller = Get.put(FundRaiserController());
     await showGeneralDialog(
@@ -244,7 +273,7 @@ class DetailBillView extends GetView<BillController> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Get.back();
+                          Navigator.of(context).pop(false);
                         },
                         child: const Text('Cancelar',
                             style: TextStyle(
@@ -256,16 +285,18 @@ class DetailBillView extends GetView<BillController> {
                           onPressed: () async {
                             Map<String, dynamic> retorno = await controller
                                 .deleteFundRaising(fundRaising.id);
-
                             if (retorno['success'] == true) {
-                              Get.back();
-                              bill.fundraisings!.remove(fundRaising.id!);
+
                               Get.snackbar(
                                   'Sucesso!', retorno['message'].join('\n'),
                                   backgroundColor: Colors.green,
                                   colorText: Colors.white,
                                   duration: const Duration(seconds: 2),
                                   snackPosition: SnackPosition.BOTTOM);
+
+                              Get.find<BillController>().getAllBills();
+                              Get.offAllNamed(Routes.bill);
+
                             } else {
                               Get.snackbar(
                                   'Falha!', retorno['message'].join('\n'),
@@ -273,6 +304,7 @@ class DetailBillView extends GetView<BillController> {
                                   colorText: Colors.white,
                                   duration: const Duration(seconds: 2),
                                   snackPosition: SnackPosition.BOTTOM);
+                              Navigator.of(context).pop(false);
                             }
                           },
                           style: ElevatedButton.styleFrom(

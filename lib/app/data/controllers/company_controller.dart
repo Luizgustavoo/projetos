@@ -55,14 +55,14 @@ class CompanyController extends GetxController {
     searchControllerMyCompany.addListener(onMySearchChanged);
   }
 
-  @override
-  void onClose() {
-    searchControllerAllCompany.removeListener(onSearchChanged);
-    searchControllerMyCompany.removeListener(onMySearchChanged);
-    searchControllerAllCompany.dispose();
-    searchControllerMyCompany.dispose();
-    super.onClose();
-  }
+  // @override
+  // void onClose() {
+  //   searchControllerAllCompany.removeListener(onSearchChanged);
+  //   searchControllerMyCompany.removeListener(onMySearchChanged);
+  //   searchControllerAllCompany.dispose();
+  //   searchControllerMyCompany.dispose();
+  //   super.onClose();
+  // }
 
   Future<void> getCompanies(int id) async {
     isLoading.value = true;

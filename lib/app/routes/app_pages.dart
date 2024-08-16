@@ -95,7 +95,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.detailbill,
-      page: () => const DetailBillView(),
+      page: () => DetailBillView(),
       binding: BillBinding(),
     ),
     GetPage(
