@@ -219,7 +219,6 @@ class FundRaiserApiClient {
           "Authorization": token,
         },
       );
-      print(json.decode(response.body));
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

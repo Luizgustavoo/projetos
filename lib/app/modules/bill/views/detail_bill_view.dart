@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
@@ -10,7 +9,7 @@ import 'package:projetos/app/routes/app_routes.dart';
 class DetailBillView extends GetView<BillController> {
   DetailBillView({super.key});
 
-  RxBool deleted = false.obs;
+  final RxBool deleted = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -61,42 +60,46 @@ class DetailBillView extends GetView<BillController> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'VALOR CAPTADO',
-                                style: TextStyle(
-                                    fontFamily: 'Poppins', fontSize: 15),
-                              ),
-                              Obx(
-                                () => Text(
-                                  'R\$${controller.formatValue(double.parse(totalCapturedValue.toString()))}',
-                                  style: const TextStyle(
-                                      fontFamily: 'Poppinss', fontSize: 23),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'VALOR CAPTADO',
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins', fontSize: 15),
                                 ),
-                              ),
-                            ],
+                                Obx(
+                                  () => Text(
+                                    'R\$${controller.formatValue(double.parse(totalCapturedValue.toString()))}',
+                                    style: const TextStyle(
+                                        fontFamily: 'Poppinss', fontSize: 20),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'VALOR A CAPTAR',
-                                style: TextStyle(
-                                    fontFamily: 'Poppins', fontSize: 15),
-                              ),
-                              Obx(
-                                () => Text(
-                                  'R\$${controller.formatValue(double.parse(finalValue.toString()))}',
-                                  style: const TextStyle(
-                                      fontFamily: 'Poppinss',
-                                      fontSize: 23,
-                                      color: Colors.green),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'VALOR A CAPTAR',
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins', fontSize: 15),
                                 ),
-                              ),
-                            ],
-                          )
+                                Obx(
+                                  () => Text(
+                                    'R\$${controller.formatValue(double.parse(finalValue.toString()))}',
+                                    style: const TextStyle(
+                                        fontFamily: 'Poppinss',
+                                        fontSize: 20,
+                                        color: Colors.green),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     )),
@@ -128,26 +131,12 @@ class DetailBillView extends GetView<BillController> {
                               fundRaising.status == 'captado' ? true : false;
                           return Dismissible(
                             key: UniqueKey(),
-                            direction: DismissDirection.horizontal,
+                            direction: DismissDirection.endToStart,
                             confirmDismiss: (DismissDirection direction) async {
                               if (direction == DismissDirection.endToStart) {
                                 deleted.value = false;
-                                bool? result = await showDeleteDialog(
+                                await showDeleteDialog(
                                     context, fundRaising, bill, controller);
-
-                                /*print("retorno do modal $result");
-                                if(result == true){
-                                  fundraisings.removeWhere(
-                                          (item) => item.id == fundRaising.id);
-                                  totalCapturedValue.value =
-                                      totalCapturedValue.value -
-                                          fundRaising.capturedValue!;
-
-                                  finalValue.value = finalValue.value + fundRaising.capturedValue!;
-
-                                }*/
-
-
                               }
                               return false;
                             },
@@ -235,7 +224,7 @@ class DetailBillView extends GetView<BillController> {
         )));
   }
 
- Future<bool?>showDeleteDialog(BuildContext context, FundRaising fundRaising,
+  Future<bool?> showDeleteDialog(BuildContext context, FundRaising fundRaising,
       Bill bill, BillController billController) async {
     final controller = Get.put(FundRaiserController());
     await showGeneralDialog(
@@ -273,7 +262,7 @@ class DetailBillView extends GetView<BillController> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).pop(false);
+                          Get.back();
                         },
                         child: const Text('Cancelar',
                             style: TextStyle(
@@ -286,7 +275,6 @@ class DetailBillView extends GetView<BillController> {
                             Map<String, dynamic> retorno = await controller
                                 .deleteFundRaising(fundRaising.id);
                             if (retorno['success'] == true) {
-
                               Get.snackbar(
                                   'Sucesso!', retorno['message'].join('\n'),
                                   backgroundColor: Colors.green,
@@ -295,8 +283,7 @@ class DetailBillView extends GetView<BillController> {
                                   snackPosition: SnackPosition.BOTTOM);
 
                               Get.find<BillController>().getAllBills();
-                              Get.offAllNamed(Routes.bill);
-
+                              Get.offAllNamed(Routes.home);
                             } else {
                               Get.snackbar(
                                   'Falha!', retorno['message'].join('\n'),
@@ -304,7 +291,7 @@ class DetailBillView extends GetView<BillController> {
                                   colorText: Colors.white,
                                   duration: const Duration(seconds: 2),
                                   snackPosition: SnackPosition.BOTTOM);
-                              Navigator.of(context).pop(false);
+                              // Navigator.of(context).pop(false);
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -326,5 +313,6 @@ class DetailBillView extends GetView<BillController> {
         );
       },
     );
+    return null;
   }
 }
