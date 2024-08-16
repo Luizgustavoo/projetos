@@ -1,4 +1,5 @@
 import 'package:projetos/app/data/models/fundraisings_model.dart';
+import 'package:projetos/app/data/models/user_model.dart';
 
 class Company {
   int? id;
@@ -18,25 +19,28 @@ class Company {
   String? tipoCaptacao;
   String? cargoContato;
   List<FundRaising>? fundraisings;
+  User? companyuser;
 
-  Company(
-      {this.id,
-      this.nome,
-      this.cnpj,
-      this.responsavel,
-      this.telefone,
-      this.nomePessoa,
-      this.status,
-      this.createdAt,
-      this.updatedAt,
-      this.endereco,
-      this.numero,
-      this.cidade,
-      this.estado,
-      this.bairro,
-      this.tipoCaptacao,
-      this.cargoContato,
-      this.fundraisings});
+  Company({
+    this.id,
+    this.nome,
+    this.cnpj,
+    this.responsavel,
+    this.telefone,
+    this.nomePessoa,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.endereco,
+    this.numero,
+    this.cidade,
+    this.estado,
+    this.bairro,
+    this.tipoCaptacao,
+    this.cargoContato,
+    this.fundraisings,
+    this.companyuser,
+  });
 
   Company.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -55,11 +59,15 @@ class Company {
     bairro = json['bairro'];
     tipoCaptacao = json['tipo_captacao'];
     cargoContato = json['cargo_contato'];
+
     if (json['fundraisings'] != null) {
       fundraisings = <FundRaising>[];
       json['fundraisings'].forEach((v) {
         fundraisings!.add(FundRaising.fromJson(v));
       });
+      companyuser = json['companyuser'] != null
+          ? User.fromJson(json['companyuser'])
+          : null;
     }
   }
 
@@ -81,9 +89,14 @@ class Company {
     data['bairro'] = bairro;
     data['tipo_captacao'] = tipoCaptacao;
     data['cargo_contato'] = cargoContato;
+
     if (fundraisings != null) {
       data['fundraisings'] = fundraisings!.map((v) => v.toJson()).toList();
     }
+    if (companyuser != null) {
+      data['companyuser'] = companyuser!.toJson();
+    }
+
     return data;
   }
 }

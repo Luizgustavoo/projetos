@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projetos/app/data/controllers/bill_controller.dart';
@@ -198,138 +199,91 @@ class MyCompanyView extends GetView<CompanyController> {
               onPressed: () async {
                 final pdf = pw.Document();
                 final User user = Get.arguments as User;
+                final String formattedDate =
+                    DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
                 final int randomNum = Random().nextInt(100000);
-                // Carregar a imagem do fundo
                 final ByteData imageData =
                     await rootBundle.load('assets/images/bg.jpg');
                 final Uint8List bytes = imageData.buffer.asUint8List();
                 final image = pw.MemoryImage(bytes);
 
-                // Adicionar uma página com uma tabela ao PDF
                 pdf.addPage(
-                  pw.Page(
-                    pageFormat: PdfPageFormat.a4,
-                    build: (pw.Context context) {
-                      return pw.Stack(
-                        children: [
-                          pw.Positioned.fill(
-                            child: pw.Image(image, fit: pw.BoxFit.cover),
+                  pw.MultiPage(
+                    pageTheme: pw.PageTheme(
+                      margin: pw.EdgeInsets.zero,
+                      buildBackground: (context) => pw.Positioned.fill(
+                        child: pw.Image(image, fit: pw.BoxFit.cover),
+                      ),
+                    ),
+                    header: (context) => pw.Padding(
+                      padding: const pw.EdgeInsets.only(top: 70, left: 20),
+                      child: pw.Text(
+                        'RELATÓRIO CAPTADOR: ${user.name!.toUpperCase()}',
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                      ),
+                    ),
+                    footer: (context) => pw.Padding(
+                      padding: const pw.EdgeInsets.only(left: 20, bottom: 10),
+                      child: pw.Text(
+                        'DATA RELATÓRIO: $formattedDate',
+                        style: const pw.TextStyle(fontSize: 12, height: 10),
+                      ),
+                    ),
+                    build: (context) => [
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.only(
+                            left: 20, right: 5, top: 8),
+                        child: pw.TableHelper.fromTextArray(
+                          cellPadding:
+                              const pw.EdgeInsets.symmetric(horizontal: 10),
+                          headers: [
+                            'ID',
+                            'EMPRESA',
+                            'CNPJ',
+                            'RESPONSÁVEL',
+                            'TELEFONE',
+                            'CONTATO'
+                          ],
+                          data: controller.filteredMyCompanies.map((company) {
+                            return [
+                              company.id.toString(),
+                              company.nome ?? '',
+                              company.cnpj ?? '',
+                              company.responsavel ?? '',
+                              company.telefone ?? '',
+                              company.nomePessoa ?? '',
+                            ];
+                          }).toList(),
+                          border: pw.TableBorder.all(),
+                          headerStyle: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            fontSize: 10,
                           ),
-                          pw.Column(
-                            crossAxisAlignment: pw.CrossAxisAlignment.start,
-                            children: [
-                              pw.SizedBox(height: 100),
-                              pw.Center(
-                                child: pw.Text(
-                                  'EMPRESAS DE ${user.name!.toUpperCase()}',
-                                  style: pw.TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: pw.FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              pw.SizedBox(height: 10),
-                              pw.Table(
-                                border: pw.TableBorder.all(),
-                                columnWidths: {
-                                  0: const pw.FixedColumnWidth(30),
-                                  1: const pw.FlexColumnWidth(85),
-                                  2: const pw.FixedColumnWidth(100),
-                                  3: const pw.FixedColumnWidth(100),
-                                  4: const pw.FixedColumnWidth(100),
-                                  5: const pw.FixedColumnWidth(70),
-                                },
-                                children: [
-                                  pw.TableRow(
-                                    children: [
-                                      pw.Padding(
-                                        padding: const pw.EdgeInsets.all(8),
-                                        child: pw.Text('ID',
-                                            style: const pw.TextStyle(
-                                                fontSize: 10)),
-                                      ),
-                                      pw.Padding(
-                                        padding: const pw.EdgeInsets.all(8),
-                                        child: pw.Text('EMPRESA',
-                                            style: const pw.TextStyle(
-                                                fontSize: 10)),
-                                      ),
-                                      pw.Padding(
-                                        padding: const pw.EdgeInsets.all(8),
-                                        child: pw.Text('CNPJ',
-                                            style: const pw.TextStyle(
-                                                fontSize: 10)),
-                                      ),
-                                      pw.Padding(
-                                        padding: const pw.EdgeInsets.all(8),
-                                        child: pw.Text('RESPONSÁVEL',
-                                            style: const pw.TextStyle(
-                                                fontSize: 10)),
-                                      ),
-                                      pw.Padding(
-                                        padding: const pw.EdgeInsets.all(8),
-                                        child: pw.Text('TELEFONE',
-                                            style: const pw.TextStyle(
-                                                fontSize: 10)),
-                                      ),
-                                      pw.Padding(
-                                        padding: const pw.EdgeInsets.all(8),
-                                        child: pw.Text('CONTATO',
-                                            style: const pw.TextStyle(
-                                              fontSize: 10,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                  ...controller.filteredMyCompanies.map(
-                                    (company) {
-                                      return pw.TableRow(
-                                        children: [
-                                          pw.Padding(
-                                            padding: const pw.EdgeInsets.all(8),
-                                            child:
-                                                pw.Text(company.id.toString()),
-                                          ),
-                                          pw.Padding(
-                                            padding: const pw.EdgeInsets.all(8),
-                                            child: pw.Text(company.nome!),
-                                          ),
-                                          pw.Padding(
-                                            padding: const pw.EdgeInsets.all(8),
-                                            child: pw.Text(company.cnpj!),
-                                          ),
-                                          pw.Padding(
-                                            padding: const pw.EdgeInsets.all(8),
-                                            child:
-                                                pw.Text(company.responsavel!),
-                                          ),
-                                          pw.Padding(
-                                            padding: const pw.EdgeInsets.all(8),
-                                            child: pw.Text(company.telefone!),
-                                          ),
-                                          pw.Padding(
-                                            padding: const pw.EdgeInsets.all(8),
-                                            child: pw.Text(company.nomePessoa!),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
+                          cellStyle: const pw.TextStyle(fontSize: 10),
+                          cellAlignment: pw.Alignment.centerLeft,
+                          headerDecoration: const pw.BoxDecoration(
+                            color: PdfColors.grey300,
                           ),
-                        ],
-                      );
-                    },
+                          cellHeight: 25,
+                          columnWidths: {
+                            0: const pw.FixedColumnWidth(30),
+                            1: const pw.FlexColumnWidth(85),
+                            2: const pw.FixedColumnWidth(100),
+                            3: const pw.FixedColumnWidth(100),
+                            4: const pw.FixedColumnWidth(100),
+                            5: const pw.FixedColumnWidth(70),
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 );
 
-                final pdfData = await pdf.save();
+                final output = await pdf.save();
                 await showShareDialog(
-                  context,
-                  'Relatório_Empresas_$randomNum',
-                  pdfData,
+                  Get.context!,
+                  'Relatório_Captador_$randomNum',
+                  output,
                 );
               },
               child: const Icon(

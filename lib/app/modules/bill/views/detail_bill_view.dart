@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/bill_controller.dart';
+import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/fundraisings_model.dart';
 
@@ -18,6 +19,8 @@ class DetailBillView extends GetView<BillController> {
     double totalValue = double.tryParse(bill.valorAprovado) ?? 0.0;
 
     double finalValue = totalValue - totalCapturedValue;
+
+    final listFund = bill.fundraisings!.obs;
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -96,56 +99,98 @@ class DetailBillView extends GetView<BillController> {
                 ],
               ),
             ),
-            Expanded(
-                child: bill.fundraisings!.isNotEmpty
+            Obx(() => Expanded(
+                child: listFund.isNotEmpty
                     ? ListView.builder(
                         padding:
                             const EdgeInsets.only(top: 10, left: 16, right: 16),
-                        itemCount: bill.fundraisings!.length,
+                        itemCount: listFund.length,
                         shrinkWrap: true,
                         physics: const AlwaysScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           FundRaising fundRaising = bill.fundraisings![index];
+
                           final status =
                               fundRaising.status == 'captado' ? true : false;
-                          return Card(
-                            elevation: 2,
-                            color:
-                                status ? Colors.greenAccent : Colors.redAccent,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            margin: const EdgeInsets.all(5),
-                            child: ListTile(
-                              title: Text(
-                                'EMPRESA: ${fundRaising.company!.nome}',
-                                style: TextStyle(
-                                    fontFamily: 'Poppinss',
-                                    color:
-                                        status ? Colors.black : Colors.white),
+                          return Dismissible(
+                            key: UniqueKey(),
+                            direction: DismissDirection.horizontal,
+                            confirmDismiss: (DismissDirection direction) async {
+                              if (direction == DismissDirection.endToStart) {
+                                showDeleteDialog(
+                                    context, fundRaising, bill, controller);
+                              }
+                              return false;
+                            },
+                            background: Container(
+                              margin: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.red,
                               ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'CAPTADOR: ${fundRaising.user!.name!.toUpperCase()}',
-                                    style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: status
-                                            ? Colors.black
-                                            : Colors.white),
-                                  ),
-                                  Text(
-                                    status
-                                        ? 'VALOR CAPTADO: R\$${controller.formatValue(double.parse(fundRaising.capturedValue.toString()))}'
-                                        : 'VALOR PREVISTO: R\$${controller.formatValue(double.parse(fundRaising.predictedValue.toString()))}',
-                                    style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: status
-                                            ? Colors.black
-                                            : Colors.white),
-                                  ),
-                                ],
+                              child: const Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          'EXCLUIR',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Icon(
+                                          Icons.delete_forever,
+                                          size: 25,
+                                          color: Colors.white,
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                            ),
+                            child: Card(
+                              elevation: 2,
+                              color: status
+                                  ? Colors.greenAccent
+                                  : Colors.redAccent,
+                              shadowColor: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              margin: const EdgeInsets.all(5),
+                              child: ListTile(
+                                title: Text(
+                                  'EMPRESA: ${fundRaising.company!.nome}',
+                                  style: TextStyle(
+                                      fontFamily: 'Poppinss',
+                                      color:
+                                          status ? Colors.black : Colors.white),
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'CAPTADOR: ${fundRaising.user!.name!.toUpperCase()}',
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          color: status
+                                              ? Colors.black
+                                              : Colors.white),
+                                    ),
+                                    Text(
+                                      status
+                                          ? 'VALOR CAPTADO: R\$${controller.formatValue(double.parse(fundRaising.capturedValue.toString()))}'
+                                          : 'VALOR PREVISTO: R\$${controller.formatValue(double.parse(fundRaising.predictedValue.toString()))}',
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          color: status
+                                              ? Colors.black
+                                              : Colors.white),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           );
@@ -156,8 +201,98 @@ class DetailBillView extends GetView<BillController> {
                           style:
                               TextStyle(fontFamily: 'Poppinss', fontSize: 20),
                         ),
-                      ))
+                      )))
           ],
         )));
+  }
+
+  Future<void> showDeleteDialog(BuildContext context, FundRaising fundRaising,
+      Bill bill, BillController billController) async {
+    final controller = Get.put(FundRaiserController());
+    await showGeneralDialog(
+      context: context,
+      pageBuilder: (BuildContext buildContext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        return Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width - 40,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Material(
+              type: MaterialType.transparency,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Tem certeza que deseja excluir?',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Empresa: ${fundRaising.company!.nome}',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text('Cancelar',
+                            style: TextStyle(
+                                fontFamily: 'Poppins', color: Colors.white)),
+                      ),
+                      SizedBox(
+                        width: 120,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            Map<String, dynamic> retorno = await controller
+                                .deleteFundRaising(fundRaising.id);
+
+                            if (retorno['success'] == true) {
+                              Get.back();
+                              bill.fundraisings!.remove(fundRaising.id!);
+                              Get.snackbar(
+                                  'Sucesso!', retorno['message'].join('\n'),
+                                  backgroundColor: Colors.green,
+                                  colorText: Colors.white,
+                                  duration: const Duration(seconds: 2),
+                                  snackPosition: SnackPosition.BOTTOM);
+                            } else {
+                              Get.snackbar(
+                                  'Falha!', retorno['message'].join('\n'),
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                  duration: const Duration(seconds: 2),
+                                  snackPosition: SnackPosition.BOTTOM);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                          ),
+                          child: const Text(
+                            'Excluir',
+                            style: TextStyle(
+                                fontFamily: 'Poppins', color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

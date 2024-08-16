@@ -33,6 +33,13 @@ class ReportView extends GetView<ReportController> {
                         snackPosition: SnackPosition.BOTTOM,
                         duration: const Duration(seconds: 2),
                         colorText: Colors.white);
+                  } else if (controller.listReport.isEmpty) {
+                    Get.snackbar('ATENÇÃO',
+                        'Este captador ainda não fez nenhum contato!',
+                        backgroundColor: Colors.red,
+                        snackPosition: SnackPosition.BOTTOM,
+                        duration: const Duration(seconds: 3),
+                        colorText: Colors.white);
                   } else {
                     await controller
                         .getReport(controller.selectedUserId.value!);
@@ -68,7 +75,7 @@ class ReportView extends GetView<ReportController> {
                                 message: user
                                     .name!, // Mostrar nome completo no tooltip
                                 child: Text(
-                                  user.name!,
+                                  user.name!.toUpperCase(),
                                   style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize:

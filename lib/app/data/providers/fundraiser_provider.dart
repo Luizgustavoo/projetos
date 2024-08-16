@@ -206,4 +206,24 @@ class FundRaiserApiClient {
     }
     return null;
   }
+
+  deleteFundRaising(String token, FundRaising fundRaising) async {
+    try {
+      Uri fundRaiserUrl;
+      String url = '$baseUrl/v1/fundraising/${fundRaising.id}';
+      fundRaiserUrl = Uri.parse(url);
+      var response = await httpClient.delete(
+        fundRaiserUrl,
+        headers: {
+          "Accept": "application/json",
+          "Authorization": token,
+        },
+      );
+      print(json.decode(response.body));
+      return json.decode(response.body);
+    } catch (err) {
+      Exception(err);
+    }
+    return null;
+  }
 }

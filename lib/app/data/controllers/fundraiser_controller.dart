@@ -215,6 +215,16 @@ class FundRaiserController extends GetxController {
     return retorno;
   }
 
+  Future<Map<String, dynamic>> deleteFundRaising(int? id) async {
+    FundRaising fundRaising = FundRaising(
+      id: id,
+    );
+    final token = ServiceStorage.getToken();
+    mensagem = await repository.deleteFundRaising("Bearer $token", fundRaising);
+    retorno = {'success': mensagem['success'], 'message': mensagem['message']};
+    return retorno;
+  }
+
   void clearAllFields() {
     final textControllers = [
       nameRaiserController,

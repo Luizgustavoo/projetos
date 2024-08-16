@@ -85,4 +85,14 @@ class FundRaiserRepository {
       Exception(e);
     }
   }
+
+  deleteFundRaising(String token, FundRaising fundRaising) async {
+    try {
+      var response = await apiClient.deleteFundRaising(token, fundRaising);
+
+      return response;
+    } catch (e) {
+      Exception(e);
+    }
+  }
 }

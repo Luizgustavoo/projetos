@@ -258,7 +258,23 @@ class AllCompanyView extends GetView<CompanyController> {
                           billController.listAllBillsDropDown.map((Bill bill) {
                         return DropdownMenuItem<int>(
                           value: bill.id,
-                          child: Text(bill.nome!),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.75,
+                            child: Tooltip(
+                              message: bill
+                                  .nome!, // Mostrar nome completo no tooltip
+                              child: Text(
+                                bill.nome!.toUpperCase(),
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize:
+                                      14, // Reduzir tamanho da fonte, se necessário
+                                ),
+                                overflow:
+                                    TextOverflow.clip, // Truncar texto longo
+                              ),
+                            ),
+                          ),
                         );
                       }).toList(),
                       onChanged: (value) {
