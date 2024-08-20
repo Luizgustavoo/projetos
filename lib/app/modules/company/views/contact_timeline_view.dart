@@ -38,7 +38,7 @@ class ContactTimeLineView extends GetView<CompanyController> {
                       ? "DATA PREVISTA: ${FormattedInputers.formatApiDate(fundRaising.expectedDate.toString())}"
                       : "DATA CAPTAÇÃO: ${FormattedInputers.formatApiDate(fundRaising.dateOfCapture.toString())}";
 
-                  String valor = fundRaising.status == 'aguardando'
+                  dynamic valor = fundRaising.status == 'aguardando'
                       ? FormattedInputers.formatValue(
                           fundRaising.predictedValue.toString())
                       : FormattedInputers.formatValue(

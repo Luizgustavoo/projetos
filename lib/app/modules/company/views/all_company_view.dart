@@ -261,17 +261,14 @@ class AllCompanyView extends GetView<CompanyController> {
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width * 0.75,
                             child: Tooltip(
-                              message: bill
-                                  .nome!, // Mostrar nome completo no tooltip
+                              message: bill.nome!,
                               child: Text(
                                 bill.nome!.toUpperCase(),
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
-                                  fontSize:
-                                      14, // Reduzir tamanho da fonte, se necessário
+                                  fontSize: 14,
                                 ),
-                                overflow:
-                                    TextOverflow.clip, // Truncar texto longo
+                                overflow: TextOverflow.clip,
                               ),
                             ),
                           ),
@@ -290,10 +287,18 @@ class AllCompanyView extends GetView<CompanyController> {
                   }),
                   const SizedBox(height: 15),
                   Obx(() {
+                    int? selectedValue;
+
+                    if (company.companyUser != null &&
+                        company.companyUser!.isNotEmpty) {
+                      selectedValue = company.companyUser!.first.id;
+                    }
+
                     return DropdownButtonFormField<int>(
                       decoration: const InputDecoration(
                         labelText: 'CAPTADOR',
                       ),
+                      value: selectedValue,
                       items: userController.listFundRaiser.map((User user) {
                         return DropdownMenuItem<int>(
                           value: user.id,
@@ -303,9 +308,11 @@ class AllCompanyView extends GetView<CompanyController> {
                           ),
                         );
                       }).toList(),
-                      onChanged: (value) {
-                        controller.selectedUserId.value = value!;
-                      },
+                      onChanged: selectedValue != null
+                          ? null
+                          : (value) {
+                              controller.selectedUserId.value = value!;
+                            },
                       validator: (value) {
                         if (value == null) {
                           return 'Por favor, selecione um captador';

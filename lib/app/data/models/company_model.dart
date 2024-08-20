@@ -19,7 +19,7 @@ class Company {
   String? tipoCaptacao;
   String? cargoContato;
   List<FundRaising>? fundraisings;
-  List<User>? companyuser;
+  List<User>? companyUser;
 
   Company({
     this.id,
@@ -39,7 +39,7 @@ class Company {
     this.tipoCaptacao,
     this.cargoContato,
     this.fundraisings,
-    this.companyuser,
+    this.companyUser,
   });
 
   Company.fromJson(Map<String, dynamic> json) {
@@ -68,9 +68,9 @@ class Company {
     }
 
     if (json['companyuser'] != null) {
-      companyuser = <User>[];
+      companyUser = <User>[];
       json['companyuser'].forEach((v) {
-        companyuser!.add(User.fromJson(v));
+        companyUser!.add(User.fromJson(v));
       });
     }
   }
@@ -97,8 +97,8 @@ class Company {
     if (fundraisings != null) {
       data['fundraisings'] = fundraisings!.map((v) => v.toJson()).toList();
     }
-    if (companyuser != null) {
-      data['companyuser'] = companyuser!.map((v) => v.toJson()).toList();
+    if (companyUser != null) {
+      data['companyuser'] = companyUser!.map((v) => v.toJson()).toList();
     }
 
     return data;
