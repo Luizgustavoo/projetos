@@ -41,8 +41,9 @@ class CustomMaterialCard extends StatelessWidget {
                 Get.to(() => PdfViewPage(pdfUrl: url),
                     arguments: materialModel);
               }
-            } else if (materialModel!.tipo == 'video' &&
-                materialModel!.arquivoVideo != null) {
+            } else if (materialModel!.tipo == 'video' ||
+                materialModel!.tipo == 'link' &&
+                    materialModel!.arquivoVideo != null) {
               final controller = Get.put(MaterialController());
               String url = materialModel!.arquivoVideo!;
               if (url.contains('youtube.com') || url.contains('youtu.be')) {
@@ -69,12 +70,20 @@ class CustomMaterialCard extends StatelessWidget {
                   Share.share('Veja este arquivo PDF: $url');
                 },
               )
-            : IconButton(
-                onPressed: null,
-                icon: Icon(
-                  FontAwesomeIcons.youtube,
-                  color: Colors.grey.shade600,
-                )),
+            : materialModel!.tipo == 'link' &&
+                    materialModel!.arquivoVideo != null
+                ? IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      FontAwesomeIcons.globe,
+                      color: Colors.grey.shade600,
+                    ))
+                : IconButton(
+                    onPressed: null,
+                    icon: Icon(
+                      FontAwesomeIcons.youtube,
+                      color: Colors.grey.shade600,
+                    )),
         trailing: ServiceStorage.getUserType() != 1
             ? const SizedBox()
             : IconButton(
@@ -95,8 +104,8 @@ class CustomMaterialCard extends StatelessWidget {
           style: const TextStyle(fontFamily: 'Poppins', fontSize: 14),
         ),
         subtitle: Text(
-          type!,
-          style: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
+          type!.toUpperCase(),
+          style: const TextStyle(fontFamily: 'Poppinss', fontSize: 13),
         ),
       ),
     );

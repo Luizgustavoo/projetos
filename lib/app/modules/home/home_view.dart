@@ -141,14 +141,6 @@ class HomeView extends GetView<HomeController> {
                           },
                         ),
                         HomeCard(
-                          icon: Icons.pin_drop_rounded,
-                          title: 'EMPRESAS\nDISPONÍVEIS',
-                          onTap: () {
-                            companyController.getAvailableCompanies();
-                            Get.toNamed(Routes.availablecompany);
-                          },
-                        ),
-                        HomeCard(
                           icon: Icons.history_rounded,
                           title: 'EMPRESAS\nEXPIRANDO',
                           onTap: () {
@@ -166,6 +158,14 @@ class HomeView extends GetView<HomeController> {
                           },
                         ),
                       ],
+                      HomeCard(
+                        icon: Icons.pin_drop_rounded,
+                        title: 'EMPRESAS\nDISPONÍVEIS',
+                        onTap: () {
+                          companyController.getAvailableCompanies();
+                          Get.toNamed(Routes.availablecompany);
+                        },
+                      ),
                       HomeCard(
                         icon: Icons.phone_android_rounded,
                         title: 'MATERIAIS\nDIVULGAÇÃO',

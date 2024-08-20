@@ -138,6 +138,7 @@ class AllCompanyView extends GetView<CompanyController> {
                                 arguments: company);
                           },
                           child: CustomCompanyCard(
+                            index: index + 1,
                             name: company.nome ?? "",
                             responsible: company.responsavel ?? "",
                             phone: company.telefone ?? "",
@@ -258,18 +259,28 @@ class AllCompanyView extends GetView<CompanyController> {
                           billController.listAllBillsDropDown.map((Bill bill) {
                         return DropdownMenuItem<int>(
                           value: bill.id,
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.75,
-                            child: Tooltip(
-                              message: bill.nome!,
-                              child: Text(
-                                bill.nome!.toUpperCase(),
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.75,
+                                  child: Tooltip(
+                                    message: bill.nome!,
+                                    child: Text(
+                                      bill.nome!.toUpperCase(),
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                      ),
+                                      overflow: TextOverflow.clip,
+                                    ),
+                                  ),
                                 ),
-                                overflow: TextOverflow.clip,
-                              ),
+                                const Divider(thickness: 1),
+                              ],
                             ),
                           ),
                         );
@@ -289,6 +300,7 @@ class AllCompanyView extends GetView<CompanyController> {
                   Obx(() {
                     int? selectedValue;
 
+                    // Verifica se há um captador associado à empresa e define o valor selecionado.
                     if (company.companyUser != null &&
                         company.companyUser!.isNotEmpty) {
                       selectedValue = company.companyUser!.first.id;
@@ -298,18 +310,18 @@ class AllCompanyView extends GetView<CompanyController> {
                       decoration: const InputDecoration(
                         labelText: 'CAPTADOR',
                       ),
-                      value: selectedValue,
+                      value: selectedValue, // Usa o valor selecionado se houver
                       items: userController.listFundRaiser.map((User user) {
                         return DropdownMenuItem<int>(
                           value: user.id,
                           child: Text(
-                            user.name!,
+                            user.name!.toUpperCase(),
                             style: const TextStyle(fontFamily: 'Poppins'),
                           ),
                         );
                       }).toList(),
                       onChanged: selectedValue != null
-                          ? null
+                          ? null // Desabilita o dropdown se já houver um captador selecionado
                           : (value) {
                               controller.selectedUserId.value = value!;
                             },
@@ -366,9 +378,15 @@ class AllCompanyView extends GetView<CompanyController> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
+                          int? companyUserId;
+                          if (company.companyUser != null &&
+                              company.companyUser!.isNotEmpty) {
+                            companyUserId = company.companyUser!.first.id;
+                          }
                           Map<String, dynamic> retorno =
                               await fundRaiserController.insertFundRaising(
-                                  company.id!, controller.selectedBillId.value);
+                                  company.id!, controller.selectedBillId.value,
+                                  companyUserId: companyUserId);
 
                           if (retorno['success'] == true) {
                             Get.back();
@@ -454,8 +472,8 @@ class AllCompanyView extends GetView<CompanyController> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          Map<String, dynamic> retorno =
-                              await controller.unlinkCompany(company.id);
+                          Map<String, dynamic> retorno = await controller
+                              .unlinkCompany(company.id, 'excluir');
 
                           if (retorno['success'] == true) {
                             Get.back();

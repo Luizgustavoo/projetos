@@ -92,6 +92,7 @@ class AvailableCompanyView extends GetView<CompanyController> {
                               ),
                             ),
                             child: CustomCompanyCard(
+                              index: index + 1,
                               name: company.nome ?? "",
                               responsible: company.responsavel ?? "",
                               phone: company.telefone ?? "",

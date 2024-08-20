@@ -55,19 +55,19 @@ class ContactTimeLineView extends GetView<CompanyController> {
                       color: Colors.orange,
                       thickness: 2,
                     ),
-                    indicatorStyle: const IndicatorStyle(
+                    indicatorStyle: IndicatorStyle(
                       width: 15,
-                      color: Colors.orange,
+                      color: Colors.orange.shade100,
                       indicatorXY: 0.5,
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                     ),
                     endChild: Container(
                       margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: fundRaising.status == 'captado'
-                            ? Colors.green[200]
-                            : Colors.red.shade200,
+                            ? Colors.green.shade300
+                            : Colors.red.shade300,
                       ),
                       constraints: const BoxConstraints(
                         minHeight: 120,
@@ -78,17 +78,22 @@ class ContactTimeLineView extends GetView<CompanyController> {
                         children: [
                           Text(
                             dataCap,
-                            style: const TextStyle(fontSize: 16),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Poppinss',
+                            ),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             'VALOR: R\$ $valor',
-                            style: const TextStyle(fontSize: 16),
+                            style: const TextStyle(
+                                fontSize: 15, fontFamily: 'Poppins'),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             'CAPTADOR: ${fundRaising.user!.name!.toUpperCase()}',
-                            style: const TextStyle(fontSize: 16),
+                            style: const TextStyle(
+                                fontSize: 15, fontFamily: 'Poppins'),
                           ),
                         ],
                       ),

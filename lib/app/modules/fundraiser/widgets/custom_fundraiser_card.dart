@@ -9,8 +9,12 @@ import 'package:projetos/app/routes/app_routes.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
 class CustomFundRaiserCard extends StatelessWidget {
-  const CustomFundRaiserCard(
-      {super.key, this.fundRaiserName, this.fundRaiserPhone, this.user});
+  const CustomFundRaiserCard({
+    super.key,
+    this.fundRaiserName,
+    this.fundRaiserPhone,
+    this.user,
+  });
 
   final String? fundRaiserName;
   final String? fundRaiserPhone;

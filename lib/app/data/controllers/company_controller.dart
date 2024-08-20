@@ -55,19 +55,21 @@ class CompanyController extends GetxController {
     searchControllerMyCompany.addListener(onMySearchChanged);
   }
 
-  // @override
-  // void onClose() {
-  //   searchControllerAllCompany.removeListener(onSearchChanged);
-  //   searchControllerMyCompany.removeListener(onMySearchChanged);
-  //   searchControllerAllCompany.dispose();
-  //   searchControllerMyCompany.dispose();
-  //   super.onClose();
-  // }
+  @override
+  void onClose() {
+    searchControllerAllCompany.removeListener(onSearchChanged);
+    searchControllerMyCompany.removeListener(onMySearchChanged);
+    searchControllerAllCompany.dispose();
+    searchControllerMyCompany.dispose();
+    super.onClose();
+  }
 
   Future<void> getCompanies(int id) async {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
+      listAllCompany.clear();
+      filteredMyCompanies.clear();
       listCompany.value = await repository.gettAll("Bearer $token", id);
       filteredMyCompanies.value = listCompany;
     } catch (e) {
@@ -181,12 +183,12 @@ class CompanyController extends GetxController {
     return retorno;
   }
 
-  Future<Map<String, dynamic>> unlinkCompany(int? id) async {
+  Future<Map<String, dynamic>> unlinkCompany(int? id, String tela) async {
     Company company = Company(
       id: id,
     );
     final token = ServiceStorage.getToken();
-    mensagem = await repository.unlinkCompany("Bearer $token", company);
+    mensagem = await repository.unlinkCompany("Bearer $token", company, tela);
     retorno = {'success': mensagem['success'], 'message': mensagem['message']};
     if (ServiceStorage.getUserType() == 1) {
       getAllCompanies();

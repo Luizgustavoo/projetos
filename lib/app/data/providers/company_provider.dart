@@ -214,7 +214,7 @@ class CompanyApiClient {
     return null;
   }
 
-  unlinkCompany(String token, Company company) async {
+  unlinkCompany(String token, Company company, String tela) async {
     try {
       Uri companyUrl;
       String url =
@@ -224,8 +224,10 @@ class CompanyApiClient {
         "Accept": "application/json",
         "Authorization": token,
       }, body: {
-        "tipo_usuario": ServiceStorage.getUserType().toString()
+        "tipo_usuario": ServiceStorage.getUserType().toString(),
+        "tela": tela
       });
+      print(json.decode(response.body));
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

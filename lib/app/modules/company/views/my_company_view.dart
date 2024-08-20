@@ -31,16 +31,28 @@ class MyCompanyView extends GetView<CompanyController> {
   final billController = Get.put(BillController());
   @override
   Widget build(BuildContext context) {
-    String titulo = "MINHAS EMPRESAS";
-
-    if (Get.arguments != null && Get.arguments is User) {
-      final User user = Get.arguments as User;
-      titulo = "EMPRESAS DE ${user.name!.toUpperCase()}";
-    }
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(titulo),
+        toolbarHeight: MediaQuery.of(context).size.height * 0.08,
+        title: Obx(() {
+          String titulo =
+              "MINHAS EMPRESAS - ${controller.listCompany.length} EMPRESAS";
+
+          if (Get.arguments != null && Get.arguments is User) {
+            final User user = Get.arguments as User;
+            titulo =
+                "EMPRESAS DE ${user.name!.toUpperCase()} - ${controller.listCompany.length} EMPRESAS";
+          }
+
+          return FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              titulo.replaceFirst(' - ', '\n'),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }),
+        centerTitle: true,
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
@@ -164,6 +176,7 @@ class MyCompanyView extends GetView<CompanyController> {
                                   arguments: company);
                             },
                             child: CustomCompanyCard(
+                              index: index + 1,
                               name: company.nome ?? "",
                               responsible: company.responsavel ?? "",
                               phone: company.telefone ?? "",
@@ -629,14 +642,17 @@ class MyCompanyView extends GetView<CompanyController> {
                         onPressed: () {
                           Get.back();
                         },
-                        child: const Text('Cancelar'),
+                        child: const Text('Cancelar',
+                            style: TextStyle(
+                                fontFamily: 'Poppins', color: Colors.white)),
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          Map<String, dynamic> retorno =
-                              await controller.unlinkCompany(company.id);
+                          Map<String, dynamic> retorno = await controller
+                              .unlinkCompany(company.id, 'desvincular');
 
                           if (retorno['success'] == true) {
+                            Get.back();
                             Get.back();
                             Get.snackbar(
                                 'Sucesso!', retorno['message'].join('\n'),
@@ -656,7 +672,11 @@ class MyCompanyView extends GetView<CompanyController> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                         ),
-                        child: const Text('Excluir'),
+                        child: const Text(
+                          'Excluir',
+                          style: TextStyle(
+                              fontFamily: 'Poppins', color: Colors.white),
+                        ),
                       ),
                     ],
                   ),

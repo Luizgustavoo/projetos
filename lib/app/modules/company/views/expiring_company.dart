@@ -47,6 +47,7 @@ class ExpiringCompanyView extends GetView<CompanyController> {
                       itemBuilder: (context, index) {
                         Company company = controller.listExpirianCompany[index];
                         return CustomCompanyCard(
+                          index: index + 1,
                           name: company.nome ?? "",
                           responsible: company.responsavel ?? "",
                           phone: company.telefone ?? "",

@@ -79,9 +79,9 @@ class CompanyRepository {
     }
   }
 
-  unlinkCompany(String token, Company company) async {
+  unlinkCompany(String token, Company company, String tela) async {
     try {
-      var response = await apiClient.unlinkCompany(token, company);
+      var response = await apiClient.unlinkCompany(token, company, tela);
 
       return response;
     } catch (e) {

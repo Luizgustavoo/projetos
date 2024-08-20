@@ -125,8 +125,8 @@ class FundRaiserController extends GetxController {
     return retorno;
   }
 
-  Future<Map<String, dynamic>> insertFundRaising(
-      int companyId, int billId) async {
+  Future<Map<String, dynamic>> insertFundRaising(int companyId, int billId,
+      {int? companyUserId}) async {
     final token = ServiceStorage.getToken();
     final companyController = Get.put(CompanyController());
 
@@ -151,13 +151,18 @@ class FundRaiserController extends GetxController {
         companyId: companyId);
 
     if (fundRaisingKey.currentState!.validate()) {
+      // Usa o companyUserId se foi passado, caso contrário, usa o selectedUserId do controller.
+      int selectedUserId =
+          companyUserId ?? companyController.selectedUserId.value;
+
       mensagem = await repository.insertFundRaising(
           "Bearer $token",
           fundRaiser,
           billId,
           paymentDateController.text,
-          companyController.selectedUserId.value,
+          selectedUserId, // Passa o ID correto aqui
           paidOutCheckboxValue.value);
+
       retorno = {
         'success': mensagem['success'],
         'message': mensagem['message']

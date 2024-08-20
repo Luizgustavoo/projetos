@@ -16,6 +16,7 @@ class CustomCompanyCard extends StatelessWidget {
   final Company? company;
   final String? state;
   final String? city;
+  final int index;
 
   const CustomCompanyCard(
       {super.key,
@@ -26,7 +27,8 @@ class CustomCompanyCard extends StatelessWidget {
       this.color,
       this.state,
       this.city,
-      this.company});
+      this.company,
+      required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +59,7 @@ class CustomCompanyCard extends StatelessWidget {
               ),
         dense: true,
         title: Text(
-          'EMPRESA: ${name!}'.toUpperCase(),
+          '$index -  EMPRESA: ${name!}'.toUpperCase(),
           style: const TextStyle(fontFamily: 'Poppinss'),
         ),
         subtitle: Column(

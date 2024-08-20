@@ -64,6 +64,10 @@ class CreateMaterialModal extends GetView<MaterialController> {
                         value: 'arquivo',
                         child: Text('ARQUIVO'),
                       ),
+                      DropdownMenuItem(
+                        value: 'link',
+                        child: Text('LINK'),
+                      ),
                     ],
                     onChanged: (value) {
                       if (value != null) {
@@ -75,14 +79,15 @@ class CreateMaterialModal extends GetView<MaterialController> {
                   )),
               const SizedBox(height: 10),
               Obx(() {
-                if (controller.selectedFileType.value == 'video') {
+                if (controller.selectedFileType.value == 'video' ||
+                    controller.selectedFileType.value == 'link') {
                   return Column(
                     children: [
                       TextFormField(
                         controller: controller.linkController,
                         keyboardType: TextInputType.url,
                         decoration: const InputDecoration(
-                          labelText: 'LINK DO VÍDEO',
+                          labelText: 'LINK DO VÍDEO OU SITE',
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
