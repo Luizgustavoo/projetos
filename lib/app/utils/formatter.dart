@@ -66,6 +66,28 @@ abstract class FormattedInputers {
     return buffer.toString();
   }
 
+  static String formatValuePTBR(dynamic value) {
+    if (value is String) {
+      value = double.tryParse(value) ?? 0.0;
+    }
+    final NumberFormat formatter =
+    NumberFormat.currency(symbol: '', decimalDigits: 2, locale: 'pt_BR');
+    return formatter.format(value);
+  }
+
+  static String formatDoubleForDecimal(double value) {
+    String formatted = value.toStringAsFixed(2).replaceAll('.', ',');
+
+    if (formatted.endsWith(',00')) {
+      return formatted.substring(0, formatted.length - 3);
+    }
+    if (formatted.endsWith(',0')) {
+      return formatted.substring(0, formatted.length - 2);
+    }
+
+    return formatted;
+  }
+
   static String formatPercentage(String value) {
     var text = value.replaceAll(RegExp(r'[^0-9]'), '');
     if (text.isEmpty) {

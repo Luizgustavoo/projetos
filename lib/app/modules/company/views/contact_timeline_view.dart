@@ -39,9 +39,9 @@ class ContactTimeLineView extends GetView<CompanyController> {
                       : "DATA CAPTAÇÃO: ${FormattedInputers.formatApiDate(fundRaising.dateOfCapture.toString())}";
 
                   dynamic valor = fundRaising.status == 'aguardando'
-                      ? FormattedInputers.formatValue(
+                      ? FormattedInputers.formatValuePTBR(
                           fundRaising.predictedValue.toString())
-                      : FormattedInputers.formatValue(
+                      : FormattedInputers.formatValuePTBR(
                           fundRaising.capturedValue.toString());
 
                   return TimelineTile(
@@ -82,7 +82,7 @@ class ContactTimeLineView extends GetView<CompanyController> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'VALOR: $valor',
+                            'VALOR: R\$ $valor',
                             style: const TextStyle(fontSize: 16),
                           ),
                           const SizedBox(height: 8),
