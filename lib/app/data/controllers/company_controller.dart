@@ -115,28 +115,50 @@ class CompanyController extends GetxController {
   }
 
   Future<Map<String, dynamic>> insertCompany() async {
-    final token = ServiceStorage.getToken();
-    Company company = Company(
-      nome: nameCompanyController.text,
-      cnpj: cnpjController.text,
-      responsavel: responsibleCompanyController.text,
-      telefone: contactController.text,
-      nomePessoa: peopleContactController.text,
-      endereco: streetController.text,
-      numero: numberController.text,
-      bairro: neighborhoodController.text,
-      cidade: cityController.text,
-      estado: selectedState.value,
-      tipoCaptacao: selectedCompanyDonation.value,
-      cargoContato: rolePeopleController.text,
-    );
     if (companyKey.currentState!.validate()) {
+      final RegExp cidadeUfRegex = RegExp(r'^[A-Za-zÀ-ÿ\s]+-[A-Z]{2}$');
+
+      if (!cidadeUfRegex.hasMatch(cityController.text)) {
+        return {
+          'success': false,
+          'message': ['Formato de cidade e UF inválido! Use "Cidade-UF".']
+        };
+      }
+
+      final cidadeUfPartes = cityController.text.split('-');
+      if (cidadeUfPartes.length != 2) {
+        return {
+          'success': false,
+          'message': ['Formato de cidade inválido!']
+        };
+      }
+      final cidade = cidadeUfPartes[0].trim();
+      final estado = cidadeUfPartes[1].trim();
+
+      final token = ServiceStorage.getToken();
+      Company company = Company(
+        nome: nameCompanyController.text,
+        cnpj: cnpjController.text,
+        responsavel: responsibleCompanyController.text,
+        telefone: contactController.text,
+        nomePessoa: peopleContactController.text,
+        endereco: streetController.text,
+        numero: numberController.text,
+        bairro: neighborhoodController.text,
+        cidade: cidade,
+        estado: estado,
+        tipoCaptacao: selectedCompanyDonation.value,
+        cargoContato: rolePeopleController.text,
+      );
+
       mensagem = await repository.insertCompany(
           "Bearer $token", company, selectedUserId.value);
       retorno = {
         'success': mensagem['success'],
-        'message': mensagem['message']
+        'message': mensagem['message'],
+        'data': mensagem['data']
       };
+
       if (Get.currentRoute == Routes.mycompany) {
         int idd =
             ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
@@ -149,6 +171,24 @@ class CompanyController extends GetxController {
   }
 
   Future<Map<String, dynamic>> updateCompany(int? id) async {
+    final RegExp cidadeUfRegex = RegExp(r'^[A-Za-zÀ-ÿ\s]+-[A-Z]{2}$');
+
+    if (!cidadeUfRegex.hasMatch(cityController.text)) {
+      return {
+        'success': false,
+        'message': ['Formato de cidade e UF inválido! Use "Cidade-UF".']
+      };
+    }
+
+    final cidadeUfPartes = cityController.text.split('-');
+    if (cidadeUfPartes.length != 2) {
+      return {
+        'success': false,
+        'message': ['Formato de cidade inválido!']
+      };
+    }
+    final cidade = cidadeUfPartes[0].trim();
+    final estado = cidadeUfPartes[1].trim();
     Company company = Company(
       id: id,
       nome: nameCompanyController.text,
@@ -159,8 +199,8 @@ class CompanyController extends GetxController {
       endereco: streetController.text,
       numero: numberController.text,
       bairro: neighborhoodController.text,
-      cidade: cityController.text,
-      estado: selectedState.value,
+      cidade: cidade,
+      estado: estado,
       tipoCaptacao: selectedCompanyDonation.value,
       cargoContato: rolePeopleController.text,
     );

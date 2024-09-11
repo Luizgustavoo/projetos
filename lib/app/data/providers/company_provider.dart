@@ -173,7 +173,6 @@ class CompanyApiClient {
 
       var responseStream = await response.stream.bytesToString();
       var httpResponse = http.Response(responseStream, response.statusCode);
-
       return json.decode(httpResponse.body);
     } catch (err) {
       Exception(err);
@@ -227,7 +226,6 @@ class CompanyApiClient {
         "tipo_usuario": ServiceStorage.getUserType().toString(),
         "tela": tela
       });
-      print(json.decode(response.body));
       return json.decode(response.body);
     } catch (err) {
       Exception(err);

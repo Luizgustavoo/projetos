@@ -21,14 +21,13 @@ final ThemeData appThemeData = ThemeData(
       backgroundColor: Color(0xFF1d1d1d),
       centerTitle: true,
       titleTextStyle: TextStyle(
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: FontWeight.bold,
-        fontFamily: 'Poppins',
+        fontFamily: 'Poppinss',
         color: Colors.white,
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      
       isDense: true,
       filled: true,
       fillColor: const Color(0xFFE8E3E3),

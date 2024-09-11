@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:projetos/app/data/controllers/contact_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/contact_company_model.dart';
+import 'package:projetos/app/modules/company/widgets/create_company_modal.dart';
 
 class ContactModal extends GetView<ContactController> {
   final String? name;
@@ -41,7 +42,7 @@ class ContactModal extends GetView<ContactController> {
               ),
               const SizedBox(height: 8),
               Text(
-                name!,
+                name ?? '',
                 style: const TextStyle(
                   fontSize: 16,
                 ),
@@ -210,40 +211,92 @@ class ContactModal extends GetView<ContactController> {
               ),
               const SizedBox(height: 16),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: const Text("CANCELAR"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      Map<String, dynamic> retorno = isUpdate
-                          ? await controller.updateContactCompany(
-                              contactCompany!.companyId, contactCompany!.id)
-                          : await controller.insertContactCompany(company!.id!);
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () async {
+                          Map<String, dynamic> retorno = await controller
+                              .insertContactCompany(company!.id!);
 
-                      if (retorno['success'] == true) {
-                        Get.back();
-                        Get.snackbar('Sucesso!', retorno['message'].join('\n'),
-                            backgroundColor: Colors.green,
-                            colorText: Colors.white,
-                            duration: const Duration(seconds: 2),
-                            snackPosition: SnackPosition.BOTTOM);
-                      } else {
-                        Get.snackbar('Falha!', retorno['message'].join('\n'),
-                            backgroundColor: Colors.red,
-                            colorText: Colors.white,
-                            duration: const Duration(seconds: 2),
-                            snackPosition: SnackPosition.BOTTOM);
-                      }
-                    },
-                    child: const Text(
-                      "CONFIRMAR",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                          if (retorno['success'] == true) {
+                            Get.back();
+                            // Exibe o snackbar para sucesso
+                            Get.snackbar(
+                              'Sucesso!',
+                              retorno['message'].join('\n'),
+                              backgroundColor: Colors.green,
+                              colorText: Colors.white,
+                              duration: const Duration(seconds: 2),
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+
+                            await Future.delayed(const Duration(seconds: 1));
+
+                            Get.bottomSheet(
+                              backgroundColor: Colors.white,
+                              CreateCompanyModal(),
+                              isScrollControlled: true,
+                            );
+                          } else {
+                            // Exibe o snackbar para falha
+                            Get.snackbar(
+                              'Falha!',
+                              retorno['message'].join('\n'),
+                              backgroundColor: Colors.red,
+                              colorText: Colors.white,
+                              duration: const Duration(seconds: 2),
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          }
+                        },
+                        child: const Text(
+                          "NOVO PATROCINADOR",
+                          style: TextStyle(fontSize: 10),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text("CANCELAR"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          Map<String, dynamic> retorno = isUpdate
+                              ? await controller.updateContactCompany(
+                                  contactCompany!.companyId, contactCompany!.id)
+                              : await controller
+                                  .insertContactCompany(company!.id!);
+
+                          if (retorno['success'] == true) {
+                            Get.back();
+                            Get.snackbar(
+                                'Sucesso!', retorno['message'].join('\n'),
+                                backgroundColor: Colors.green,
+                                colorText: Colors.white,
+                                duration: const Duration(seconds: 2),
+                                snackPosition: SnackPosition.BOTTOM);
+                          } else {
+                            Get.snackbar(
+                                'Falha!', retorno['message'].join('\n'),
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                                duration: const Duration(seconds: 2),
+                                snackPosition: SnackPosition.BOTTOM);
+                          }
+                        },
+                        child: const Text(
+                          "CONFIRMAR",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

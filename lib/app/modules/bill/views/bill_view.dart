@@ -14,7 +14,7 @@ class BillView extends GetView<BillController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PROJETOS'),
+        title: const Text('CONTROLE PROJETOS'),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),

@@ -19,7 +19,7 @@ class AllCompanyView extends GetView<CompanyController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TODAS EMPRESAS'),
+        title: const Text('TODOS PATROCINADORES'),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
@@ -35,7 +35,7 @@ class AllCompanyView extends GetView<CompanyController> {
               child: TextField(
                 controller: controller.searchControllerAllCompany,
                 decoration: const InputDecoration(
-                  labelText: 'Pesquisar Empresas',
+                  labelText: 'Pesquisar patrocinadores',
                   prefixIcon: Icon(Icons.search),
                 ),
               ),

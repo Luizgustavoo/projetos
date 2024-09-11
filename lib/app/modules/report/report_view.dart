@@ -33,18 +33,21 @@ class ReportView extends GetView<ReportController> {
                         snackPosition: SnackPosition.BOTTOM,
                         duration: const Duration(seconds: 2),
                         colorText: Colors.white);
-                  } else if (controller.listReport.isEmpty) {
-                    Get.snackbar('ATENÇÃO',
-                        'Este captador ainda não fez nenhum contato!',
-                        backgroundColor: Colors.red,
-                        snackPosition: SnackPosition.BOTTOM,
-                        duration: const Duration(seconds: 3),
-                        colorText: Colors.white);
                   } else {
                     await controller
                         .getReport(controller.selectedUserId.value!);
-                    await controller
-                        .generatePdf(controller.selectedUserId.value!);
+
+                    if (controller.listReport.isEmpty) {
+                      Get.snackbar('ATENÇÃO',
+                          'Este captador ainda não fez nenhum contato!',
+                          backgroundColor: Colors.red,
+                          snackPosition: SnackPosition.BOTTOM,
+                          duration: const Duration(seconds: 3),
+                          colorText: Colors.white);
+                    } else {
+                      await controller
+                          .generatePdf(controller.selectedUserId.value!);
+                    }
                   }
                 },
                 title: 'RELATÓRIO CAPTADOR',
@@ -72,25 +75,21 @@ class ReportView extends GetView<ReportController> {
                             return DropdownMenuItem<User>(
                               value: user,
                               child: Tooltip(
-                                message: user
-                                    .name!, // Mostrar nome completo no tooltip
+                                message: user.name!,
                                 child: Text(
                                   user.name!.toUpperCase(),
                                   style: const TextStyle(
                                     fontFamily: 'Poppins',
-                                    fontSize:
-                                        14, // Reduzir tamanho da fonte, se necessário
+                                    fontSize: 14,
                                   ),
-                                  overflow: TextOverflow
-                                      .ellipsis, // Truncar texto longo
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             );
                           }),
                         ],
                         onChanged: (value) {
-                          controller.selectedUserId.value = value ??
-                              User(); // Define o modelo User vazio caso o valor seja null
+                          controller.selectedUserId.value = value ?? User();
                         },
                         validator: (value) {
                           if (value == null || value.id == 0) {

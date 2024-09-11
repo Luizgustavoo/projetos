@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
@@ -105,7 +104,7 @@ class HomeView extends GetView<HomeController> {
                         ),
                         HomeCard(
                           icon: Icons.domain_add_rounded,
-                          title: 'TODAS AS\nEMPRESAS',
+                          title: 'TODOS OS\nPATROCINADORES',
                           onTap: () {
                             companyController.searchControllerAllCompany.text =
                                 '';
@@ -122,7 +121,7 @@ class HomeView extends GetView<HomeController> {
                         ),
                         HomeCard(
                           icon: CupertinoIcons.chart_bar_alt_fill,
-                          title: 'LISTAGEM\nRELATÓRIOS',
+                          title: '\nRELATÓRIOS',
                           onTap: () {
                             Get.toNamed(Routes.report);
                           },
@@ -132,7 +131,7 @@ class HomeView extends GetView<HomeController> {
                         HomeCard(
                           icon: Icons.factory_rounded,
                           color: Colors.black,
-                          title: 'MINHAS\nEMPRESAS',
+                          title: 'CONTROLE\nCLIENTES',
                           onTap: () {
                             companyController.searchControllerMyCompany.text =
                                 '';
@@ -142,15 +141,15 @@ class HomeView extends GetView<HomeController> {
                         ),
                         HomeCard(
                           icon: Icons.history_rounded,
-                          title: 'EMPRESAS\nEXPIRANDO',
+                          title: 'CLIENTES\nEXPIRANDO',
                           onTap: () {
                             companyController.getExpirianCompanies(0);
                             Get.toNamed(Routes.expiringcompany);
                           },
                         ),
                         HomeCard(
-                          icon: FontAwesomeIcons.wallet,
-                          title: 'MEU\nFINANCEIRO',
+                          icon: Icons.attach_money_rounded,
+                          title: 'CONTROLE\nFINANCEIRO',
                           onTap: () {
                             walletController.getFinancial(0);
                             walletController.getFinancialBalance(0);
@@ -160,7 +159,9 @@ class HomeView extends GetView<HomeController> {
                       ],
                       HomeCard(
                         icon: Icons.pin_drop_rounded,
-                        title: 'EMPRESAS\nDISPONÍVEIS',
+                        title: ServiceStorage.getUserType() == 1
+                            ? 'PATROCINADORES\nDISPONÍVEIS'
+                            : 'CLIENTES\nDISPONÍVEIS',
                         onTap: () {
                           companyController.getAvailableCompanies();
                           Get.toNamed(Routes.availablecompany);
@@ -175,7 +176,7 @@ class HomeView extends GetView<HomeController> {
                       ),
                       HomeCard(
                         icon: Icons.post_add_rounded,
-                        title: 'LISTAGEM\nPROJETOS',
+                        title: 'CONTROLE\nPROJETOS',
                         onTap: () {
                           billsController.getAllBills();
                           Get.toNamed(Routes.bill);
@@ -208,7 +209,9 @@ class HomeView extends GetView<HomeController> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'EMPRESAS',
+                      ServiceStorage.getUserType() == 1
+                          ? 'PATROCINADORES'
+                          : 'CLIENTES',
                       style: TextStyle(
                           fontSize: kIsWeb ||
                                   defaultTargetPlatform ==

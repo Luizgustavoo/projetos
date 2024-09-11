@@ -59,7 +59,7 @@ class CustomCompanyCard extends StatelessWidget {
               ),
         dense: true,
         title: Text(
-          '$index -  EMPRESA: ${name!}'.toUpperCase(),
+          '$index -  PATROCINADOR: ${name!}'.toUpperCase(),
           style: const TextStyle(fontFamily: 'Poppinss'),
         ),
         subtitle: Column(

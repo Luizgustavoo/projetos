@@ -12,6 +12,12 @@ class ContactTimeLineView extends GetView<CompanyController> {
   @override
   Widget build(BuildContext context) {
     final Company company = Get.arguments as Company;
+
+    // Calcula o total doado
+    double totalDoado = company.fundraisings!
+        .where((fundRaising) => fundRaising.status == 'captado')
+        .fold(0.0, (sum, fundRaising) => sum + fundRaising.capturedValue!);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('CAPTAÇÕES ${company.nome!.toUpperCase()}'),
@@ -83,17 +89,23 @@ class ContactTimeLineView extends GetView<CompanyController> {
                               fontFamily: 'Poppinss',
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),
                           Text(
                             'VALOR: R\$ $valor',
                             style: const TextStyle(
                                 fontSize: 15, fontFamily: 'Poppins'),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),
                           Text(
                             'CAPTADOR: ${fundRaising.user!.name!.toUpperCase()}',
                             style: const TextStyle(
                                 fontSize: 15, fontFamily: 'Poppins'),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            'PROJETO: ${fundRaising.bill!.nome!.toUpperCase()}',
+                            style: const TextStyle(
+                                fontSize: 12, fontFamily: 'Poppins'),
                           ),
                         ],
                       ),
@@ -101,6 +113,17 @@ class ContactTimeLineView extends GetView<CompanyController> {
                   );
                 },
               ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        height: 55,
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Text(
+            'TOTAL DOADO: R\$ ${FormattedInputers.formatValuePTBR(totalDoado.toString())}',
+            style: const TextStyle(fontSize: 18, fontFamily: 'Poppinss'),
+            textAlign: TextAlign.center,
+          ),
+        ),
       ),
     );
   }

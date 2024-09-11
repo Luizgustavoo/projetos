@@ -36,12 +36,12 @@ class MyCompanyView extends GetView<CompanyController> {
         toolbarHeight: MediaQuery.of(context).size.height * 0.08,
         title: Obx(() {
           String titulo =
-              "MINHAS EMPRESAS - ${controller.listCompany.length} EMPRESAS";
+              "MEUS CLIENTES - ${controller.listCompany.length} CLIENTES";
 
           if (Get.arguments != null && Get.arguments is User) {
             final User user = Get.arguments as User;
             titulo =
-                "EMPRESAS DE ${user.name!.toUpperCase()} - ${controller.listCompany.length} EMPRESAS";
+                "PATROCINADORES DE ${user.name!.toUpperCase()} - ${controller.listCompany.length} PATROCINADORES";
           }
 
           return FittedBox(
@@ -66,7 +66,7 @@ class MyCompanyView extends GetView<CompanyController> {
               child: TextField(
                 controller: controller.searchControllerMyCompany,
                 decoration: const InputDecoration(
-                  labelText: 'Pesquisar Empresas',
+                  labelText: 'Pesquisar patrocinadores',
                   prefixIcon: Icon(Icons.search),
                 ),
               ),

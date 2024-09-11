@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projetos/app/data/controllers/city_state_controller.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
+import 'package:projetos/app/data/controllers/contact_controller.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
+import 'package:projetos/app/modules/company/widgets/contact_modal.dart';
 import 'package:projetos/app/utils/service_storage.dart';
+import 'package:searchfield/searchfield.dart';
 
 class CreateCompanyModal extends GetView<CompanyController> {
   CreateCompanyModal({super.key, this.company});
   final userController = Get.put(FundRaiserController());
   final Company? company;
+  final cityController = Get.put(CityStateController());
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +30,13 @@ class CreateCompanyModal extends GetView<CompanyController> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 5),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 5),
                 child: Text(
-                  'CADASTRO DE EMPRESA',
-                  style: TextStyle(
+                  ServiceStorage.getUserType() == 1
+                      ? 'CADASTRO DE PATROCINADOR'
+                      : 'CADASTRO DE CLIENTE',
+                  style: const TextStyle(
                     fontFamily: 'Poppinss',
                     fontSize: 17,
                     color: Color(0xFFEBAE1F),
@@ -46,7 +53,7 @@ class CreateCompanyModal extends GetView<CompanyController> {
               TextFormField(
                 controller: controller.nameCompanyController,
                 decoration: const InputDecoration(
-                  labelText: 'NOME DA EMPRESA',
+                  labelText: 'NOME DO PATROCINADOR',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -77,7 +84,7 @@ class CreateCompanyModal extends GetView<CompanyController> {
                 controller: controller.responsibleCompanyController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
-                  labelText: 'RESPONSÁVEL EMPRESA',
+                  labelText: 'RESPONSÁVEL',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -139,7 +146,7 @@ class CreateCompanyModal extends GetView<CompanyController> {
                     child: TextFormField(
                       controller: controller.numberController,
                       decoration: const InputDecoration(
-                        labelText: 'NÚMERO',
+                        labelText: 'Nº',
                       ),
                     ),
                   ),
@@ -153,75 +160,33 @@ class CreateCompanyModal extends GetView<CompanyController> {
                 ),
               ),
               const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: TextFormField(
-                      controller: controller.cityController,
-                      decoration: const InputDecoration(
-                        labelText: 'CIDADE',
-                      ),
-                    ),
+              Obx(() {
+                return SearchField(
+                  controller: controller.cityController,
+                  suggestions: cityController.listCities.map((city) {
+                    return SearchFieldListItem(city.cidadeEstado!);
+                  }).toList(),
+                  suggestionState: Suggestion.expand,
+                  textInputAction: TextInputAction.next,
+                  marginColor: Colors.grey,
+                  searchStyle: const TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
                   ),
-                  const SizedBox(width: 10),
-                  Obx(() {
-                    return Expanded(
-                      child: DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          labelText: 'ESTADO',
-                        ),
-                        value: controller.selectedState.value.isEmpty
-                            ? null
-                            : controller.selectedState.value,
-                        items: [
-                          'AC',
-                          'AL',
-                          'AM',
-                          'AP',
-                          'BA',
-                          'CE',
-                          'DF',
-                          'ES',
-                          'GO',
-                          'MA',
-                          'MG',
-                          'MS',
-                          'MT',
-                          'PA',
-                          'PB',
-                          'PE',
-                          'PI',
-                          'PR',
-                          'RJ',
-                          'RN',
-                          'RO',
-                          'RR',
-                          'RS',
-                          'SC',
-                          'SE',
-                          'SP',
-                          'TO'
-                        ].map((String state) {
-                          return DropdownMenuItem<String>(
-                            value: state,
-                            child: Text(state.toUpperCase(),
-                                style: const TextStyle(fontFamily: 'Poppins')),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          controller.selectedState.value = value!;
-                        },
-                      ),
-                    );
-                  }),
-                ],
-              ),
+                  searchInputDecoration: const InputDecoration(
+                    labelText: 'CIDADE',
+                  ),
+                  itemHeight: 50,
+                  onSuggestionTap: (suggestion) {
+                    controller.cityController.text = suggestion.searchKey;
+                  },
+                );
+              }),
               const SizedBox(height: 15),
               Obx(() {
                 return DropdownButtonFormField<String>(
                   decoration: const InputDecoration(
-                    labelText: 'DOAÇÃO EMPRESA',
+                    labelText: 'DOAÇÃO PATROCINADOR',
                   ),
                   value: controller.selectedCompanyDonation.value.isEmpty
                       ? null
@@ -276,58 +241,116 @@ class CreateCompanyModal extends GetView<CompanyController> {
               ],
               const SizedBox(height: 16),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    width: 120,
-                    child: TextButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      child: const Text(
-                        'CANCELAR',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Color(0xFFEBAE1F),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () async {
+                          Map<String, dynamic> retorno =
+                              await controller.insertCompany();
+
+                          if (retorno['success'] == true) {
+                            Get.put(ContactController());
+                            // print(retorno['data']);
+                            Company companyData = Company(
+                              id: retorno['data']['id'],
+                              nome: retorno['data']['nome'],
+                            );
+
+                            Get.back();
+
+                            Get.snackbar(
+                              'Sucesso!',
+                              retorno['message'].join('\n'),
+                              backgroundColor: Colors.green,
+                              colorText: Colors.white,
+                              duration: const Duration(seconds: 2),
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+
+                            await Future.delayed(const Duration(seconds: 1));
+
+                            Get.bottomSheet(
+                              backgroundColor: Colors.white,
+                              ContactModal(
+                                name: companyData.nome,
+                              ),
+                              isScrollControlled: true,
+                            );
+                          } else {
+                            Get.snackbar(
+                              'Falha!',
+                              retorno['message'].join('\n'),
+                              backgroundColor: Colors.red,
+                              colorText: Colors.white,
+                              duration: const Duration(seconds: 2),
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          }
+                        },
+                        child: const Text(
+                          'NOVO CONTATO',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontFamily: 'Poppins',
+                            color: Color(0xFFEBAE1F),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () async {
-                      Map<String, dynamic> retorno = isUpdate
-                          ? await controller.updateCompany(company!.id)
-                          : await controller.insertCompany();
-
-                      if (retorno['success'] == true) {
-                        Get.back();
-                        Get.snackbar(
-                          'Sucesso!',
-                          retorno['message'].join('\n'),
-                          backgroundColor: Colors.green,
-                          colorText: Colors.white,
-                          duration: const Duration(seconds: 2),
-                          snackPosition: SnackPosition.BOTTOM,
-                        );
-                      } else {
-                        Get.snackbar(
-                          'Falha!',
-                          retorno['message'].join('\n'),
-                          backgroundColor: Colors.red,
-                          colorText: Colors.white,
-                          duration: const Duration(seconds: 2),
-                          snackPosition: SnackPosition.BOTTOM,
-                        );
-                      }
-                    },
-                    child: Text(
-                      isUpdate ? 'ATUALIZAR' : 'CADASTRAR',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.white,
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text(
+                          'CANCELAR',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: Color(0xFFEBAE1F),
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () async {
+                          Map<String, dynamic> retorno = isUpdate
+                              ? await controller.updateCompany(company!.id)
+                              : await controller.insertCompany();
+
+                          if (retorno['success'] == true) {
+                            Get.back();
+                            Get.snackbar(
+                              'Sucesso!',
+                              retorno['message'].join('\n'),
+                              backgroundColor: Colors.green,
+                              colorText: Colors.white,
+                              duration: const Duration(seconds: 2),
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          } else {
+                            Get.snackbar(
+                              'Falha!',
+                              retorno['message'].join('\n'),
+                              backgroundColor: Colors.red,
+                              colorText: Colors.white,
+                              duration: const Duration(seconds: 2),
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          }
+                        },
+                        child: Text(
+                          isUpdate ? 'ATUALIZAR' : 'CADASTRAR',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

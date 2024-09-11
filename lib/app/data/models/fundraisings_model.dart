@@ -1,3 +1,4 @@
+import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/fund_raiser_comission_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
@@ -19,24 +20,27 @@ class FundRaising {
   User? user;
   Company? company;
   FundRaiserComission? fundRaiserComission;
+  Bill? bill;
 
-  FundRaising(
-      {this.id,
-      this.userId,
-      this.companyId,
-      this.expectedDate,
-      this.predictedValue,
-      this.capturedValue,
-      this.dateOfCapture,
-      this.status,
-      this.createdAt,
-      this.updatedAt,
-      this.empresa,
-      this.pago,
-      this.payDay,
-      this.company,
-      this.fundRaiserComission,
-      this.user});
+  FundRaising({
+    this.id,
+    this.userId,
+    this.companyId,
+    this.expectedDate,
+    this.predictedValue,
+    this.capturedValue,
+    this.dateOfCapture,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.empresa,
+    this.pago,
+    this.payDay,
+    this.company,
+    this.fundRaiserComission,
+    this.user,
+    this.bill,
+  });
 
   FundRaising.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -53,9 +57,12 @@ class FundRaising {
     pago = json['pago'];
     payDay = json['payday'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
-    fundRaiserComission = json['fundraisercomission'] != null ? FundRaiserComission.fromJson(json['fundraisercomission']) : null;
+    fundRaiserComission = json['fundraisercomission'] != null
+        ? FundRaiserComission.fromJson(json['fundraisercomission'])
+        : null;
     company =
         json['company'] != null ? Company.fromJson(json['company']) : null;
+    bill = json['bill'] != null ? Bill.fromJson(json['bill']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -81,6 +88,9 @@ class FundRaising {
     }
     if (fundRaiserComission != null) {
       data['fundraisercomission'] = fundRaiserComission!.toJson();
+    }
+    if (bill != null) {
+      data['bill'] = bill!.toJson();
     }
     return data;
   }

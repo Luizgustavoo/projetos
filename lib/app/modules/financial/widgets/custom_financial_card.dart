@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
+import 'package:projetos/app/data/models/fundraisings_model.dart';
 import 'package:projetos/app/utils/formatter.dart';
 
 class CustomFinancialCard extends StatelessWidget {
@@ -17,6 +19,14 @@ class CustomFinancialCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Somando o valor captado de todos os projetos
+    double totalCommission = bill.fundraisings!.fold(0.0, (sum, e) {
+      int capturedValue =
+          e.capturedValue != null ? e.capturedValue!.toInt() : 0;
+      double percentage = double.tryParse(bill.porcentagem.toString()) ?? 0.0;
+      return sum + calculateCommission(capturedValue, percentage);
+    });
+
     return Card(
       color: bill.status == 'aberto'
           ? const Color(0xFFFFF3DB)
@@ -28,20 +38,38 @@ class CustomFinancialCard extends StatelessWidget {
       child: ExpansionTile(
         dense: true,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        title: RichText(
-            text: TextSpan(children: [
-          TextSpan(
-              text: '${bill.nome} - '.toUpperCase(),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                  text: '${bill.nome} - '.toUpperCase(),
+                  style: const TextStyle(
+                      fontFamily: 'Poppinss',
+                      color: Colors.black54,
+                      fontSize: 16),
+                ),
+                TextSpan(
+                  text: 'SITUAÇÃO: ${bill.status}'.toUpperCase(),
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                      color:
+                          bill.status == 'aberto' ? Colors.green : Colors.red),
+                ),
+              ]),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              'TOTAL COMISSÃO: R\$${controller.formatValue(totalCommission.toString())}',
               style: const TextStyle(
-                  fontFamily: 'Poppinss', color: Colors.black54, fontSize: 16)),
-          TextSpan(
-              text: 'SITUAÇÃO: ${bill.status}'.toUpperCase(),
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 12,
-                  color: bill.status == 'aberto' ? Colors.green : Colors.red))
-        ])),
+                  fontFamily: 'Poppinss', fontSize: 14, color: Colors.black),
+            ),
+          ],
+        ),
         children: bill.fundraisings!.map((e) {
+          // Cast capturedValue to int before use
           int capturedValue =
               e.capturedValue != null ? e.capturedValue!.toInt() : 0;
           double percentage =
@@ -56,27 +84,12 @@ class CustomFinancialCard extends StatelessWidget {
             trailing: e.fundRaiserComission != null &&
                     e.fundRaiserComission!.status! == 'a_receber'
                 ? IconButton(
+                    tooltip: 'Pagar',
                     onPressed: () async {
-                      Map<String, dynamic> retorno = await controller
-                          .updateFinancial(e.fundRaiserComission!.id!);
-
-                      if (retorno['success'] == true) {
-                        Get.back();
-                        Get.snackbar('Sucesso!', retorno['message'].join('\n'),
-                            backgroundColor: Colors.green,
-                            colorText: Colors.white,
-                            duration: const Duration(seconds: 2),
-                            snackPosition: SnackPosition.BOTTOM);
-                      } else {
-                        Get.snackbar('Falha!', retorno['message'].join('\n'),
-                            backgroundColor: Colors.red,
-                            colorText: Colors.white,
-                            duration: const Duration(seconds: 2),
-                            snackPosition: SnackPosition.BOTTOM);
-                      }
+                      showDeleteDialog(context, e);
                     },
                     icon: const Icon(
-                      Icons.payments_rounded,
+                      FontAwesomeIcons.wallet,
                       color: Colors.green,
                     ))
                 : const SizedBox(),
@@ -100,6 +113,102 @@ class CustomFinancialCard extends StatelessWidget {
           );
         }).toList(),
       ),
+    );
+  }
+
+  Future<void> showDeleteDialog(
+      BuildContext context, FundRaising fundRaising) async {
+    await showGeneralDialog(
+      context: context,
+      pageBuilder: (BuildContext buildContext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        double commission = calculateCommission(
+            fundRaising.capturedValue != null
+                ? fundRaising.capturedValue!.toInt()
+                : 0,
+            double.tryParse(bill.porcentagem.toString()) ?? 0.0);
+
+        return Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width - 40,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Material(
+              type: MaterialType.transparency,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Pagamento',
+                    style: TextStyle(
+                      fontFamily: 'Poppinss',
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    textAlign: TextAlign.center,
+                    'Deseja pagar a comissão de R\$${controller.formatValue(commission.toString())}?',
+                    style: const TextStyle(fontSize: 16, fontFamily: 'Poppins'),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text('Cancelar',
+                            style: TextStyle(
+                                fontFamily: 'Poppins', color: Colors.white)),
+                      ),
+                      SizedBox(
+                        width: 120,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            Map<String, dynamic> retorno =
+                                await controller.updateFinancial(
+                                    fundRaising.fundRaiserComission!.id!);
+
+                            if (retorno['success'] == true) {
+                              Get.back();
+                              Get.snackbar(
+                                  'Sucesso!', retorno['message'].join('\n'),
+                                  backgroundColor: Colors.green,
+                                  colorText: Colors.white,
+                                  duration: const Duration(seconds: 2),
+                                  snackPosition: SnackPosition.BOTTOM);
+                            } else {
+                              Get.snackbar(
+                                  'Falha!', retorno['message'].join('\n'),
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                  duration: const Duration(seconds: 2),
+                                  snackPosition: SnackPosition.BOTTOM);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                          ),
+                          child: const Text(
+                            'PAGAR',
+                            style: TextStyle(
+                                fontFamily: 'Poppins', color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
