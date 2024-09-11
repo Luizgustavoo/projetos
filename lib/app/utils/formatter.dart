@@ -71,7 +71,7 @@ abstract class FormattedInputers {
       value = double.tryParse(value) ?? 0.0;
     }
     final NumberFormat formatter =
-    NumberFormat.currency(symbol: '', decimalDigits: 2, locale: 'pt_BR');
+        NumberFormat.currency(symbol: '', decimalDigits: 2, locale: 'pt_BR');
     return formatter.format(value);
   }
 
@@ -105,13 +105,13 @@ abstract class FormattedInputers {
   static String formatPercentageSend(String value) {
     var text = value.replaceAll(RegExp(r'[^0-9]'), '');
     if (text.isEmpty) {
-      return '0,00%';
+      return '0,0%';
     }
 
-    var number = int.parse(text);
+    var number = double.parse(text);
     var formattedNumber =
-        NumberFormat.decimalPercentPattern(decimalDigits: 2, locale: 'pt_BR')
-            .format(number / 1000.0);
+        NumberFormat.decimalPercentPattern(decimalDigits: 1, locale: 'pt_BR')
+            .format(number / 100.0);
 
     return formattedNumber;
   }
