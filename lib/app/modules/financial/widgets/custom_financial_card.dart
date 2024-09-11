@@ -5,6 +5,8 @@ import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/fundraisings_model.dart';
+import 'package:projetos/app/data/models/user_model.dart';
+import 'package:projetos/app/routes/app_routes.dart';
 import 'package:projetos/app/utils/formatter.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
@@ -12,9 +14,15 @@ class CustomFinancialCard extends StatelessWidget {
   final Bill bill;
   final FinancialController controller;
   final int? id;
+  final User user;
 
-  const CustomFinancialCard(
-      {super.key, required this.bill, required this.controller, this.id});
+  const CustomFinancialCard({
+    super.key,
+    required this.bill,
+    required this.controller,
+    this.id,
+    required this.user,
+  });
 
   double calculateCommission(int capturedValue, double percentage) {
     return capturedValue * (percentage / 100);
@@ -179,9 +187,15 @@ class CustomFinancialCard extends StatelessWidget {
                             if (retorno['success'] == true) {
                               final billController = Get.put(BillController());
                               await billController.getAllBills();
+                              await controller.getFinancial(id!);
                               await controller.getFinancialBalance(id!);
 
+                              //começa
+
                               Get.back();
+                              Get.toNamed(Routes.financial, arguments: user);
+
+                              //termina
                               Get.snackbar(
                                   'Sucesso!', retorno['message'].join('\n'),
                                   backgroundColor: Colors.green,
