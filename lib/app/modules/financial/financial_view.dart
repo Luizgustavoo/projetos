@@ -128,7 +128,11 @@ class FinancialView extends GetView<FinancialController> {
                     itemBuilder: ((context, index) {
                       Bill bill = controller.listFinancial[index];
                       return CustomFinancialCard(
-                          bill: bill, controller: controller, id: user.id);
+                        bill: bill,
+                        controller: controller,
+                        id: user.id,
+                        user: user,
+                      );
                     }),
                   ),
                 ))
