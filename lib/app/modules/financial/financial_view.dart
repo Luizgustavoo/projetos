@@ -16,8 +16,8 @@ class FinancialView extends GetView<FinancialController> {
   @override
   Widget build(BuildContext context) {
     String carteira = "CONTROLE FINANCEIRO";
+    final User user = Get.arguments as User;
     if (Get.arguments != null && Get.arguments is User) {
-      final User user = Get.arguments as User;
       carteira = "FINANCEIRO: ${user.name!.toUpperCase()}";
     }
 
@@ -128,7 +128,7 @@ class FinancialView extends GetView<FinancialController> {
                     itemBuilder: ((context, index) {
                       Bill bill = controller.listFinancial[index];
                       return CustomFinancialCard(
-                          bill: bill, controller: controller);
+                          bill: bill, controller: controller, id: user.id);
                     }),
                   ),
                 ))

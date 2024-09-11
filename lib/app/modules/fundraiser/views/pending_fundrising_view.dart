@@ -144,27 +144,30 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                 children: [
                   const Text(
                     'CONFIRMAR ARRECADAÇÃO',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 20, fontFamily: 'Poppinss'),
                     textAlign: TextAlign.center,
+                  ),
+                  const Divider(
+                    thickness: 2,
+                    color: Colors.black,
                   ),
                   const SizedBox(height: 6),
                   Text(
                     fundRaising.empresa!.toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
+                    style: const TextStyle(fontSize: 16, fontFamily: 'Poppins'),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 6),
+                  Text(
+                    fundRaising.bill!.nome!.toUpperCase(),
+                    style: const TextStyle(fontSize: 12, fontFamily: 'Poppins'),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 6),
                   Text(
                     "PREVISÃO: ${controller.formatDate(fundRaising.expectedDate.toString())} - R\$ ${controller.formatValue(double.parse(fundRaising.predictedValue.toString()))}",
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style:
+                        const TextStyle(fontSize: 13, fontFamily: 'Poppinss'),
                     textAlign: TextAlign.center,
                   ),
                   const Divider(
@@ -240,6 +243,7 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                               .updatePendingFundRaising(fundRaising.id);
 
                           if (retorno['success'] == true) {
+                            Get.back();
                             Get.back();
                             Get.snackbar(
                                 'Sucesso!', retorno['message'].join('\n'),

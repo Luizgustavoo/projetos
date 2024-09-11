@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/fund_raiser_comission_model.dart';
 import 'package:projetos/app/data/repositories/financial_repository.dart';
@@ -58,14 +59,14 @@ class FinancialController extends GetxController {
   }
 
   Future<Map<String, dynamic>> updateFinancial(int? id) async {
-    FundRaiserComission company = FundRaiserComission(
-      id: id,
-    );
+    FundRaiserComission company = FundRaiserComission(id: id);
     final token = ServiceStorage.getToken();
 
     mensagem = await repository.updateFinancial("Bearer $token", company);
     retorno = {'success': mensagem['success'], 'message': mensagem['message']};
+   
     getFinancial(id!);
+    
 
     return retorno;
   }

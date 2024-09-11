@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/fundraisings_model.dart';
 import 'package:projetos/app/utils/formatter.dart';
+import 'package:projetos/app/utils/service_storage.dart';
 
 class CustomFinancialCard extends StatelessWidget {
   final Bill bill;
   final FinancialController controller;
+  final int? id;
 
   const CustomFinancialCard(
-      {super.key, required this.bill, required this.controller});
+      {super.key, required this.bill, required this.controller, this.id});
 
   double calculateCommission(int capturedValue, double percentage) {
     return capturedValue * (percentage / 100);
@@ -19,7 +22,6 @@ class CustomFinancialCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Somando o valor captado de todos os projetos
     double totalCommission = bill.fundraisings!.fold(0.0, (sum, e) {
       int capturedValue =
           e.capturedValue != null ? e.capturedValue!.toInt() : 0;
@@ -69,7 +71,6 @@ class CustomFinancialCard extends StatelessWidget {
           ],
         ),
         children: bill.fundraisings!.map((e) {
-          // Cast capturedValue to int before use
           int capturedValue =
               e.capturedValue != null ? e.capturedValue!.toInt() : 0;
           double percentage =
@@ -82,17 +83,18 @@ class CustomFinancialCard extends StatelessWidget {
               style: const TextStyle(fontFamily: 'Poppinss'),
             ),
             trailing: e.fundRaiserComission != null &&
-                    e.fundRaiserComission!.status! == 'a_receber'
+                    e.fundRaiserComission!.status! == 'a_receber' &&
+                    ServiceStorage.getUserType() == 1
                 ? IconButton(
                     tooltip: 'Pagar',
                     onPressed: () async {
-                      showDeleteDialog(context, e);
+                      showUpdateBalanceDialog(context, e);
                     },
                     icon: const Icon(
                       FontAwesomeIcons.wallet,
                       color: Colors.green,
                     ))
-                : const SizedBox(),
+                : const SizedBox.shrink(),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -105,7 +107,7 @@ class CustomFinancialCard extends StatelessWidget {
                   style: const TextStyle(fontFamily: 'Poppins'),
                 ),
                 Text(
-                  'DATA DE PAGAMENTO: ${FormattedInputers.formatApiDate(e.fundRaiserComission!.payday.toString())}',
+                  'DATA DE PAGAMENTO: ${e.fundRaiserComission != null && e.fundRaiserComission!.payday != null ? FormattedInputers.formatApiDate(e.fundRaiserComission!.payday.toString()) : "DATA INDISPONÍVEL"}',
                   style: const TextStyle(fontFamily: 'Poppins'),
                 ),
               ],
@@ -116,7 +118,7 @@ class CustomFinancialCard extends StatelessWidget {
     );
   }
 
-  Future<void> showDeleteDialog(
+  Future<void> showUpdateBalanceDialog(
       BuildContext context, FundRaising fundRaising) async {
     await showGeneralDialog(
       context: context,
@@ -175,6 +177,10 @@ class CustomFinancialCard extends StatelessWidget {
                                     fundRaising.fundRaiserComission!.id!);
 
                             if (retorno['success'] == true) {
+                              final billController = Get.put(BillController());
+                              await billController.getAllBills();
+                              await controller.getFinancialBalance(id!);
+
                               Get.back();
                               Get.snackbar(
                                   'Sucesso!', retorno['message'].join('\n'),
