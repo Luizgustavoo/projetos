@@ -85,10 +85,15 @@ class CustomFinancialCard extends StatelessWidget {
               double.tryParse(bill.porcentagem.toString()) ?? 0.0;
           double commission = calculateCommission(capturedValue, percentage);
 
+          String pagoAreceber =
+              e.fundRaiserComission!.payday != null ? "(PAGO)" : "(A PAGAR)";
+
           return ListTile(
             title: Text(
               e.company!.nome!.toUpperCase(),
-              style: const TextStyle(fontFamily: 'Poppinss'),
+              style: const TextStyle(
+                fontFamily: 'Poppinss',
+              ),
             ),
             trailing: e.fundRaiserComission != null &&
                     e.fundRaiserComission!.status! == 'a_receber' &&
@@ -111,7 +116,7 @@ class CustomFinancialCard extends StatelessWidget {
                   style: const TextStyle(fontFamily: 'Poppins'),
                 ),
                 Text(
-                  'COMISSÃO: R\$${controller.formatValue(commission.toStringAsFixed(2))}',
+                  'COMISSÃO: R\$${controller.formatValue(commission.toStringAsFixed(2))} - $pagoAreceber',
                   style: const TextStyle(fontFamily: 'Poppins'),
                 ),
                 Text(
