@@ -8,6 +8,7 @@ class Bill {
   String? observacoes;
   dynamic valorAprovado;
   dynamic porcentagem;
+  String? observacaoStatus;
   List<FundRaising>? fundraisings;
 
   Bill(
@@ -28,6 +29,7 @@ class Bill {
     observacoes = json['observacoes'];
     valorAprovado = json['valor_aprovado'].toString();
     porcentagem = json['porcentagem_comissao'].toString();
+    observacaoStatus = json['observacao_status_fechado'];
     if (json['fundraisings'] != null) {
       fundraisings = <FundRaising>[];
       json['fundraisings'].forEach((v) {
@@ -45,6 +47,7 @@ class Bill {
     data['observacoes'] = observacoes;
     data['valor_aprovado'] = valorAprovado;
     data['porcentagem_comissao'] = porcentagem;
+    data['observacao_status_fechado'] = observacaoStatus;
     if (fundraisings != null) {
       data['fundraisings'] = fundraisings!.map((v) => v.toJson()).toList();
     }

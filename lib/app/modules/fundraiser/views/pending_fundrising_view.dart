@@ -20,6 +20,17 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
         child: Column(
           children: [
             const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: TextField(
+                controller: controller.searchController,
+                decoration: const InputDecoration(
+                  labelText: 'Pesquisar captações',
+                  prefixIcon: Icon(Icons.search),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
             Obx(() {
               if (controller.isLoading.value) {
                 return const Expanded(
@@ -38,14 +49,14 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                   ),
                 );
               } else if (!controller.isLoading.value &&
-                  controller.listPendingFundRising.isNotEmpty) {
+                  controller.filteredPendingFundRising.isNotEmpty) {
                 return Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.only(right: 15, left: 15),
-                    itemCount: controller.listPendingFundRising.length,
+                    itemCount: controller.filteredPendingFundRising.length,
                     itemBuilder: (context, index) {
                       FundRaising fundRaising =
-                          controller.listPendingFundRising[index];
+                          controller.filteredPendingFundRising[index];
                       return Dismissible(
                         key: UniqueKey(),
                         direction: DismissDirection.endToStart,
@@ -101,7 +112,7 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
               } else {
                 return const Expanded(
                   child: Center(
-                    child: Text('NÃO HÁ EMPRESAS CAPTAÇÕES PENDENTES'),
+                    child: Text('NÃO HÁ PATROCINADORES CAPTAÇÕES PENDENTES'),
                   ),
                 );
               }

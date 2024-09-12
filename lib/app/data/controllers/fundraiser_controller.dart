@@ -12,6 +12,7 @@ import 'package:projetos/app/utils/service_storage.dart';
 class FundRaiserController extends GetxController {
   RxList<User> listFundRaiser = RxList<User>([]);
   RxList<FundRaising> listPendingFundRising = RxList<FundRaising>([]);
+  RxList<FundRaising> filteredPendingFundRising = RxList<FundRaising>([]);
   RxBool isLoading = true.obs;
   var paidOutCheckboxValue = false.obs;
   var showPaymentDateField = false.obs;
@@ -35,6 +36,8 @@ class FundRaiserController extends GetxController {
   final pendingValueFundController = TextEditingController();
   final paymentDateController = TextEditingController();
 
+  final searchController = TextEditingController();
+
   final repository = Get.put(FundRaiserRepository());
 
   User? selectedUser;
@@ -50,7 +53,14 @@ class FundRaiserController extends GetxController {
   void onInit() {
     getFundRaisers();
     getAllPendingFundRising();
+    searchController.addListener(filterPendingFundRaisings);
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    searchController.dispose();
+    super.onClose();
   }
 
   Future<void> getFundRaisers() async {
@@ -72,10 +82,24 @@ class FundRaiserController extends GetxController {
       var pendingFundRaisings =
           await repository.getAllPendingFundRising("Bearer $token");
       listPendingFundRising.value = pendingFundRaisings;
+      filterPendingFundRaisings(); // Apply filter on initial load
     } catch (e) {
       Exception('Exception: $e');
     }
     isLoading.value = false;
+  }
+
+  void filterPendingFundRaisings() {
+    String searchQuery = searchController.text.toLowerCase();
+    if (searchQuery.isEmpty) {
+      filteredPendingFundRising.value = listPendingFundRising;
+    } else {
+      filteredPendingFundRising.value =
+          listPendingFundRising.where((fundRaising) {
+        return fundRaising.empresa!.toLowerCase().contains(searchQuery) ||
+            fundRaising.bill!.nome!.toLowerCase().contains(searchQuery);
+      }).toList();
+    }
   }
 
   Future<Map<String, dynamic>> insertFundRaiser() async {

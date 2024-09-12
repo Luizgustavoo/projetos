@@ -40,7 +40,7 @@ class CustomBillCard extends StatelessWidget {
                 },
                 icon: const Icon(
                   Icons.edit_rounded,
-                  color: Colors.black54,
+                  color: Colors.black,
                 ),
               )
             : const SizedBox(),
@@ -53,10 +53,17 @@ class CustomBillCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('ANO : ${year!}'.toUpperCase(),
-                style: const TextStyle(fontFamily: 'Poppins')),
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: bill!.status == 'aberto'
+                        ? Colors.black
+                        : Colors.white)),
             Text(
               'VALOR APROVADO: ${value!}',
-              style: const TextStyle(fontFamily: 'Poppins'),
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color:
+                      bill!.status == 'aberto' ? Colors.black : Colors.white),
             ),
           ],
         ),

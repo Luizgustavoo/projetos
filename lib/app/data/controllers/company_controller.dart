@@ -14,6 +14,7 @@ class CompanyController extends GetxController {
   var listCompany = <Company>[].obs;
   var filteredAllCompanies = <Company>[].obs;
   var filteredMyCompanies = <Company>[].obs;
+  var filteredAvailableCompanies = <Company>[].obs;
 
   var paidOutCheckboxValue = false.obs;
   var showPaymentDateField = false.obs;
@@ -31,6 +32,7 @@ class CompanyController extends GetxController {
   final peopleContactController = TextEditingController();
   final searchControllerAllCompany = TextEditingController();
   final searchControllerMyCompany = TextEditingController();
+  final searchControllerAvailableCompany = TextEditingController();
   final streetController = TextEditingController();
   final numberController = TextEditingController();
   final neighborhoodController = TextEditingController();
@@ -53,14 +55,17 @@ class CompanyController extends GetxController {
     super.onInit();
     searchControllerAllCompany.addListener(onSearchChanged);
     searchControllerMyCompany.addListener(onMySearchChanged);
+    searchControllerAvailableCompany.addListener(onAvailableSearchChanged);
   }
 
   @override
   void onClose() {
     searchControllerAllCompany.removeListener(onSearchChanged);
     searchControllerMyCompany.removeListener(onMySearchChanged);
+    searchControllerAvailableCompany.removeListener(onAvailableSearchChanged);
     searchControllerAllCompany.dispose();
     searchControllerMyCompany.dispose();
+    searchControllerAvailableCompany.dispose();
     super.onClose();
   }
 
@@ -82,8 +87,11 @@ class CompanyController extends GetxController {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
+      // listAvailableCompany.clear();
+      // filteredAvailableCompanies.clear();
       listAvailableCompany.value =
           await repository.gettAllAvailable("Bearer $token");
+      filteredAvailableCompanies.value = listAvailableCompany;
     } catch (e) {
       Exception(e);
     }
@@ -259,6 +267,10 @@ class CompanyController extends GetxController {
     filterMyCompanies(searchControllerMyCompany.text);
   }
 
+  void onAvailableSearchChanged() {
+    filterAvailableCompanies(searchControllerAvailableCompany.text);
+  }
+
   void filterAllCompanies(String query) {
     if (query.isEmpty) {
       filteredAllCompanies.value = listAllCompany;
@@ -275,6 +287,17 @@ class CompanyController extends GetxController {
       filteredMyCompanies.value = listCompany;
     } else {
       filteredMyCompanies.value = listCompany
+          .where((company) =>
+              company.nome!.toUpperCase().contains(query.toUpperCase()))
+          .toList();
+    }
+  }
+
+  void filterAvailableCompanies(String query) {
+    if (query.isEmpty) {
+      filteredAvailableCompanies.value = listAvailableCompany;
+    } else {
+      filteredAvailableCompanies.value = listAvailableCompany
           .where((company) =>
               company.nome!.toUpperCase().contains(query.toUpperCase()))
           .toList();

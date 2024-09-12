@@ -25,12 +25,12 @@ class CustomPendingFundRaiserCard extends StatelessWidget {
       margin: const EdgeInsets.all(5),
       child: ListTile(
           trailing: const SizedBox(
-            width: 118,
+            width: 105,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  'Arraste para atualizar',
+                  'Arraste p/ atualizar',
                   style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 7.5,
@@ -38,26 +38,26 @@ class CustomPendingFundRaiserCard extends StatelessWidget {
                 ),
                 SizedBox(width: 5),
                 Icon(Icons.arrow_back_ios_new_rounded,
-                    size: 20, color: Colors.black54)
+                    size: 15, color: Colors.black54)
               ],
             ),
           ),
           dense: true,
           title: Text(
-            'EMPRESA: $companyName'.toUpperCase(),
-            style: const TextStyle(fontSize: 12.5, fontFamily: 'Poppinss'),
+            '$companyName'.toUpperCase(),
+            style: const TextStyle(fontSize: 12, fontFamily: 'Poppinss'),
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('VALOR PREVISTO: $predictedValue',
-                  style: const TextStyle(fontFamily: 'Poppins')),
+                  style: const TextStyle(fontFamily: 'Poppins', fontSize: 11)),
               Text('DATA PREVISTA: $predictedDate',
-                  style: const TextStyle(fontFamily: 'Poppins')),
+                  style: const TextStyle(fontFamily: 'Poppins', fontSize: 11)),
               Text('STATUS: $status'.toUpperCase(),
-                  style: const TextStyle(fontFamily: 'Poppins')),
+                  style: const TextStyle(fontFamily: 'Poppins', fontSize: 11)),
               Text('CAPTADOR: $fundRaiser'.toUpperCase(),
-                  style: const TextStyle(fontFamily: 'Poppins')),
+                  style: const TextStyle(fontFamily: 'Poppins', fontSize: 11)),
             ],
           )),
     );

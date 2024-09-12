@@ -22,7 +22,18 @@ class AvailableCompanyView extends GetView<CompanyController> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: TextField(
+                controller: controller.searchControllerAvailableCompany,
+                decoration: const InputDecoration(
+                  labelText: 'Pesquisar patrocinadores',
+                  prefixIcon: Icon(Icons.search),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
             Obx(() {
               if (controller.isLoading.value) {
                 return const Expanded(
@@ -41,14 +52,14 @@ class AvailableCompanyView extends GetView<CompanyController> {
                   ),
                 );
               } else if (!controller.isLoading.value &&
-                  controller.listAvailableCompany.isNotEmpty) {
+                  controller.filteredAvailableCompanies.isNotEmpty) {
                 return Expanded(
                     child: ListView.builder(
                         padding: const EdgeInsets.only(right: 15, left: 15),
-                        itemCount: controller.listAvailableCompany.length,
+                        itemCount: controller.filteredAvailableCompanies.length,
                         itemBuilder: (context, index) {
                           Company company =
-                              controller.listAvailableCompany[index];
+                              controller.filteredAvailableCompanies[index];
                           return Dismissible(
                             key: UniqueKey(),
                             direction: DismissDirection.endToStart,

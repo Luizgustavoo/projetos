@@ -104,7 +104,7 @@ class FinancialView extends GetView<FinancialController> {
                                       fontFamily: 'Poppins',
                                       color: Colors.red.shade800,
                                       fontSize: 20)),
-                            )
+                            ),
                           ],
                         ),
                       ),
