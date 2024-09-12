@@ -14,14 +14,14 @@ class CustomFinancialCard extends StatelessWidget {
   final Bill bill;
   final FinancialController controller;
   final int? id;
-  final User user;
+  final User? user;
 
   const CustomFinancialCard({
     super.key,
     required this.bill,
     required this.controller,
     this.id,
-    required this.user,
+    this.user,
   });
 
   double calculateCommission(double capturedValue, double percentage) {

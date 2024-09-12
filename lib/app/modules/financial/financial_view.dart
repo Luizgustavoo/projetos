@@ -16,11 +16,13 @@ class FinancialView extends GetView<FinancialController> {
   @override
   Widget build(BuildContext context) {
     String carteira = "CONTROLE FINANCEIRO";
-    final User user = Get.arguments as User;
-    if (Get.arguments != null && Get.arguments is User) {
+    final arguments = Get.arguments;
+
+    User? user;
+    if (arguments != null && arguments is User) {
+      user = arguments;
       carteira = "FINANCEIRO: ${user.name!.toUpperCase()}";
     }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(carteira),
@@ -130,7 +132,7 @@ class FinancialView extends GetView<FinancialController> {
                       return CustomFinancialCard(
                         bill: bill,
                         controller: controller,
-                        id: user.id,
+                        id: user?.id ?? 0,
                         user: user,
                       );
                     }),

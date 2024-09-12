@@ -151,8 +151,10 @@ class HomeView extends GetView<HomeController> {
                           icon: Icons.attach_money_rounded,
                           title: 'CONTROLE\nFINANCEIRO',
                           onTap: () {
-                            walletController.getFinancial(0);
-                            walletController.getFinancialBalance(0);
+                            walletController
+                                .getFinancial(ServiceStorage.getUserId());
+                            walletController.getFinancialBalance(
+                                ServiceStorage.getUserId());
                             Get.toNamed(Routes.financial);
                           },
                         ),
