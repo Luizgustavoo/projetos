@@ -7,7 +7,7 @@ class CompanyRepository {
   gettAll(String token, int id) async {
     List<Company> list = <Company>[];
 
-    var response = await apiClient.gettAll(token, id);
+    var response = await apiClient.getAll(token, id);
 
     if (response != null) {
       response['data'].forEach((e) {

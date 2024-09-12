@@ -24,15 +24,15 @@ class CustomFinancialCard extends StatelessWidget {
     required this.user,
   });
 
-  double calculateCommission(int capturedValue, double percentage) {
+  double calculateCommission(double capturedValue, double percentage) {
     return capturedValue * (percentage / 100);
   }
 
   @override
   Widget build(BuildContext context) {
     double totalCommission = bill.fundraisings!.fold(0.0, (sum, e) {
-      int capturedValue =
-          e.capturedValue != null ? e.capturedValue!.toInt() : 0;
+      double capturedValue =
+          e.capturedValue != null ? e.capturedValue!.toDouble() : 0.0;
       double percentage = double.tryParse(bill.porcentagem.toString()) ?? 0.0;
       return sum + calculateCommission(capturedValue, percentage);
     });
@@ -72,15 +72,15 @@ class CustomFinancialCard extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             Text(
-              'TOTAL COMISSÃO: R\$${controller.formatValue(totalCommission.toString())}',
+              'TOTAL COMISSÃO: R\$${controller.formatValue(totalCommission.toStringAsFixed(2))}',
               style: const TextStyle(
                   fontFamily: 'Poppinss', fontSize: 14, color: Colors.black),
             ),
           ],
         ),
         children: bill.fundraisings!.map((e) {
-          int capturedValue =
-              e.capturedValue != null ? e.capturedValue!.toInt() : 0;
+          double capturedValue =
+              e.capturedValue != null ? e.capturedValue!.toDouble() : 0.0;
           double percentage =
               double.tryParse(bill.porcentagem.toString()) ?? 0.0;
           double commission = calculateCommission(capturedValue, percentage);
@@ -107,11 +107,11 @@ class CustomFinancialCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'VALOR CAPTADO: R\$${controller.formatValue(capturedValue.toString())}',
+                  'VALOR CAPTADO: R\$${controller.formatValue(capturedValue.toStringAsFixed(2))}',
                   style: const TextStyle(fontFamily: 'Poppins'),
                 ),
                 Text(
-                  'COMISSÃO: R\$${controller.formatValue(commission.toInt())}',
+                  'COMISSÃO: R\$${controller.formatValue(commission.toStringAsFixed(2))}',
                   style: const TextStyle(fontFamily: 'Poppins'),
                 ),
                 Text(

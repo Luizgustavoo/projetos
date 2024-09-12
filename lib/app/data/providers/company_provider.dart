@@ -11,7 +11,7 @@ import 'package:projetos/app/utils/service_storage.dart';
 class CompanyApiClient {
   final http.Client httpClient = http.Client();
 
-  gettAll(String token, int id) async {
+  getAll(String token, int id) async {
     try {
       String userId =
           id <= 0 ? ServiceStorage.getUserId().toString() : id.toString();

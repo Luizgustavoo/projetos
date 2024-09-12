@@ -5,10 +5,10 @@ import 'package:projetos/app/data/providers/contact_provider.dart';
 class ContactRepository {
   final ContactApiClient apiClient = ContactApiClient();
 
-  gettAll(String token, Company company) async {
+  getAll(String token, Company company, {dynamic id}) async {
     List<ContactCompany> list = <ContactCompany>[];
 
-    var response = await apiClient.gettAll(token, company);
+    var response = await apiClient.gettAll(token, company, id: id);
 
     if (response != null) {
       response['data'].forEach((e) {

@@ -16,7 +16,7 @@ class ContactCompanyView extends GetView<ContactController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(company.nome!.toUpperCase()),
+        // title: Text(company.nome!.toUpperCase()),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),

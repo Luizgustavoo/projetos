@@ -12,11 +12,12 @@ import 'package:projetos/app/utils/service_storage.dart';
 class ContactApiClient {
   final http.Client httpClient = http.Client();
 
-  gettAll(String token, Company company) async {
+  gettAll(String token, Company company, {dynamic id}) async {
     try {
       Uri contactCompanyUrl;
+      int idUser = id ?? ServiceStorage.getUserId();
       String url =
-          '$baseUrl/v1/contactcompany/company/${ServiceStorage.getUserId().toString()}/${company.id}';
+          '$baseUrl/v1/contactcompany/company/${idUser.toString()}/${company.id}';
       contactCompanyUrl = Uri.parse(url);
       var response = await httpClient.get(
         contactCompanyUrl,

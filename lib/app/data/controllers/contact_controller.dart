@@ -33,12 +33,12 @@ class ContactController extends GetxController {
   };
   dynamic mensagem;
 
-  Future<void> getContactCompanies(Company company) async {
+  Future<void> getContactCompanies(Company company, {dynamic id}) async {
     isLoading.value = true;
     try {
       final token = ServiceStorage.getToken();
       listContactCompany.value =
-          await repository.gettAll("Bearer $token", company);
+          await repository.getAll("Bearer $token", company, id: id);
       update();
     } catch (e) {
       Exception(e);

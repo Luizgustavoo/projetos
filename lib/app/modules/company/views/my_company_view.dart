@@ -29,8 +29,15 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 class MyCompanyView extends GetView<CompanyController> {
   MyCompanyView({super.key});
   final billController = Get.put(BillController());
+
   @override
   Widget build(BuildContext context) {
+    User? user;
+
+    // Verifica se os argumentos foram passados e se são do tipo correto
+    if (Get.arguments != null && Get.arguments is User) {
+      user = Get.arguments as User;
+    }
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: MediaQuery.of(context).size.height * 0.08,
@@ -171,7 +178,10 @@ class MyCompanyView extends GetView<CompanyController> {
                             onTap: () {
                               final contactController =
                                   Get.put(ContactController());
-                              contactController.getContactCompanies(company);
+                              contactController.getContactCompanies(company,
+                                  id: ServiceStorage.getUserType() == 1
+                                      ? user!.id!
+                                      : ServiceStorage.getUserId());
                               Get.toNamed(Routes.contactcompany,
                                   arguments: company);
                             },

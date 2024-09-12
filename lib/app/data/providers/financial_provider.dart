@@ -25,7 +25,6 @@ class FinancialApiClient {
           "Authorization": token,
         },
       );
-      print(response.body);
       if (response.statusCode == 201) {
         return json.decode(response.body);
       } else if (response.statusCode == 401 &&
@@ -92,7 +91,6 @@ class FinancialApiClient {
       }, body: {
         "pago": "sim"
       });
-      print(response.body);
       return json.decode(response.body);
     } catch (err) {
       Exception(err);
