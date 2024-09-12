@@ -5,6 +5,7 @@ import 'package:projetos/app/data/repositories/company_repository.dart';
 import 'package:projetos/app/routes/app_routes.dart';
 import 'package:projetos/app/utils/formatter.dart';
 import 'package:projetos/app/utils/service_storage.dart';
+import 'package:projetos/app/utils/services.dart';
 
 class CompanyController extends GetxController {
   RxList<Company> listAvailableCompany = RxList<Company>([]);
@@ -124,6 +125,7 @@ class CompanyController extends GetxController {
 
   Future<Map<String, dynamic>> insertCompany() async {
     if (companyKey.currentState!.validate()) {
+      Services.isLoadingCRUD(true);
       final RegExp cidadeUfRegex = RegExp(r'^[A-Za-zÀ-ÿ\s]+-[A-Z]{2}$');
 
       if (!cidadeUfRegex.hasMatch(cityController.text)) {
@@ -174,11 +176,13 @@ class CompanyController extends GetxController {
       } else {
         getAllCompanies();
       }
+      Services.isLoadingCRUD(false);
     }
     return retorno;
   }
 
   Future<Map<String, dynamic>> updateCompany(int? id) async {
+    Services.isLoadingCRUD(true);
     final RegExp cidadeUfRegex = RegExp(r'^[A-Za-zÀ-ÿ\s]+-[A-Z]{2}$');
 
     if (!cidadeUfRegex.hasMatch(cityController.text)) {
@@ -228,6 +232,7 @@ class CompanyController extends GetxController {
         getAllCompanies();
       }
     }
+    Services.isLoadingCRUD(false);
     return retorno;
   }
 

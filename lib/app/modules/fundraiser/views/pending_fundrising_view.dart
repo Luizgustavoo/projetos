@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/fundraisings_model.dart';
 import 'package:projetos/app/modules/fundraiser/widgets/custom_pending_fundirising_card.dart';
+import 'package:projetos/app/utils/services.dart';
 
 class PendingFundRisingView extends GetView<FundRaiserController> {
   const PendingFundRisingView({super.key});
@@ -248,33 +249,38 @@ class PendingFundRisingView extends GetView<FundRaiserController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          Map<String, dynamic> retorno = await controller
-                              .updatePendingFundRaising(fundRaising.id);
+                      Obx(
+                        () => Services.isLoadingCRUD.value
+                            ? const CircularProgressIndicator()
+                            : ElevatedButton(
+                                onPressed: () async {
+                                  Map<String, dynamic> retorno =
+                                      await controller.updatePendingFundRaising(
+                                          fundRaising.id);
 
-                          if (retorno['success'] == true) {
-                            Get.back();
-                            Get.back();
-                            Get.snackbar(
-                                'Sucesso!', retorno['message'].join('\n'),
-                                backgroundColor: Colors.green,
-                                colorText: Colors.white,
-                                duration: const Duration(seconds: 2),
-                                snackPosition: SnackPosition.BOTTOM);
-                          } else {
-                            Get.snackbar(
-                                'Falha!', retorno['message'].join('\n'),
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                                duration: const Duration(seconds: 2),
-                                snackPosition: SnackPosition.BOTTOM);
-                          }
-                        },
-                        child: const Text(
-                          "CONFIRMAR",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                                  if (retorno['success'] == true) {
+                                    Get.back();
+                                    Get.back();
+                                    Get.snackbar('Sucesso!',
+                                        retorno['message'].join('\n'),
+                                        backgroundColor: Colors.green,
+                                        colorText: Colors.white,
+                                        duration: const Duration(seconds: 2),
+                                        snackPosition: SnackPosition.BOTTOM);
+                                  } else {
+                                    Get.snackbar(
+                                        'Falha!', retorno['message'].join('\n'),
+                                        backgroundColor: Colors.red,
+                                        colorText: Colors.white,
+                                        duration: const Duration(seconds: 2),
+                                        snackPosition: SnackPosition.BOTTOM);
+                                  }
+                                },
+                                child: const Text(
+                                  "CONFIRMAR",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                       ),
                       TextButton(
                         onPressed: () {

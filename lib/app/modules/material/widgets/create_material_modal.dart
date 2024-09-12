@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/material_controller.dart';
 import 'package:projetos/app/data/models/material_model.dart';
+import 'package:projetos/app/utils/services.dart';
 
 class CreateMaterialModal extends GetView<MaterialController> {
   const CreateMaterialModal({super.key, this.materialModel});
@@ -147,32 +148,39 @@ class CreateMaterialModal extends GetView<MaterialController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      Map<String, dynamic> retorno = isUpdate
-                          ? await controller.updateMaterial(materialModel!.id)
-                          : await controller.insertMaterial();
+                  Obx(
+                    () => Services.isLoadingCRUD.value
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton(
+                            onPressed: () async {
+                              Map<String, dynamic> retorno = isUpdate
+                                  ? await controller
+                                      .updateMaterial(materialModel!.id)
+                                  : await controller.insertMaterial();
 
-                      if (retorno['success'] == true) {
-                        Get.back();
-                        Get.snackbar('Sucesso!', retorno['message'].join('\n'),
-                            backgroundColor: Colors.green,
-                            colorText: Colors.white,
-                            duration: const Duration(seconds: 2),
-                            snackPosition: SnackPosition.BOTTOM);
-                      } else {
-                        Get.snackbar('Falha!', retorno['message'].join('\n'),
-                            backgroundColor: Colors.red,
-                            colorText: Colors.white,
-                            duration: const Duration(seconds: 2),
-                            snackPosition: SnackPosition.BOTTOM);
-                      }
-                    },
-                    child: Text(
-                      isUpdate ? 'ATUALIZAR' : 'CADASTRAR',
-                      style: const TextStyle(
-                          fontFamily: 'Poppins', color: Colors.white),
-                    ),
+                              if (retorno['success'] == true) {
+                                Get.back();
+                                Get.snackbar(
+                                    'Sucesso!', retorno['message'].join('\n'),
+                                    backgroundColor: Colors.green,
+                                    colorText: Colors.white,
+                                    duration: const Duration(seconds: 2),
+                                    snackPosition: SnackPosition.BOTTOM);
+                              } else {
+                                Get.snackbar(
+                                    'Falha!', retorno['message'].join('\n'),
+                                    backgroundColor: Colors.red,
+                                    colorText: Colors.white,
+                                    duration: const Duration(seconds: 2),
+                                    snackPosition: SnackPosition.BOTTOM);
+                              }
+                            },
+                            child: Text(
+                              isUpdate ? 'ATUALIZAR' : 'CADASTRAR',
+                              style: const TextStyle(
+                                  fontFamily: 'Poppins', color: Colors.white),
+                            ),
+                          ),
                   ),
                   const SizedBox(width: 10),
                   SizedBox(

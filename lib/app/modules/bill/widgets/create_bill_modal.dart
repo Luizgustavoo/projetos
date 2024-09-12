@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/utils/formatter.dart';
+import 'package:projetos/app/utils/services.dart';
 
 class CreateBillModal extends GetView<BillController> {
   const CreateBillModal({super.key, this.bill});
@@ -49,6 +50,23 @@ class CreateBillModal extends GetView<BillController> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, insira o nome';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  maxLines: 3,
+                  keyboardType: TextInputType.multiline,
+                  textInputAction: TextInputAction.newline,
+                  controller: controller.commentsController,
+                  decoration: const InputDecoration(
+                    labelText: 'DESCRIÇÃO',
+                    alignLabelWithHint: true,
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, insira as descrição';
                     }
                     return null;
                   },
@@ -145,17 +163,11 @@ class CreateBillModal extends GetView<BillController> {
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
                   textInputAction: TextInputAction.newline,
-                  controller: controller.commentsController,
+                  controller: controller.commentsStatusController,
                   decoration: const InputDecoration(
                     labelText: 'OBSERVAÇÕES',
                     alignLabelWithHint: true,
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, insira as observações';
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -175,33 +187,38 @@ class CreateBillModal extends GetView<BillController> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    ElevatedButton(
-                      onPressed: () async {
-                        Map<String, dynamic> retorno = isUpdate
-                            ? await controller.updateBill(bill!.id)
-                            : await controller.insertBill();
+                    Obx(
+                      () => Services.isLoadingCRUD.value
+                          ? const CircularProgressIndicator()
+                          : ElevatedButton(
+                              onPressed: () async {
+                                Map<String, dynamic> retorno = isUpdate
+                                    ? await controller.updateBill(bill!.id)
+                                    : await controller.insertBill();
 
-                        if (retorno['success'] == true) {
-                          Get.back();
-                          Get.snackbar(
-                              'Sucesso!', retorno['message'].join('\n'),
-                              backgroundColor: Colors.green,
-                              colorText: Colors.white,
-                              duration: const Duration(seconds: 2),
-                              snackPosition: SnackPosition.BOTTOM);
-                        } else {
-                          Get.snackbar('Falha!', retorno['message'].join('\n'),
-                              backgroundColor: Colors.red,
-                              colorText: Colors.white,
-                              duration: const Duration(seconds: 2),
-                              snackPosition: SnackPosition.BOTTOM);
-                        }
-                      },
-                      child: Text(
-                        isUpdate ? 'ATUALIZAR' : 'CADASTRAR',
-                        style: const TextStyle(
-                            fontFamily: 'Poppins', color: Colors.white),
-                      ),
+                                if (retorno['success'] == true) {
+                                  Get.back();
+                                  Get.snackbar(
+                                      'Sucesso!', retorno['message'].join('\n'),
+                                      backgroundColor: Colors.green,
+                                      colorText: Colors.white,
+                                      duration: const Duration(seconds: 2),
+                                      snackPosition: SnackPosition.BOTTOM);
+                                } else {
+                                  Get.snackbar(
+                                      'Falha!', retorno['message'].join('\n'),
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white,
+                                      duration: const Duration(seconds: 2),
+                                      snackPosition: SnackPosition.BOTTOM);
+                                }
+                              },
+                              child: Text(
+                                isUpdate ? 'ATUALIZAR' : 'CADASTRAR',
+                                style: const TextStyle(
+                                    fontFamily: 'Poppins', color: Colors.white),
+                              ),
+                            ),
                     ),
                   ],
                 ),

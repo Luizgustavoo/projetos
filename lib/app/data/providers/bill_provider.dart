@@ -87,7 +87,8 @@ class BillApiClient {
         "status": bill.status.toString(),
         "valor_aprovado": bill.valorAprovado.toString(),
         "observacoes": bill.observacoes.toString(),
-        "porcentagem_comissao": bill.porcentagem.toString()
+        "porcentagem_comissao": bill.porcentagem.toString(),
+        "observacao_status_fechado": bill.observacaoStatus.toString(),
       });
 
       request.headers.addAll({
@@ -121,7 +122,8 @@ class BillApiClient {
         "status": bill.status.toString(),
         "valor_aprovado": bill.valorAprovado.toString(),
         "observacoes": bill.observacoes.toString(),
-        "porcentagem_comissao": bill.porcentagem.toString()
+        "porcentagem_comissao": bill.porcentagem.toString(),
+        "observacao_status_fechado": bill.observacaoStatus.toString(),
       });
       return json.decode(response.body);
     } catch (err) {

@@ -8,6 +8,7 @@ import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/data/repositories/fundraiser_repository.dart';
 import 'package:projetos/app/utils/formatter.dart';
 import 'package:projetos/app/utils/service_storage.dart';
+import 'package:projetos/app/utils/services.dart';
 
 class FundRaiserController extends GetxController {
   RxList<User> listFundRaiser = RxList<User>([]);
@@ -151,6 +152,7 @@ class FundRaiserController extends GetxController {
 
   Future<Map<String, dynamic>> insertFundRaising(int companyId, int billId,
       {int? companyUserId}) async {
+    Services.isLoadingCRUD(true);
     final token = ServiceStorage.getToken();
     final companyController = Get.put(CompanyController());
 
@@ -195,10 +197,12 @@ class FundRaiserController extends GetxController {
           ServiceStorage.getUserType() == 1 ? 0 : ServiceStorage.getUserId();
       companyController.getCompanies(idd);
     }
+    Services.isLoadingCRUD(false);
     return retorno;
   }
 
   Future<Map<String, dynamic>> updatePendingFundRaising(int? id) async {
+    Services.isLoadingCRUD(true);
     String valueString =
         pendingValueFundController.text.replaceAll(RegExp(r'[^0-9,]'), '');
 
@@ -230,6 +234,7 @@ class FundRaiserController extends GetxController {
       };
       getAllPendingFundRising();
     }
+    Services.isLoadingCRUD(false);
     return retorno;
   }
 

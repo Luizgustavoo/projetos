@@ -8,6 +8,7 @@ import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/modules/company/widgets/contact_modal.dart';
 import 'package:projetos/app/utils/service_storage.dart';
+import 'package:projetos/app/utils/services.dart';
 import 'package:searchfield/searchfield.dart';
 
 class CreateCompanyModal extends GetView<CompanyController> {
@@ -245,58 +246,63 @@ class CreateCompanyModal extends GetView<CompanyController> {
                 children: [
                   Row(
                     children: [
-                      TextButton(
-                        onPressed: () async {
-                          Map<String, dynamic> retorno =
-                              await controller.insertCompany();
+                      Obx(
+                        () => Services.isLoadingCRUD.value
+                            ? const CircularProgressIndicator()
+                            : TextButton(
+                                onPressed: () async {
+                                  Map<String, dynamic> retorno =
+                                      await controller.insertCompany();
 
-                          if (retorno['success'] == true) {
-                            Get.put(ContactController());
-                            // print(retorno['data']);
-                            Company companyData = Company(
-                              id: retorno['data']['id'],
-                              nome: retorno['data']['nome'],
-                            );
+                                  if (retorno['success'] == true) {
+                                    Get.put(ContactController());
+                                    // print(retorno['data']);
+                                    Company companyData = Company(
+                                      id: retorno['data']['id'],
+                                      nome: retorno['data']['nome'],
+                                    );
 
-                            Get.back();
+                                    Get.back();
 
-                            Get.snackbar(
-                              'Sucesso!',
-                              retorno['message'].join('\n'),
-                              backgroundColor: Colors.green,
-                              colorText: Colors.white,
-                              duration: const Duration(seconds: 2),
-                              snackPosition: SnackPosition.BOTTOM,
-                            );
+                                    Get.snackbar(
+                                      'Sucesso!',
+                                      retorno['message'].join('\n'),
+                                      backgroundColor: Colors.green,
+                                      colorText: Colors.white,
+                                      duration: const Duration(seconds: 2),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
 
-                            await Future.delayed(const Duration(seconds: 1));
+                                    await Future.delayed(
+                                        const Duration(seconds: 1));
 
-                            Get.bottomSheet(
-                              backgroundColor: Colors.white,
-                              ContactModal(
-                                name: companyData.nome,
+                                    Get.bottomSheet(
+                                      backgroundColor: Colors.white,
+                                      ContactModal(
+                                        name: companyData.nome,
+                                      ),
+                                      isScrollControlled: true,
+                                    );
+                                  } else {
+                                    Get.snackbar(
+                                      'Falha!',
+                                      retorno['message'].join('\n'),
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white,
+                                      duration: const Duration(seconds: 2),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
+                                  }
+                                },
+                                child: const Text(
+                                  'NOVO CONTATO',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFFEBAE1F),
+                                  ),
+                                ),
                               ),
-                              isScrollControlled: true,
-                            );
-                          } else {
-                            Get.snackbar(
-                              'Falha!',
-                              retorno['message'].join('\n'),
-                              backgroundColor: Colors.red,
-                              colorText: Colors.white,
-                              duration: const Duration(seconds: 2),
-                              snackPosition: SnackPosition.BOTTOM,
-                            );
-                          }
-                        },
-                        child: const Text(
-                          'NOVO CONTATO',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontFamily: 'Poppins',
-                            color: Color(0xFFEBAE1F),
-                          ),
-                        ),
                       ),
                     ],
                   ),
@@ -315,40 +321,45 @@ class CreateCompanyModal extends GetView<CompanyController> {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () async {
-                          Map<String, dynamic> retorno = isUpdate
-                              ? await controller.updateCompany(company!.id)
-                              : await controller.insertCompany();
+                      Obx(
+                        () => Services.isLoadingCRUD.value
+                            ? const CircularProgressIndicator()
+                            : ElevatedButton(
+                                onPressed: () async {
+                                  Map<String, dynamic> retorno = isUpdate
+                                      ? await controller
+                                          .updateCompany(company!.id)
+                                      : await controller.insertCompany();
 
-                          if (retorno['success'] == true) {
-                            Get.back();
-                            Get.snackbar(
-                              'Sucesso!',
-                              retorno['message'].join('\n'),
-                              backgroundColor: Colors.green,
-                              colorText: Colors.white,
-                              duration: const Duration(seconds: 2),
-                              snackPosition: SnackPosition.BOTTOM,
-                            );
-                          } else {
-                            Get.snackbar(
-                              'Falha!',
-                              retorno['message'].join('\n'),
-                              backgroundColor: Colors.red,
-                              colorText: Colors.white,
-                              duration: const Duration(seconds: 2),
-                              snackPosition: SnackPosition.BOTTOM,
-                            );
-                          }
-                        },
-                        child: Text(
-                          isUpdate ? 'ATUALIZAR' : 'CADASTRAR',
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            color: Colors.white,
-                          ),
-                        ),
+                                  if (retorno['success'] == true) {
+                                    Get.back();
+                                    Get.snackbar(
+                                      'Sucesso!',
+                                      retorno['message'].join('\n'),
+                                      backgroundColor: Colors.green,
+                                      colorText: Colors.white,
+                                      duration: const Duration(seconds: 2),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
+                                  } else {
+                                    Get.snackbar(
+                                      'Falha!',
+                                      retorno['message'].join('\n'),
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white,
+                                      duration: const Duration(seconds: 2),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
+                                  }
+                                },
+                                child: Text(
+                                  isUpdate ? 'ATUALIZAR' : 'CADASTRAR',
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                       ),
                     ],
                   ),

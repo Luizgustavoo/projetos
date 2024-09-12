@@ -47,62 +47,92 @@ class DetailBillView extends GetView<BillController> {
               padding: const EdgeInsets.only(right: 15, left: 15, top: 20),
               child: SizedBox(
                 width: double.infinity,
-                height: 80,
                 child: Card(
-                    elevation: 2,
-                    shadowColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    margin: const EdgeInsets.all(5),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, right: 10, top: 8, bottom: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'VALOR CAPTADO',
-                                  style: TextStyle(
-                                      fontFamily: 'Poppins', fontSize: 15),
-                                ),
-                                Obx(
-                                  () => Text(
-                                    'R\$${controller.formatValue(double.parse(totalCapturedValue.toString()))}',
-                                    style: const TextStyle(
-                                        fontFamily: 'Poppinss', fontSize: 20),
+                  elevation: 2,
+                  shadowColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  margin: const EdgeInsets.all(5),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 8, bottom: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'VALOR CAPTADO',
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins', fontSize: 15),
+                                  ),
+                                  Obx(
+                                    () => Text(
+                                      'R\$${controller.formatValue(double.parse(totalCapturedValue.toString()))}',
+                                      style: const TextStyle(
+                                          fontFamily: 'Poppinss', fontSize: 20),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'VALOR A CAPTAR',
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins', fontSize: 15),
+                                  ),
+                                  Obx(
+                                    () => Text(
+                                      'R\$${controller.formatValue(double.parse(finalValue.toString()))}',
+                                      style: const TextStyle(
+                                          fontFamily: 'Poppinss',
+                                          fontSize: 20,
+                                          color: Colors.green),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        if (bill.observacaoStatus != null) ...[
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons
+                                    .info, // Substitua pelo ícone que deseja usar
+                                color: Color.fromARGB(
+                                    255, 24, 114, 188), // Cor do ícone
+                              ),
+                              const SizedBox(
+                                  width: 8.0), // Espaço entre o ícone e o texto
+                              Expanded(
+                                child: Text(
+                                  bill.observacaoStatus ??
+                                      "", // Garantia de que não será nulo
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(
+                                        255, 24, 114, 188), // Cor do texto
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'VALOR A CAPTAR',
-                                  style: TextStyle(
-                                      fontFamily: 'Poppins', fontSize: 15),
-                                ),
-                                Obx(
-                                  () => Text(
-                                    'R\$${controller.formatValue(double.parse(finalValue.toString()))}',
-                                    style: const TextStyle(
-                                        fontFamily: 'Poppinss',
-                                        fontSize: 20,
-                                        color: Colors.green),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
+                              ),
+                            ],
+                          )
+                        ]
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
             const Padding(

@@ -23,6 +23,7 @@ import 'package:projetos/app/utils/service_storage.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:projetos/app/utils/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
@@ -568,33 +569,38 @@ class MyCompanyView extends GetView<CompanyController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          Map<String, dynamic> retorno =
-                              await fundRaiserController.insertFundRaising(
-                                  company.id!, controller.selectedBillId.value);
+                      Obx(
+                        () => Services.isLoadingCRUD.value
+                            ? const CircularProgressIndicator()
+                            : ElevatedButton(
+                                onPressed: () async {
+                                  Map<String, dynamic> retorno =
+                                      await fundRaiserController
+                                          .insertFundRaising(company.id!,
+                                              controller.selectedBillId.value);
 
-                          if (retorno['success'] == true) {
-                            Get.back();
-                            Get.snackbar(
-                                'Sucesso!', retorno['message'].join('\n'),
-                                backgroundColor: Colors.green,
-                                colorText: Colors.white,
-                                duration: const Duration(seconds: 2),
-                                snackPosition: SnackPosition.BOTTOM);
-                          } else {
-                            Get.snackbar(
-                                'Falha!', retorno['message'].join('\n'),
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                                duration: const Duration(seconds: 2),
-                                snackPosition: SnackPosition.BOTTOM);
-                          }
-                        },
-                        child: const Text(
-                          "CONFIRMAR",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                                  if (retorno['success'] == true) {
+                                    Get.back();
+                                    Get.snackbar('Sucesso!',
+                                        retorno['message'].join('\n'),
+                                        backgroundColor: Colors.green,
+                                        colorText: Colors.white,
+                                        duration: const Duration(seconds: 2),
+                                        snackPosition: SnackPosition.BOTTOM);
+                                  } else {
+                                    Get.snackbar(
+                                        'Falha!', retorno['message'].join('\n'),
+                                        backgroundColor: Colors.red,
+                                        colorText: Colors.white,
+                                        duration: const Duration(seconds: 2),
+                                        snackPosition: SnackPosition.BOTTOM);
+                                  }
+                                },
+                                child: const Text(
+                                  "CONFIRMAR",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                       ),
                       TextButton(
                         onPressed: () {

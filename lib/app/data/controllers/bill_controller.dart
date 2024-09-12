@@ -5,6 +5,7 @@ import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/repositories/bill_repository.dart';
 import 'package:projetos/app/utils/formatter.dart';
 import 'package:projetos/app/utils/service_storage.dart';
+import 'package:projetos/app/utils/services.dart';
 
 class BillController extends GetxController {
   var listAllBills = <Bill>[].obs;
@@ -24,6 +25,7 @@ class BillController extends GetxController {
   final percentageValueController = TextEditingController();
   final yearController = TextEditingController();
   final commentsController = TextEditingController();
+  final commentsStatusController = TextEditingController();
 
   Map<String, dynamic> retorno = {
     "success": false,
@@ -63,30 +65,33 @@ class BillController extends GetxController {
   }
 
   Future<Map<String, dynamic>> insertBill() async {
+    Services.isLoadingCRUD(true);
     final token = ServiceStorage.getToken();
     if (billKey.currentState!.validate()) {
       mensagem = await repository.insertBill(
           "Bearer $token",
           Bill(
-            nome: nameController.text,
-            ano: int.parse(yearController.text),
-            status: status.value.toString(),
-            observacoes: commentsController.text,
-            valorAprovado:
-                FormattedInputers.convertToDouble(aprovedValueController.text),
-            porcentagem: FormattedInputers.convertPercentageToDouble(
-                percentageValueController.text),
-          ));
+              nome: nameController.text,
+              ano: int.parse(yearController.text),
+              status: status.value.toString(),
+              observacoes: commentsController.text,
+              valorAprovado: FormattedInputers.convertToDouble(
+                  aprovedValueController.text),
+              porcentagem: FormattedInputers.convertPercentageToDouble(
+                  percentageValueController.text),
+              observacaoStatus: commentsStatusController.text));
       retorno = {
         'success': mensagem['success'],
         'message': mensagem['message']
       };
       getAllBills();
     }
+    Services.isLoadingCRUD(false);
     return retorno;
   }
 
   Future<Map<String, dynamic>> updateBill(int? id) async {
+    Services.isLoadingCRUD(true);
     Bill bill = Bill(
       id: id,
       nome: nameController.text,
@@ -97,6 +102,7 @@ class BillController extends GetxController {
           FormattedInputers.convertToDouble(aprovedValueController.text),
       porcentagem: FormattedInputers.convertPercentageToDouble(
           percentageValueController.text),
+      observacaoStatus: commentsStatusController.text,
     );
     final token = ServiceStorage.getToken();
     if (billKey.currentState!.validate()) {
@@ -107,6 +113,7 @@ class BillController extends GetxController {
       };
       getAllBills();
     }
+    Services.isLoadingCRUD(false);
     return retorno;
   }
 
@@ -129,6 +136,7 @@ class BillController extends GetxController {
           FormattedInputers.formatPercentageSend(selectedBill!.porcentagem);
       yearController.text = selectedBill!.ano.toString();
       status.value = selectedBill!.status.toString();
+      commentsStatusController.text = selectedBill!.observacaoStatus.toString();
       commentsController.text = selectedBill!.observacoes.toString();
     }
   }
@@ -139,7 +147,8 @@ class BillController extends GetxController {
       aprovedValueController,
       yearController,
       commentsController,
-      percentageValueController
+      percentageValueController,
+      commentsStatusController
     ];
 
     for (final controller in textControllers) {

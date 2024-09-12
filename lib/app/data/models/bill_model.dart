@@ -19,6 +19,7 @@ class Bill {
       this.observacoes,
       this.valorAprovado,
       this.porcentagem,
+      this.observacaoStatus,
       this.fundraisings});
 
   Bill.fromJson(Map<String, dynamic> json) {
