@@ -7,6 +7,7 @@ import 'package:projetos/app/data/controllers/contact_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/data/models/contact_company_model.dart';
 import 'package:projetos/app/modules/company/widgets/create_company_modal.dart';
+import 'package:projetos/app/utils/services.dart';
 
 class ContactModal extends GetView<ContactController> {
   final String? name;
@@ -215,46 +216,52 @@ class ContactModal extends GetView<ContactController> {
                 children: [
                   Row(
                     children: [
-                      TextButton(
-                        onPressed: () async {
-                          Map<String, dynamic> retorno = await controller
-                              .insertContactCompany(company!.id!);
+                      Obx(
+                        () => Services.isLoadingCRUD.value
+                            ? const CircularProgressIndicator()
+                            : TextButton(
+                                onPressed: () async {
+                                  Map<String, dynamic> retorno =
+                                      await controller
+                                          .insertContactCompany(company!.id!);
 
-                          if (retorno['success'] == true) {
-                            Get.back();
-                            // Exibe o snackbar para sucesso
-                            Get.snackbar(
-                              'Sucesso!',
-                              retorno['message'].join('\n'),
-                              backgroundColor: Colors.green,
-                              colorText: Colors.white,
-                              duration: const Duration(seconds: 2),
-                              snackPosition: SnackPosition.BOTTOM,
-                            );
+                                  if (retorno['success'] == true) {
+                                    Get.back();
+                                    // Exibe o snackbar para sucesso
+                                    Get.snackbar(
+                                      'Sucesso!',
+                                      retorno['message'].join('\n'),
+                                      backgroundColor: Colors.green,
+                                      colorText: Colors.white,
+                                      duration: const Duration(seconds: 2),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
 
-                            await Future.delayed(const Duration(seconds: 1));
+                                    await Future.delayed(
+                                        const Duration(seconds: 1));
 
-                            Get.bottomSheet(
-                              backgroundColor: Colors.white,
-                              CreateCompanyModal(),
-                              isScrollControlled: true,
-                            );
-                          } else {
-                            // Exibe o snackbar para falha
-                            Get.snackbar(
-                              'Falha!',
-                              retorno['message'].join('\n'),
-                              backgroundColor: Colors.red,
-                              colorText: Colors.white,
-                              duration: const Duration(seconds: 2),
-                              snackPosition: SnackPosition.BOTTOM,
-                            );
-                          }
-                        },
-                        child: const Text(
-                          "NOVO PATROCINADOR",
-                          style: TextStyle(fontSize: 10),
-                        ),
+                                    Get.bottomSheet(
+                                      backgroundColor: Colors.white,
+                                      CreateCompanyModal(),
+                                      isScrollControlled: true,
+                                    );
+                                  } else {
+                                    // Exibe o snackbar para falha
+                                    Get.snackbar(
+                                      'Falha!',
+                                      retorno['message'].join('\n'),
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white,
+                                      duration: const Duration(seconds: 2),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
+                                  }
+                                },
+                                child: const Text(
+                                  "NOVO PATROCINADOR",
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ),
                       ),
                     ],
                   ),
@@ -266,35 +273,40 @@ class ContactModal extends GetView<ContactController> {
                         },
                         child: const Text("CANCELAR"),
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          Map<String, dynamic> retorno = isUpdate
-                              ? await controller.updateContactCompany(
-                                  contactCompany!.companyId, contactCompany!.id)
-                              : await controller
-                                  .insertContactCompany(company!.id!);
+                      Obx(
+                        () => Services.isLoadingCRUD.value
+                            ? const CircularProgressIndicator()
+                            : ElevatedButton(
+                                onPressed: () async {
+                                  Map<String, dynamic> retorno = isUpdate
+                                      ? await controller.updateContactCompany(
+                                          contactCompany!.companyId,
+                                          contactCompany!.id)
+                                      : await controller
+                                          .insertContactCompany(company!.id!);
 
-                          if (retorno['success'] == true) {
-                            Get.back();
-                            Get.snackbar(
-                                'Sucesso!', retorno['message'].join('\n'),
-                                backgroundColor: Colors.green,
-                                colorText: Colors.white,
-                                duration: const Duration(seconds: 2),
-                                snackPosition: SnackPosition.BOTTOM);
-                          } else {
-                            Get.snackbar(
-                                'Falha!', retorno['message'].join('\n'),
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                                duration: const Duration(seconds: 2),
-                                snackPosition: SnackPosition.BOTTOM);
-                          }
-                        },
-                        child: const Text(
-                          "CONFIRMAR",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                                  if (retorno['success'] == true) {
+                                    Get.back();
+                                    Get.snackbar('Sucesso!',
+                                        retorno['message'].join('\n'),
+                                        backgroundColor: Colors.green,
+                                        colorText: Colors.white,
+                                        duration: const Duration(seconds: 2),
+                                        snackPosition: SnackPosition.BOTTOM);
+                                  } else {
+                                    Get.snackbar(
+                                        'Falha!', retorno['message'].join('\n'),
+                                        backgroundColor: Colors.red,
+                                        colorText: Colors.white,
+                                        duration: const Duration(seconds: 2),
+                                        snackPosition: SnackPosition.BOTTOM);
+                                  }
+                                },
+                                child: const Text(
+                                  "CONFIRMAR",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                       ),
                     ],
                   ),

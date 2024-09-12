@@ -6,6 +6,7 @@ import 'package:projetos/app/data/models/contact_company_model.dart';
 import 'package:projetos/app/data/repositories/contact_repository.dart';
 import 'package:projetos/app/utils/formatter.dart';
 import 'package:projetos/app/utils/service_storage.dart';
+import 'package:projetos/app/utils/services.dart';
 import 'package:timezone/data/latest.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -47,6 +48,7 @@ class ContactController extends GetxController {
   }
 
   Future<Map<String, dynamic>> insertContactCompany(int companyId) async {
+    Services.isLoadingCRUD(true);
     final token = ServiceStorage.getToken();
 
     ContactCompany contactCompany = ContactCompany(
@@ -70,11 +72,14 @@ class ContactController extends GetxController {
 
       getContactCompanies(Company(id: companyId));
     }
+    Services.isLoadingCRUD(false);
     return retorno;
   }
 
   Future<Map<String, dynamic>> updateContactCompany(
       int? companyId, int? contactId) async {
+    Services.isLoadingCRUD(true);
+
     ContactCompany contactCompany = ContactCompany(
       id: contactId,
       companyId: companyId,
@@ -97,6 +102,7 @@ class ContactController extends GetxController {
       };
       getContactCompanies(Company(id: companyId));
     }
+    Services.isLoadingCRUD(false);
     return retorno;
   }
 

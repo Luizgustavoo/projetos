@@ -261,9 +261,7 @@ class CreateCompanyModal extends GetView<CompanyController> {
                                       id: retorno['data']['id'],
                                       nome: retorno['data']['nome'],
                                     );
-
                                     Get.back();
-
                                     Get.snackbar(
                                       'Sucesso!',
                                       retorno['message'].join('\n'),
@@ -280,6 +278,7 @@ class CreateCompanyModal extends GetView<CompanyController> {
                                       backgroundColor: Colors.white,
                                       ContactModal(
                                         name: companyData.nome,
+                                        company: companyData,
                                       ),
                                       isScrollControlled: true,
                                     );

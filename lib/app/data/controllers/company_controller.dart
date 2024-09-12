@@ -124,11 +124,12 @@ class CompanyController extends GetxController {
   }
 
   Future<Map<String, dynamic>> insertCompany() async {
+    Services.isLoadingCRUD(true);
     if (companyKey.currentState!.validate()) {
-      Services.isLoadingCRUD(true);
       final RegExp cidadeUfRegex = RegExp(r'^[A-Za-zÀ-ÿ\s]+-[A-Z]{2}$');
 
       if (!cidadeUfRegex.hasMatch(cityController.text)) {
+        Services.isLoadingCRUD(false);
         return {
           'success': false,
           'message': ['Formato de cidade e UF inválido! Use "Cidade-UF".']
@@ -137,6 +138,7 @@ class CompanyController extends GetxController {
 
       final cidadeUfPartes = cityController.text.split('-');
       if (cidadeUfPartes.length != 2) {
+        Services.isLoadingCRUD(false);
         return {
           'success': false,
           'message': ['Formato de cidade inválido!']
@@ -176,8 +178,8 @@ class CompanyController extends GetxController {
       } else {
         getAllCompanies();
       }
-      Services.isLoadingCRUD(false);
     }
+    Services.isLoadingCRUD(false);
     return retorno;
   }
 
