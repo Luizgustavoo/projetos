@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:projetos/app/data/controllers/bill_controller.dart';
 import 'package:projetos/app/data/controllers/financial_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/fundraisings_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
-import 'package:projetos/app/routes/app_routes.dart';
 import 'package:projetos/app/utils/formatter.dart';
 import 'package:projetos/app/utils/service_storage.dart';
 
@@ -85,8 +83,10 @@ class CustomFinancialCard extends StatelessWidget {
               double.tryParse(bill.porcentagem.toString()) ?? 0.0;
           double commission = calculateCommission(capturedValue, percentage);
 
-          String pagoAreceber =
-              e.fundRaiserComission!.payday != null ? "(PAGO)" : "(A PAGAR)";
+          String pagoAreceber = e.fundRaiserComission != null &&
+                  e.fundRaiserComission!.payday != null
+              ? "(PAGO)"
+              : "(A PAGAR)";
 
           return ListTile(
             title: Text(
@@ -139,7 +139,7 @@ class CustomFinancialCard extends StatelessWidget {
           Animation<double> secondaryAnimation) {
         double commission = calculateCommission(
             fundRaising.capturedValue != null
-                ? fundRaising.capturedValue!.toInt()
+                ? fundRaising.capturedValue!.toDouble()
                 : 0,
             double.tryParse(bill.porcentagem.toString()) ?? 0.0);
 
@@ -190,15 +190,16 @@ class CustomFinancialCard extends StatelessWidget {
                                     fundRaising.fundRaiserComission!.id!);
 
                             if (retorno['success'] == true) {
-                              final billController = Get.put(BillController());
-                              await billController.getAllBills();
-                              await controller.getFinancial(id!);
-                              await controller.getFinancialBalance(id!);
+                              // final billController = Get.put(BillController());
+                              // await billController.getAllBills();
+                              // await controller.getFinancial(id!);
+                              // await controller.getFinancialBalance(id!);
 
                               //começa
 
                               Get.back();
-                              Get.toNamed(Routes.financial, arguments: user);
+                              Get.back();
+                              // Get.toNamed(Routes.financial, arguments: user);
 
                               //termina
                               Get.snackbar(

@@ -162,6 +162,7 @@ class CompanyApiClient {
         "bairro": company.bairro.toString(),
         "tipo_captacao": company.tipoCaptacao.toString(),
         "cargo_contato": company.cargoContato.toString(),
+        "email": company.email.toString()
       });
 
       request.headers.addAll({
@@ -205,6 +206,7 @@ class CompanyApiClient {
         "bairro": company.bairro.toString(),
         "tipo_captacao": company.tipoCaptacao.toString(),
         "cargo_contato": company.cargoContato.toString(),
+        "email": company.email.toString()
       });
       return json.decode(response.body);
     } catch (err) {

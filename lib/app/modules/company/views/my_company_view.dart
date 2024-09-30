@@ -73,9 +73,11 @@ class MyCompanyView extends GetView<CompanyController> {
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: TextField(
                 controller: controller.searchControllerMyCompany,
-                decoration: const InputDecoration(
-                  labelText: 'Pesquisar patrocinadores',
-                  prefixIcon: Icon(Icons.search),
+                decoration: InputDecoration(
+                  labelText: ServiceStorage.getUserType() == 1
+                      ? 'Pesquisar patrocinadores'
+                      : 'Pesquisar clientes',
+                  prefixIcon: const Icon(Icons.search),
                 ),
               ),
             ),

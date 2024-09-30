@@ -27,9 +27,11 @@ class AvailableCompanyView extends GetView<CompanyController> {
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: TextField(
                 controller: controller.searchControllerAvailableCompany,
-                decoration: const InputDecoration(
-                  labelText: 'Pesquisar patrocinadores',
-                  prefixIcon: Icon(Icons.search),
+                decoration: InputDecoration(
+                  labelText: ServiceStorage.getUserType() == 1
+                      ? 'Pesquisar patrocinadores'
+                      : 'Pesquisar clientes',
+                  prefixIcon: const Icon(Icons.search),
                 ),
               ),
             ),

@@ -31,6 +31,7 @@ class CompanyController extends GetxController {
   final responsibleCompanyController = TextEditingController();
   final contactController = TextEditingController();
   final peopleContactController = TextEditingController();
+  final emailController = TextEditingController();
   final searchControllerAllCompany = TextEditingController();
   final searchControllerMyCompany = TextEditingController();
   final searchControllerAvailableCompany = TextEditingController();
@@ -149,19 +150,19 @@ class CompanyController extends GetxController {
 
       final token = ServiceStorage.getToken();
       Company company = Company(
-        nome: nameCompanyController.text,
-        cnpj: cnpjController.text,
-        responsavel: responsibleCompanyController.text,
-        telefone: contactController.text,
-        nomePessoa: peopleContactController.text,
-        endereco: streetController.text,
-        numero: numberController.text,
-        bairro: neighborhoodController.text,
-        cidade: cidade,
-        estado: estado,
-        tipoCaptacao: selectedCompanyDonation.value,
-        cargoContato: rolePeopleController.text,
-      );
+          nome: nameCompanyController.text,
+          cnpj: cnpjController.text,
+          responsavel: responsibleCompanyController.text,
+          telefone: contactController.text,
+          nomePessoa: peopleContactController.text,
+          endereco: streetController.text,
+          numero: numberController.text,
+          bairro: neighborhoodController.text,
+          cidade: cidade,
+          estado: estado,
+          tipoCaptacao: selectedCompanyDonation.value,
+          cargoContato: rolePeopleController.text,
+          email: emailController.text);
 
       mensagem = await repository.insertCompany(
           "Bearer $token", company, selectedUserId.value);
@@ -204,20 +205,20 @@ class CompanyController extends GetxController {
     final cidade = cidadeUfPartes[0].trim();
     final estado = cidadeUfPartes[1].trim();
     Company company = Company(
-      id: id,
-      nome: nameCompanyController.text,
-      cnpj: cnpjController.text,
-      responsavel: responsibleCompanyController.text,
-      telefone: contactController.text,
-      nomePessoa: peopleContactController.text,
-      endereco: streetController.text,
-      numero: numberController.text,
-      bairro: neighborhoodController.text,
-      cidade: cidade,
-      estado: estado,
-      tipoCaptacao: selectedCompanyDonation.value,
-      cargoContato: rolePeopleController.text,
-    );
+        id: id,
+        nome: nameCompanyController.text,
+        cnpj: cnpjController.text,
+        responsavel: responsibleCompanyController.text,
+        telefone: contactController.text,
+        nomePessoa: peopleContactController.text,
+        endereco: streetController.text,
+        numero: numberController.text,
+        bairro: neighborhoodController.text,
+        cidade: cidade,
+        estado: estado,
+        tipoCaptacao: selectedCompanyDonation.value,
+        cargoContato: rolePeopleController.text,
+        email: emailController.text);
     final token = ServiceStorage.getToken();
     if (companyKey.currentState!.validate()) {
       mensagem = await repository.updateCompany(
@@ -320,9 +321,10 @@ class CompanyController extends GetxController {
     streetController.text = selectedCompany!.endereco ?? "";
     numberController.text = selectedCompany!.numero ?? "";
     neighborhoodController.text = selectedCompany!.bairro ?? "";
+    emailController.text = selectedCompany!.email ?? "";
     rolePeopleController.text = selectedCompany!.cargoContato ?? "";
-    cityController.text = selectedCompany!.cidade ?? "";
-    selectedState.value = selectedCompany!.estado ?? "";
+    cityController.text =
+        "${selectedCompany!.cidade}-${selectedCompany!.estado}";
     selectedCompanyDonation.value = selectedCompany!.tipoCaptacao ?? "";
   }
 

@@ -8,6 +8,7 @@ class Company {
   String? responsavel;
   String? telefone;
   String? nomePessoa;
+  String? email;
   int? status;
   String? createdAt;
   String? updatedAt;
@@ -28,6 +29,7 @@ class Company {
     this.responsavel,
     this.telefone,
     this.nomePessoa,
+    this.email,
     this.status,
     this.createdAt,
     this.updatedAt,
@@ -49,6 +51,7 @@ class Company {
     responsavel = json['responsavel'];
     telefone = json['telefone'];
     nomePessoa = json['nome_pessoa'];
+    email = json['email'];
     status = json['status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -83,6 +86,7 @@ class Company {
     data['responsavel'] = responsavel;
     data['telefone'] = telefone;
     data['nome_pessoa'] = nomePessoa;
+    data['email'] = email;
     data['status'] = status;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
