@@ -24,7 +24,8 @@ class CustomReportCard extends StatelessWidget {
           ),
         ),
         subtitle: subtitle,
-        trailing: IconButton(onPressed: onTap, icon: const Icon(Icons.search)),
+        trailing:
+            IconButton(onPressed: onTap, icon: const Icon(Icons.download)),
       ),
     );
   }

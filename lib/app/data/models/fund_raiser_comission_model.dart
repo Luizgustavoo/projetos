@@ -6,20 +6,20 @@ class FundRaiserComission {
   String? payday;
   dynamic amount;
   FundRaising? fundraisings;
+  String? observacoes;
 
-  FundRaiserComission({
-    this.id,
-    this.status,
-    this.payday,
-    this.fundraisings
-  });
+  FundRaiserComission(
+      {this.id, this.status, this.payday, this.fundraisings, this.observacoes});
 
   FundRaiserComission.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     status = json['status'];
     payday = json['payday'];
     status = json['status'];
-    fundraisings = json['fundraisings'] != null ? FundRaising.fromJson(json['fundraisings']) : null;
+    fundraisings = json['fundraisings'] != null
+        ? FundRaising.fromJson(json['fundraisings'])
+        : null;
+    observacoes = json['observacoes'];
   }
 
   Map<String, dynamic> toJson() {
@@ -30,6 +30,7 @@ class FundRaiserComission {
     if (fundraisings != null) {
       data['fundraisings'] = fundraisings!.toJson();
     }
+    data['observacoes'] = observacoes;
     return data;
   }
 }

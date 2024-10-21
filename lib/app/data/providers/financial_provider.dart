@@ -89,7 +89,9 @@ class FinancialApiClient {
         "Accept": "application/json",
         "Authorization": token,
       }, body: {
-        "pago": "sim"
+        "pago": "sim",
+        "payday": fundRaiserComission.payday,
+        "observacoes": fundRaiserComission.observacoes
       });
       return json.decode(response.body);
     } catch (err) {

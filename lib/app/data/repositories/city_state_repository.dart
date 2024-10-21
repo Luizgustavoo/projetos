@@ -23,4 +23,24 @@ class CityStateRepository {
 
     return list;
   }
+
+  getCitiesDonation() async {
+    List<CityState> list = <CityState>[];
+
+    try {
+      var response = await apiClient.getCitiesDonation();
+
+      if (response != null) {
+        response['data'].forEach((e) {
+          list.add(CityState.fromJson(e));
+        });
+      } else {
+        return null;
+      }
+    } catch (e) {
+      Exception(e);
+    }
+
+    return list;
+  }
 }

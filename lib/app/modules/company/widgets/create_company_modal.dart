@@ -31,13 +31,11 @@ class CreateCompanyModal extends GetView<CompanyController> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 5),
+              const Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 5),
                 child: Text(
-                  ServiceStorage.getUserType() == 1
-                      ? 'CADASTRO DE PATROCINADOR'
-                      : 'CADASTRO DE CLIENTE',
-                  style: const TextStyle(
+                  'CADASTRO DE PATROCINADOR',
+                  style: TextStyle(
                     fontFamily: 'Poppinss',
                     fontSize: 17,
                     color: Color(0xFFEBAE1F),
@@ -83,7 +81,6 @@ class CreateCompanyModal extends GetView<CompanyController> {
               const SizedBox(height: 10),
               TextFormField(
                 controller: controller.responsibleCompanyController,
-                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   labelText: 'RESPONSÁVEL',
                 ),
@@ -184,11 +181,11 @@ class CreateCompanyModal extends GetView<CompanyController> {
                   suggestionState: Suggestion.expand,
                   textInputAction: TextInputAction.next,
                   marginColor: Colors.grey,
-                  searchStyle: const TextStyle(
+                  suggestionStyle: const TextStyle(
                     fontSize: 16,
                     fontFamily: 'Poppins',
                   ),
-                  searchInputDecoration: const InputDecoration(
+                  searchInputDecoration: SearchInputDecoration(
                     labelText: 'CIDADE',
                   ),
                   itemHeight: 50,

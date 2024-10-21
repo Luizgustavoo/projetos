@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
-import 'package:projetos/app/utils/service_storage.dart';
 
 class ExpiringCompanyView extends GetView<CompanyController> {
   const ExpiringCompanyView({super.key});
@@ -12,9 +11,7 @@ class ExpiringCompanyView extends GetView<CompanyController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ServiceStorage.getUserType() == 1
-            ? 'PATROCINADORES EXPIRANDO'
-            : 'CLIENTES EXPIRANDO'),
+        title: const Text('PATROCINADORES EXPIRANDO'),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),

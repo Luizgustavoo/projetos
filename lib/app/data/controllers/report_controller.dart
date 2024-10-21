@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:projetos/app/data/models/city_state_model.dart';
 import 'package:projetos/app/data/models/contact_company_model.dart';
 import 'package:projetos/app/data/models/user_model.dart';
 import 'package:projetos/app/data/repositories/report_repository.dart';
@@ -20,13 +21,33 @@ class ReportController extends GetxController {
   RxList<ContactCompany> listReport = RxList<ContactCompany>([]);
   RxBool isLoading = true.obs;
   var selectedUserId = Rxn<User>();
+  var selectedCityState = Rxn<CityState>();
   final repository = Get.put(ReportRepository());
+
+  final endDateController = TextEditingController();
+  final startDateController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
+
   Map<String, dynamic> retorno = {
     "success": false,
     "data": null,
     "message": ["Preencha todos os campos!"]
   };
   dynamic mensagem;
+
+  void clearFields() {
+    selectedCityState.value = null;
+    selectedUserId.value = null;
+    startDateController.clear();
+    endDateController.clear();
+  }
+
+  @override
+  void onClose() {
+    clearFields();
+    super.onClose();
+  }
 
   Future<void> getReport(User user) async {
     isLoading.value = true;
@@ -117,20 +138,21 @@ class ReportController extends GetxController {
           contentTextStyle:
               const TextStyle(fontFamily: 'Poppins', color: Colors.black),
           actions: [
-            TextButton.icon(
-              onPressed: () {
-                Get.back();
-                saveFile(pdfData, fileName);
-              },
-              label: const Text(
-                'Salvar',
-                style: TextStyle(fontFamily: 'Poppins'),
+            if (!kIsWeb && defaultTargetPlatform != TargetPlatform.android)
+              TextButton.icon(
+                onPressed: () {
+                  Get.back();
+                  saveFile(pdfData, fileName);
+                },
+                label: const Text(
+                  'Salvar',
+                  style: TextStyle(fontFamily: 'Poppins'),
+                ),
+                icon: const Icon(
+                  Icons.save_alt_rounded,
+                  color: Colors.black,
+                ),
               ),
-              icon: const Icon(
-                Icons.save_alt_rounded,
-                color: Colors.black,
-              ),
-            ),
             if (!kIsWeb && defaultTargetPlatform != TargetPlatform.windows)
               TextButton.icon(
                 onPressed: () {

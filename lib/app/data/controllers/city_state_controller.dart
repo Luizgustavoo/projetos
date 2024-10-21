@@ -6,12 +6,14 @@ class CityStateController extends GetxController {
   final repository = Get.put(CityStateRepository());
 
   RxList<CityState> listCities = RxList<CityState>([]);
+  RxList<CityState> listCitiesDonation = RxList<CityState>([]);
   RxList<CityState> filteredCities = RxList<CityState>([]); // Lista filtrada
   RxBool isLoading = true.obs;
 
   @override
   void onInit() {
     getCities();
+    getCitiesDonation();
     super.onInit();
   }
 
@@ -22,6 +24,17 @@ class CityStateController extends GetxController {
       filteredCities.value = listCities; // Inicialmente, todas as cidades
     } catch (e) {
       listCities.clear();
+      Exception(e);
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> getCitiesDonation() async {
+    isLoading.value = true;
+    try {
+      listCitiesDonation.value = await repository.getCitiesDonation();
+    } catch (e) {
+      listCitiesDonation.clear();
       Exception(e);
     }
     isLoading.value = false;

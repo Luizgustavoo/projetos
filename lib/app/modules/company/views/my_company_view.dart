@@ -44,7 +44,7 @@ class MyCompanyView extends GetView<CompanyController> {
         toolbarHeight: MediaQuery.of(context).size.height * 0.08,
         title: Obx(() {
           String titulo =
-              "MEUS CLIENTES - ${controller.listCompany.length} CLIENTES";
+              "MEUS PATROCINADORES - ${controller.listCompany.length} PATROCINADORES";
 
           if (Get.arguments != null && Get.arguments is User) {
             final User user = Get.arguments as User;
@@ -73,11 +73,9 @@ class MyCompanyView extends GetView<CompanyController> {
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: TextField(
                 controller: controller.searchControllerMyCompany,
-                decoration: InputDecoration(
-                  labelText: ServiceStorage.getUserType() == 1
-                      ? 'Pesquisar patrocinadores'
-                      : 'Pesquisar clientes',
-                  prefixIcon: const Icon(Icons.search),
+                decoration: const InputDecoration(
+                  labelText: 'Pesquisar patrocinadores',
+                  prefixIcon: Icon(Icons.search),
                 ),
               ),
             ),
@@ -351,20 +349,21 @@ class MyCompanyView extends GetView<CompanyController> {
           contentTextStyle:
               const TextStyle(fontFamily: 'Poppins', color: Colors.black),
           actions: [
-            TextButton.icon(
-              onPressed: () {
-                Get.back();
-                saveFile(pdfData, fileName);
-              },
-              label: const Text(
-                'Salvar',
-                style: TextStyle(fontFamily: 'Poppins'),
+            if (!kIsWeb && defaultTargetPlatform != TargetPlatform.android)
+              TextButton.icon(
+                onPressed: () {
+                  Get.back();
+                  saveFile(pdfData, fileName);
+                },
+                label: const Text(
+                  'Salvar',
+                  style: TextStyle(fontFamily: 'Poppins'),
+                ),
+                icon: const Icon(
+                  Icons.save_alt_rounded,
+                  color: Colors.black,
+                ),
               ),
-              icon: const Icon(
-                Icons.save_alt_rounded,
-                color: Colors.black,
-              ),
-            ),
             if (!kIsWeb && defaultTargetPlatform != TargetPlatform.windows)
               TextButton.icon(
                 onPressed: () {
@@ -546,6 +545,7 @@ class MyCompanyView extends GetView<CompanyController> {
                   const SizedBox(height: 15),
                   Obx(() {
                     return DropdownButtonFormField<int>(
+                      isExpanded: true,
                       decoration: const InputDecoration(
                         labelText: 'PROJETOS',
                       ),
@@ -553,7 +553,19 @@ class MyCompanyView extends GetView<CompanyController> {
                           billController.listAllBillsDropDown.map((Bill bill) {
                         return DropdownMenuItem<int>(
                           value: bill.id,
-                          child: Text(bill.nome!),
+                          child: SingleChildScrollView(
+                            // Adiciona a rolagem aqui
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(bill.nome!),
+                                const Divider(
+                                  height: 1,
+                                  thickness: 1,
+                                ), // Adiciona o divisor
+                              ],
+                            ),
+                          ),
                         );
                       }).toList(),
                       onChanged: (value) {

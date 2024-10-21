@@ -35,6 +35,29 @@ class CustomFinancialCard extends StatelessWidget {
       return sum + calculateCommission(capturedValue, percentage);
     });
 
+    // Calcular o total pago e a pagar
+    double totalPago = bill.fundraisings!.fold(0.0, (sum, e) {
+      if (e.fundRaiserComission != null &&
+          e.fundRaiserComission!.payday != null) {
+        double capturedValue =
+            e.capturedValue != null ? e.capturedValue!.toDouble() : 0.0;
+        double percentage = double.tryParse(bill.porcentagem.toString()) ?? 0.0;
+        return sum + calculateCommission(capturedValue, percentage);
+      }
+      return sum;
+    });
+
+    double totalAPagar = bill.fundraisings!.fold(0.0, (sum, e) {
+      if (e.fundRaiserComission == null ||
+          e.fundRaiserComission!.payday == null) {
+        double capturedValue =
+            e.capturedValue != null ? e.capturedValue!.toDouble() : 0.0;
+        double percentage = double.tryParse(bill.porcentagem.toString()) ?? 0.0;
+        return sum + calculateCommission(capturedValue, percentage);
+      }
+      return sum;
+    });
+
     return Card(
       color: bill.status == 'aberto'
           ? const Color(0xFFFFF3DB)
@@ -73,6 +96,21 @@ class CustomFinancialCard extends StatelessWidget {
               'TOTAL COMISSÃO: R\$${controller.formatValue(totalCommission.toStringAsFixed(2))}',
               style: const TextStyle(
                   fontFamily: 'Poppinss', fontSize: 14, color: Colors.black),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              ServiceStorage.getUserType() == 1
+                  ? 'TOTAL PAGO: R\$${controller.formatValue(totalPago.toStringAsFixed(2))}'
+                  : 'TOTAL RECEBIDO: R\$${controller.formatValue(totalPago.toStringAsFixed(2))}',
+              style: const TextStyle(
+                  fontFamily: 'Poppinss', fontSize: 14, color: Colors.green),
+            ),
+            Text(
+              ServiceStorage.getUserType() == 1
+                  ? 'TOTAL A PAGAR: R\$${controller.formatValue(totalAPagar.toStringAsFixed(2))}'
+                  : 'TOTAL A RECEBER: R\$${controller.formatValue(totalAPagar.toStringAsFixed(2))}',
+              style: const TextStyle(
+                  fontFamily: 'Poppinss', fontSize: 14, color: Colors.red),
             ),
           ],
         ),
@@ -169,6 +207,34 @@ class CustomFinancialCard extends StatelessWidget {
                     'Deseja pagar a comissão de R\$${controller.formatValue(commission.toString())}?',
                     style: const TextStyle(fontSize: 16, fontFamily: 'Poppins'),
                   ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: controller.datePaymentController,
+                    maxLength: 10,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                        labelText: 'DATA PAGAMENTO', counterText: ''),
+                    onChanged: (value) {
+                      controller.onContactDateChanged(value);
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira a data de retorno';
+                      }
+                      // Validação da data no formato DD/MM/YYYY
+                      return controller.validateDate(value)
+                          ? null
+                          : 'Data inválida. Por favor, insira no formato DD/MM/AAAA';
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: controller.datePaymentController,
+                    maxLines: 5,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                        labelText: 'OBSERVAÇÃO', counterText: ''),
+                  ),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -190,11 +256,6 @@ class CustomFinancialCard extends StatelessWidget {
                                     fundRaising.fundRaiserComission!.id!);
 
                             if (retorno['success'] == true) {
-                              // final billController = Get.put(BillController());
-                              // await billController.getAllBills();
-                              // await controller.getFinancial(id!);
-                              // await controller.getFinancialBalance(id!);
-
                               //começa
 
                               Get.back();

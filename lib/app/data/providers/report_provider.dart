@@ -11,11 +11,11 @@ class ReportApiClient {
 
   getAllReport(String token, int id) async {
     try {
-      Uri contactCompanyUrl;
+      Uri reportUrl;
       String url = '$baseUrl/v1/contactcompany/user/list/${id.toString()}';
-      contactCompanyUrl = Uri.parse(url);
+      reportUrl = Uri.parse(url);
       var response = await httpClient.get(
-        contactCompanyUrl,
+        reportUrl,
         headers: {
           "Accept": "application/json",
           "Authorization": token,

@@ -121,28 +121,24 @@ class ContactModal extends GetView<ContactController> {
               // Campo Data Retorno
               TextFormField(
                 controller: controller.dateReturnController,
-                decoration: InputDecoration(
-                  labelText: 'DATA DE RETORNO:',
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  suffixIcon: const Icon(Icons.calendar_today),
-                ),
-                readOnly: true,
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2101),
-                  );
-                  if (pickedDate != null) {
-                    controller.dateReturnController.text =
-                        DateFormat('dd/MM/yyyy').format(pickedDate);
+                maxLength: 10,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                    labelText: 'DATA RETORNO', counterText: ''),
+                onChanged: (value) {
+                  controller.onContactDateChanged(value);
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira a data de retorno';
                   }
+                  // Validação da data no formato DD/MM/YYYY
+                  return controller.validateDate(value)
+                      ? null
+                      : 'Data inválida. Por favor, insira no formato DD/MM/AAAA';
                 },
               ),
+
               const SizedBox(height: 12),
               TextFormField(
                 controller: controller.predictedValueController,

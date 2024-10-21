@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:projetos/app/data/controllers/company_controller.dart';
 import 'package:projetos/app/data/models/company_model.dart';
 import 'package:projetos/app/modules/company/widgets/custom_my_company_card.dart';
-import 'package:projetos/app/utils/service_storage.dart';
 
 class AvailableCompanyView extends GetView<CompanyController> {
   const AvailableCompanyView({super.key});
@@ -12,9 +11,7 @@ class AvailableCompanyView extends GetView<CompanyController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ServiceStorage.getUserType() == 1
-            ? 'PATROCINADORES DISPONÍVEIS'
-            : 'CLIENTES DISPONÍVEIS'),
+        title: const Text('PATROCINADORES DISPONÍVEIS'),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
@@ -27,11 +24,9 @@ class AvailableCompanyView extends GetView<CompanyController> {
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: TextField(
                 controller: controller.searchControllerAvailableCompany,
-                decoration: InputDecoration(
-                  labelText: ServiceStorage.getUserType() == 1
-                      ? 'Pesquisar patrocinadores'
-                      : 'Pesquisar clientes',
-                  prefixIcon: const Icon(Icons.search),
+                decoration: const InputDecoration(
+                  labelText: 'Pesquisar patrocinadores',
+                  prefixIcon: Icon(Icons.search),
                 ),
               ),
             ),

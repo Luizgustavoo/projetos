@@ -11,11 +11,36 @@ class CityStateApiClient {
     try {
       final token = "Bearer ${ServiceStorage.getToken()}";
 
-      Uri freightUrl;
+      Uri cityUrl;
       String url = '$baseUrl/v1/municipio';
-      freightUrl = Uri.parse(url);
+      cityUrl = Uri.parse(url);
       var response = await httpClient.get(
-        freightUrl,
+        cityUrl,
+        headers: {
+          "Accept": "application/json",
+          "Authorization": token,
+        },
+      );
+      if (response.statusCode == 201) {
+        return json.decode(response.body);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      Exception(e);
+    }
+    return null;
+  }
+
+  getCitiesDonation() async {
+    try {
+      final token = "Bearer ${ServiceStorage.getToken()}";
+
+      Uri cityUrl;
+      String url = '$baseUrl/v1/company/cities';
+      cityUrl = Uri.parse(url);
+      var response = await httpClient.get(
+        cityUrl,
         headers: {
           "Accept": "application/json",
           "Authorization": token,

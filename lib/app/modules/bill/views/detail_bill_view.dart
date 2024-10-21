@@ -5,6 +5,7 @@ import 'package:projetos/app/data/controllers/fundraiser_controller.dart';
 import 'package:projetos/app/data/models/bill_model.dart';
 import 'package:projetos/app/data/models/fundraisings_model.dart';
 import 'package:projetos/app/routes/app_routes.dart';
+import 'package:projetos/app/utils/formatter.dart';
 
 class DetailBillView extends GetView<BillController> {
   DetailBillView({super.key});
@@ -221,6 +222,14 @@ class DetailBillView extends GetView<BillController> {
                                   children: [
                                     Text(
                                       'CAPTADOR: ${fundRaising.user!.name!.toUpperCase()}',
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          color: status
+                                              ? Colors.black
+                                              : Colors.white),
+                                    ),
+                                    Text(
+                                      'DATA CAPTAÇÃO: ${FormattedInputers.formatApiDate(fundRaising.dateOfCapture!)}',
                                       style: TextStyle(
                                           fontFamily: 'Poppins',
                                           color: status

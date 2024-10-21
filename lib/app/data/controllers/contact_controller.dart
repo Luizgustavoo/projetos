@@ -166,6 +166,28 @@ class ContactController extends GetxController {
     selectedMonth = selectedContactCompany!.mesDeposito ?? 'Janeiro';
   }
 
+  bool validateDate(String value) {
+    // Remove os caracteres não numéricos
+    String dateString = value.replaceAll(RegExp(r'[^0-9]'), '');
+
+    if (dateString.length != 8) {
+      return false; // O formato deve ter 8 dígitos (DDMMYYYY)
+    }
+
+    // Extrai dia, mês e ano
+    int day = int.parse(dateString.substring(0, 2));
+    int month = int.parse(dateString.substring(2, 4));
+    int year = int.parse(dateString.substring(4, 8));
+
+    // Verifica se a data é válida
+    try {
+      DateTime date = DateTime(year, month, day);
+      return date.day == day && date.month == month && date.year == year;
+    } catch (e) {
+      return false; // Data inválida
+    }
+  }
+
   String formatApiDate(String apiDate) {
     initializeTimeZones();
 
@@ -192,6 +214,14 @@ class ContactController extends GetxController {
       text: FormattedInputers.formatValue(value),
       selection: TextSelection.collapsed(
           offset: FormattedInputers.formatValue(value).length),
+    );
+  }
+
+  void onContactDateChanged(String value) {
+    dateReturnController.value = dateReturnController.value.copyWith(
+      text: FormattedInputers.formatDate(value),
+      selection: TextSelection.collapsed(
+          offset: FormattedInputers.formatDate(value).length),
     );
   }
 

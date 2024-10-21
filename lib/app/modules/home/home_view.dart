@@ -131,7 +131,7 @@ class HomeView extends GetView<HomeController> {
                         HomeCard(
                           icon: Icons.factory_rounded,
                           color: Colors.black,
-                          title: 'CONTROLE\nCLIENTES',
+                          title: 'CONTROLE\nPATROCINADORES',
                           onTap: () {
                             companyController.searchControllerMyCompany.text =
                                 '';
@@ -141,7 +141,7 @@ class HomeView extends GetView<HomeController> {
                         ),
                         HomeCard(
                           icon: Icons.history_rounded,
-                          title: 'CLIENTES\nEXPIRANDO',
+                          title: 'PATROCINADORES\nEXPIRANDO',
                           onTap: () {
                             companyController.getExpirianCompanies(0);
                             Get.toNamed(Routes.expiringcompany);
@@ -161,9 +161,7 @@ class HomeView extends GetView<HomeController> {
                       ],
                       HomeCard(
                         icon: Icons.pin_drop_rounded,
-                        title: ServiceStorage.getUserType() == 1
-                            ? 'PATROCINADORES\nDISPONÍVEIS'
-                            : 'CLIENTES\nDISPONÍVEIS',
+                        title: 'PATROCINADORES\nDISPONÍVEIS',
                         onTap: () {
                           companyController.getAvailableCompanies();
                           Get.toNamed(Routes.availablecompany);
@@ -211,9 +209,7 @@ class HomeView extends GetView<HomeController> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      ServiceStorage.getUserType() == 1
-                          ? 'PATROCINADORES'
-                          : 'CLIENTES',
+                      'PATROCINADORES',
                       style: TextStyle(
                           fontSize: kIsWeb ||
                                   defaultTargetPlatform ==
