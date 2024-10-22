@@ -127,11 +127,48 @@ class CustomFinancialCard extends StatelessWidget {
               : "(A PAGAR)";
 
           return ListTile(
-            title: Text(
-              e.company!.nome!.toUpperCase(),
-              style: const TextStyle(
-                fontFamily: 'Poppinss',
-              ),
+            title: Row(
+              children: [
+                SizedBox(
+                  width: Get.width * 0.60,
+                  child: Text(
+                    e.company!.nome!.toUpperCase(),
+                    style:
+                        const TextStyle(fontFamily: 'Poppinss', fontSize: 13),
+                  ),
+                ),
+                e.fundRaiserComission!.observacoes != null
+                    ? IconButton(
+                        onPressed: () {
+                          Get.defaultDialog(
+                            title: 'OBSERVAÇÕES',
+                            titleStyle: const TextStyle(
+                                fontFamily: 'Poppinss', fontSize: 15),
+                            content: Text(
+                              e.fundRaiserComission!.observacoes!,
+                              textAlign: TextAlign.justify,
+                              style: const TextStyle(
+                                  fontFamily: 'Poppins', color: Colors.black),
+                            ),
+                            confirm: ElevatedButton(
+                              onPressed: () {
+                                Get.back(); // Fecha o diálogo
+                              },
+                              child: const Text(
+                                'FECHAR',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.info,
+                          size: 20,
+                          color: Colors.blue,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ],
             ),
             trailing: e.fundRaiserComission != null &&
                     e.fundRaiserComission!.status! == 'a_receber' &&
@@ -229,7 +266,7 @@ class CustomFinancialCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
-                    controller: controller.datePaymentController,
+                    controller: controller.observationController,
                     maxLines: 5,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
