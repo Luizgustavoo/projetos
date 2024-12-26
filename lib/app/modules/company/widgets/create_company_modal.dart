@@ -127,12 +127,6 @@ class CreateCompanyModal extends GetView<CompanyController> {
                 decoration: const InputDecoration(
                   labelText: 'E-MAIL',
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o e-mail da pessoa';
-                  }
-                  return null;
-                },
               ),
               const SizedBox(height: 10),
               TextFormField(

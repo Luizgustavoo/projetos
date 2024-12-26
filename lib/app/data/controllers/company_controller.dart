@@ -323,8 +323,10 @@ class CompanyController extends GetxController {
     neighborhoodController.text = selectedCompany!.bairro ?? "";
     emailController.text = selectedCompany!.email ?? "";
     rolePeopleController.text = selectedCompany!.cargoContato ?? "";
-    cityController.text =
-        "${selectedCompany!.cidade}-${selectedCompany!.estado}";
+    cityController.text = selectedCompany!.cidade.toString().contains('null') ||
+            selectedCompany!.estado.toString().contains('null')
+        ? ''
+        : "${selectedCompany!.cidade}-${selectedCompany!.estado}";
     selectedCompanyDonation.value = selectedCompany!.tipoCaptacao ?? "";
   }
 
